@@ -1,0 +1,29 @@
+### Java ###
+
+# Java编译生成的class文件
+*.class
+# Java Web应用生成的war、ear包
+*.war
+*.ear
+# Java虚拟机生成的错误日志
+hs_err_pid*
+
+### SpringBoot ###
+
+
+# 忽略target目录下的所有文件
+target/
+
+# 忽略IntelliJ IDEA工程文件
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# 忽略SpringBoot的日志文件
+logs/
+
+# 自有测试类
+/src/test/java/myTest/
+
+/client/.vscode/
