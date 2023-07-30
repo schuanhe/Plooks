@@ -35,3 +35,6 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印sql语句
 
 debug: true
+
+# 自定义配置
+base-url: /v1/api # 基础路径

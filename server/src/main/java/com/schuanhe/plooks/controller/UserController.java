@@ -1,27 +1,26 @@
 package com.schuanhe.plooks.controller;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.form.LoginForm;
 import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.utils.RedisCache;
 import com.schuanhe.plooks.utils.ResponseResult;
-import com.wf.captcha.ArithmeticCaptcha;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 import java.util.UUID;
 
+
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping("${base-url}/user") //读取配置文件中的base-url
 public class UserController {
 
     @Autowired
@@ -30,30 +29,50 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     /**
      * 登录
      * 从表单中获取用户名和密码
+     * 登录错误计数器存储在Redis中，键名为"user:login:error:{username}"，过期时间设置为一定的时间窗口，比如5分钟
      */
     @PostMapping("/login")
-    public ResponseResult<String> login(@RequestBody LoginForm loginForm){
-        System.out.println(loginForm);
-        //验证验证码
-        String uuid = loginForm.getUuid();
-        String code = loginForm.getCode();
-        String redisCode = redisCache.getCacheObject("user:captcha:" + uuid);
-        if(!code.equals(redisCode)){
-            return ResponseResult.fail("验证码错误");
+    public ResponseResult<Map<String,String>> login(@RequestBody LoginForm loginForm){
+        //先判断是否需要验证码
+        Integer cache = redisCache.getCacheObject("user:login:error:" + loginForm.getUser().getUsername());
+        System.out.println(cache);
+        if(cache != null && cache >= 3){
+            //需要验证码
+            if (loginForm.getUuid() == null || loginForm.getCode() == null){
+                return ResponseResult.fail(-1, "需要验证码");
+            }
+            String uuid = loginForm.getUuid();
+            String code = loginForm.getCode();
+            String redisCode = redisCache.getCacheObject("user:captcha:" + uuid);
+            if(!code.equals(redisCode)){
+                return ResponseResult.fail("验证码错误");
+            }
+            //验证成功，删除验证码并且重置错误计数器
+            redisCache.deleteObject("user:captcha:" + uuid);
+            redisCache.deleteObject("user:login:error:" + loginForm.getUser().getUsername());
         }
+
         //验证用户名和密码
         User user = loginForm.getUser();
-        String token = userService.login(user);
-        if(token == null){
-            return ResponseResult.fail("用户名或密码错误");
-        }
-        //登录成功，生成token
-        //String token = userService.createToken(loginUser);
+        Map<String,String> token = userService.login(user);
+        //如果账户密码错误则不会在这里来
         return ResponseResult.success(token);
+    }
 
+    /**
+     * 刷新token
+     */
+    @GetMapping("/token/refresh")
+    public ResponseResult<String> refreshToken(@RequestHeader("Authorization") String refreshToken){
+        String token = userService.refreshToken(refreshToken);
+        if(token == null){
+            return ResponseResult.fail("刷新token失败");
+        }
+        return ResponseResult.success(token);
     }
 
     /**

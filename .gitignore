@@ -23,7 +23,5 @@ target/
 # 忽略SpringBoot的日志文件
 logs/
 
-# 自有测试类
-/src/test/java/myTest/
 
 /client/.vscode/

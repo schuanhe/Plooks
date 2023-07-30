@@ -3,6 +3,8 @@ package com.schuanhe.plooks.service;
 import com.schuanhe.plooks.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
 * @author ASUS
 * @description 针对表【user(用户表)】的数据库操作Service
@@ -13,14 +15,14 @@ public interface UserService extends IService<User> {
     /**
      * 登录
      * @param user 用户信息
-     * @return 登录成功返回，失败返回null
+     * @return 登录结果
      */
-    String login(User user);
+    Map<String,String> login(User user);
 
     /**
-     * 生成token
-     * @param loginUser 登录成功的用户信息
-     * @return token
+     * 刷新token
+     * @param refreshToken 刷新token
+     * @return 刷新结果
      */
-    String createToken(User loginUser);
+    String refreshToken(String refreshToken);
 }

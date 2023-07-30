@@ -38,10 +38,11 @@ public class RedisCache
      * 缓存基本的对象，Integer、String、实体类等
      * @param key 缓存的键值
      * @param value 缓存的值
-     * @param timeout 时间
+     * @param timeout 时间 秒
      */
     public void setCacheObject(String key, String value, int timeout) {
         // 加上前缀
+        System.out.println("key:"+KEY_PREFIX_VALUE + key);
         redisTemplate.opsForValue().set(KEY_PREFIX_VALUE + key, value, timeout, TimeUnit.SECONDS);
     }
     /**
@@ -52,10 +53,12 @@ public class RedisCache
      * @param timeout 时间
      * @param timeUnit 时间颗粒度
      */
-    public <T> void setCacheObject(final String key, final T value, final Integer timeout, final TimeUnit timeUnit)
+    public void setCacheObject(final String key, String value, final Integer timeout, final TimeUnit timeUnit)
     {
         redisTemplate.opsForValue().set(KEY_PREFIX_VALUE + key, value, timeout, timeUnit);
     }
+
+
 
     /**
      * 设置有效时间
@@ -253,4 +256,7 @@ public class RedisCache
     }
 
 
+    public void increment(String s, int i) {
+        redisTemplate.opsForValue().increment(KEY_PREFIX_VALUE + s, i);
+    }
 }
