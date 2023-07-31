@@ -1,6 +1,7 @@
 package com.schuanhe.plooks.handler.impl;
 
 import com.schuanhe.plooks.service.impl.UserDetailsServiceImpl;
+import com.schuanhe.plooks.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,35 +12,36 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * 自定义认证逻辑
+ * 添加密码不匹配会在redis记录的逻辑
+ */
+
 @Component
 public class MyDaoAuthenticationProviderImpl extends DaoAuthenticationProvider {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
 
-    public MyDaoAuthenticationProviderImpl() {
-        // 在构造方法中设置UserDetailsService
+    @Autowired
+    private RedisCache redisCache;
+
+    public MyDaoAuthenticationProviderImpl(UserDetailsService userDetailsService,PasswordEncoder passwordEncoder){
+        super();
+        setPasswordEncoder(passwordEncoder);
+        // 这个地方一定要对userDetailsService赋值，不然userDetailsService是null (这个坑有点深)
         setUserDetailsService(userDetailsService);
     }
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        //try {
-        //    if (authentication.getCredentials() == null) {
-        //        this.logger.debug("Failed to authenticate since no credentials provided");
-        //        throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
-        //    } else {
-        //        String presentedPassword = authentication.getCredentials().toString();
-        //        if (!this.passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-        //            this.logger.debug("Failed to authenticate since password does not match stored value");
-        //            throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
-        //        }
-        //    }
-        //}catch (BadCredentialsException e){
-        //
-        //    System.out.println("密码错误配置");
-        //    throw new BadCredentialsException("用户名或密码错误");
-        //}
+        try {
+            //调用父类方法
+            super.additionalAuthenticationChecks(userDetails, authentication);
+
+        }catch (BadCredentialsException e){
+            redisCache.increment("user:login:error:" + userDetails.getUsername(),1);
+            throw new BadCredentialsException("账户或密码错误");
+        }
+
 
     }
 }

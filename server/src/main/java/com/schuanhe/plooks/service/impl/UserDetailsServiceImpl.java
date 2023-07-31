@@ -44,20 +44,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 使用构建的查询条件查询数据库中的用户信息
         User user = userMapper.selectOne(wrapper);
 
-        System.out.println(user);
-
-        //// 如果用户为空，抛出异常，表示用户名或密码错误
-        //if (Objects.isNull(user)) {
-        //    // 写进redis中
-        //        //登录失败，错误计数器加一
-        //        //if (cache == null){
-        //        //    redisCache.setCacheObject("user:login:error:" + username, String.valueOf(1),60*5);
-        //        //}else {
-        //            redisCache.increment("user:login:error:" + username,1);
-        //        //}
-        //    throw new RuntimeException("用户名或密码错误233");
-        //}
-
         //TODO: 从数据库中查询用户拥有的权限列表
         List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
 

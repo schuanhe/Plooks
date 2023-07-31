@@ -37,13 +37,35 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseResult<Map<String,String>> login(@RequestBody LoginForm loginForm){
-        //先判断是否需要验证码
-        Integer cache = redisCache.getCacheObject("user:login:error:" + loginForm.getUser().getUsername());
+        //判断表单是否符合要求
+        if(loginForm == null || loginForm.getUser() == null){
+            return ResponseResult.fail("表单不能为空");
+        }
+        //判断用户名和密码是否为空
+        if(loginForm.getUser().getUsername() == null || loginForm.getUser().getPassword() == null){
+            return ResponseResult.fail("用户名或密码不能为空");
+        }
+        //判断是否需要验证码
+        Integer cache = 0;
+
+        if (redisCache.hasKey("user:login:error:" + loginForm.getUser().getUsername())){
+            try {
+                cache = redisCache.getCacheObject("user:login:error:" + loginForm.getUser().getUsername());
+                //if (cacheValue != null) {
+                //    // 将String类型转换为Integer类型
+                //    cache = Integer.parseInt(cacheValue);
+                //    // 现在你可以使用cacheIntValue作为Integer类型的值
+                //}
+            }catch (Exception e){
+                return ResponseResult.fail("服务器异常:类型转化");
+            }
+        }
+
         System.out.println(cache);
-        if(cache != null && cache >= 3){
+        if(cache >= 3){
             //需要验证码
             if (loginForm.getUuid() == null || loginForm.getCode() == null){
-                return ResponseResult.fail(-1, "需要验证码");
+                return ResponseResult.fail(-1, "请输入验证码");
             }
             String uuid = loginForm.getUuid();
             String code = loginForm.getCode();

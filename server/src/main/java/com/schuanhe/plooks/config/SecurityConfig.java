@@ -11,11 +11,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.ldap.EmbeddedLdapServerContextSourceFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -76,16 +78,22 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+    /**
+     * 配置认证管理器
+     */
     @Bean
-    public MyDaoAuthenticationProviderImpl myDaoAuthenticationProvider() {
-        MyDaoAuthenticationProviderImpl myDaoAuthenticationProvider = new MyDaoAuthenticationProviderImpl();
-        myDaoAuthenticationProvider.setUserDetailsService(new UserDetailsServiceImpl());
-        return myDaoAuthenticationProvider;
+    public AuthenticationManager authenticationManager(AuthenticationManagerBuilder builder) throws Exception {
+        return builder.authenticationProvider(
+                new MyDaoAuthenticationProviderImpl(
+                        builder.getDefaultUserDetailsService(),
+                        passwordEncoder()
+                )
+        ).build();
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration, AuthenticationManagerBuilder auth) throws Exception {
         return configuration.getAuthenticationManager();
     }
 }

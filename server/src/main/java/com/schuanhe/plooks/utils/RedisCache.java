@@ -100,7 +100,7 @@ public class RedisCache
     /**
      * 删除单个对象
      *
-     * @param key
+     * @param key 待删除的对象的key
      */
     public boolean deleteObject(final String key)
     {
@@ -111,7 +111,7 @@ public class RedisCache
      * 删除集合对象
      *
      * @param collection 多个对象
-     * @return
+     * @return 删除的数量
      */
     public long deleteObject(final Collection collection)
     {
@@ -256,7 +256,20 @@ public class RedisCache
     }
 
 
+    /**
+     * 获取自增值
+     * @param s key
+     * @param i 自增步长
+     */
     public void increment(String s, int i) {
         redisTemplate.opsForValue().increment(KEY_PREFIX_VALUE + s, i);
+    }
+
+    /**
+     * 查询key是否存在
+     */
+    public boolean hasKey(String key) {
+
+        return redisTemplate.hasKey(KEY_PREFIX_VALUE + key);
     }
 }

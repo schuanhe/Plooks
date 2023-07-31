@@ -27,14 +27,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         //认证异常处理
         ResponseResult<String> result =ResponseResult.error(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
 
-        // 写进redis中
-        Integer username = redisCache.getCacheObject("user:login:error:" + request.getParameter("username"));
-        if (username == null){
-            redisCache.setCacheObject("user:login:error:" + request.getParameter("username"), String.valueOf(1),60*5);
-        }else {
-            redisCache.increment("user:login:error:" + request.getParameter("username"),1);
-        }
-
         String json = JSON.toJSONString(result);
         WebUtils.renderString(response,json);
     }
