@@ -25,4 +25,12 @@ public interface UserService extends IService<User> {
      * @return 刷新结果
      */
     String refreshToken(String refreshToken);
+
+    /**
+     * 注册
+     * @param user 用户信息
+     * @throws RuntimeException 注册失败抛出异常
+     */
+    void register(User user) throws RuntimeException;
+
 }

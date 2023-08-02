@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
+    // 根据用户名查询用户
+    User selectByUsername(String username);
+
+    // 根据邮箱查询用户
+    User selectByEmail(String email);
 }
 
 

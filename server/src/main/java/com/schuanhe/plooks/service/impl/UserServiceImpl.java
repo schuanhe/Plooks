@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
     @Override
     public Map<String, String> login(User user) {
@@ -39,7 +44,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 创建 UsernamePasswordAuthenticationToken 对象，用于封装用户登录信息
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
-        System.out.println(authenticationToken);
         // 调用 authenticationManager 进行用户认证，返回认证后的结果,如果认证失败则会自动在UserDetailsServiceImpl中抛出异常
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
@@ -90,6 +94,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         // 返回包含新的 accessToken 和 refreshToken 的 Map
         return accessToken;
+    }
+
+    @Override
+    public void register(User user){
+        // 判断用户名是否已经存在
+
+        User user1 = baseMapper.selectByUsername(user.getUsername());
+        if (Objects.nonNull(user1)) {
+            throw new RuntimeException("用户名已存在");
+        }
+
+        // 判断邮箱是否已经存在
+        User user2 = baseMapper.selectByEmail(user.getEmail());
+        if (Objects.nonNull(user2)) {
+            throw new RuntimeException("邮箱已存在");
+        }
+
+        // 处理密码(加密)
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+        // 设置用户注册时间
+        user.setCreatedAt(new Date());
+        user.setUpdatedAt(new Date());
+
+
+        // 将用户信息插入到数据库中
+        baseMapper.insert(user);
+
     }
 
 }

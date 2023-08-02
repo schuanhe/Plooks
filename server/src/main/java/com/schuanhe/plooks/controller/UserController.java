@@ -11,6 +11,8 @@ import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -51,31 +53,16 @@ public class UserController {
         if (redisCache.hasKey("user:login:error:" + loginForm.getUser().getUsername())){
             try {
                 cache = redisCache.getCacheObject("user:login:error:" + loginForm.getUser().getUsername());
-                //if (cacheValue != null) {
-                //    // 将String类型转换为Integer类型
-                //    cache = Integer.parseInt(cacheValue);
-                //    // 现在你可以使用cacheIntValue作为Integer类型的值
-                //}
             }catch (Exception e){
-                return ResponseResult.fail("服务器异常:类型转化");
+                return ResponseResult.error("服务器异常:类型转化");
             }
         }
 
         System.out.println(cache);
         if(cache >= 3){
             //需要验证码
-            if (loginForm.getUuid() == null || loginForm.getCode() == null){
-                return ResponseResult.fail(-1, "请输入验证码");
-            }
-            String uuid = loginForm.getUuid();
-            String code = loginForm.getCode();
-            String redisCode = redisCache.getCacheObject("user:captcha:" + uuid);
-            if(!code.equals(redisCode)){
-                return ResponseResult.fail("验证码错误");
-            }
-            //验证成功，删除验证码并且重置错误计数器
-            redisCache.deleteObject("user:captcha:" + uuid);
-            redisCache.deleteObject("user:login:error:" + loginForm.getUser().getUsername());
+            if (!checkCaptcha(loginForm))
+                return ResponseResult.fail(-1,"请输入正确的验证码");
         }
 
         //验证用户名和密码
@@ -83,6 +70,58 @@ public class UserController {
         Map<String,String> token = userService.login(user);
         //如果账户密码错误则不会在这里来
         return ResponseResult.success(token);
+    }
+
+    /**
+     * 注册
+     */
+    @PostMapping("/register")
+    public ResponseResult<String> register(@RequestBody LoginForm loginForm){
+        //判断表单是否符合要求
+        if(loginForm == null || loginForm.getUser() == null){
+            return ResponseResult.fail("表单不能为空");
+        }
+        //判断用户名和密码是否为空
+        if(loginForm.getUser().getUsername() == null || loginForm.getUser().getPassword() == null || loginForm.getUser().getEmail() == null){
+            return ResponseResult.fail("表单不完整");
+        }
+        //需要验证码
+        if (checkCaptcha(loginForm))
+            return ResponseResult.fail(-1,"请输入正确的验证码");
+        //注册
+        User user = loginForm.getUser();
+
+        //获取ip地址
+        String ipAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+        user.setClientIp(ipAddress);
+
+        try {
+            userService.register(user);
+        } catch (RuntimeException e) {
+            // 注册失败
+            return ResponseResult.fail(e.getMessage());
+        }
+
+
+        return ResponseResult.success("注册成功");
+
+
+    }
+
+    private boolean checkCaptcha(@RequestBody LoginForm loginForm) {
+        if (loginForm.getUuid() == null || loginForm.getCode() == null) {
+            return false;
+        }
+        String uuid = loginForm.getUuid();
+        String code = loginForm.getCode();
+        String redisCode = redisCache.getCacheObject("user:captcha:" + uuid);
+        if (!code.equals(redisCode)) {
+            return false;
+        }
+        //验证成功，删除验证码并且重置错误计数器
+        redisCache.deleteObject("user:captcha:" + uuid);
+        redisCache.deleteObject("user:login:error:" + loginForm.getUser().getUsername());
+        return true;
     }
 
     /**

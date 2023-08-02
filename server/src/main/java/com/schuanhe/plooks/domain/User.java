@@ -16,23 +16,23 @@ import lombok.Data;
 @Data
 public class User implements Serializable {
     /**
-     * 
+     *  主键
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 
+     *  创建时间
      */
     private Date createdAt;
 
     /**
-     * 
+     *  更新时间
      */
     private Date updatedAt;
 
     /**
-     * 
+     *  删除时间
      */
     private Date deletedAt;
 
@@ -87,10 +87,13 @@ public class User implements Serializable {
     private String status;
 
     /**
-     * 角色身份:0用户、1审核、2管理、3超管
+     * 角色身份:0 用户、1审核、2管理、3超管
      */
     private Integer role;
 
+    /**
+     * 邮箱验证码
+     */
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
