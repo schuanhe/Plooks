@@ -23,5 +23,11 @@ target/
 # 忽略SpringBoot的日志文件
 logs/
 
+# 暂时忽略部分docs目录下的文件
+docs/api/
 
 /client/.vscode/
+/client/node_modules/
+
+# 本地配置文件
+application-local.yml

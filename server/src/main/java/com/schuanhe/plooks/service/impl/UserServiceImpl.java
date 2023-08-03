@@ -2,10 +2,12 @@ package com.schuanhe.plooks.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.User;
+import com.schuanhe.plooks.domain.form.LoginForm;
 import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.mapper.UserMapper;
 import com.schuanhe.plooks.utils.JwtUtil;
+import com.schuanhe.plooks.utils.MailUtil;
 import com.schuanhe.plooks.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MailUtil mailUtil;
 
 
     @Override
@@ -97,19 +102,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public void register(User user){
-        // 判断用户名是否已经存在
+    public void register(LoginForm loginForm){
 
-        User user1 = baseMapper.selectByUsername(user.getUsername());
-        if (Objects.nonNull(user1)) {
-            throw new RuntimeException("用户名已存在");
+        User user = loginForm.getUser();
+        // 邮箱验证码校验
+        String code = redisCache.getCacheObject("user:email:" + user.getEmail());
+        if (code==null || !code.equals(loginForm.getCode())) {
+            throw new RuntimeException("验证码错误");
         }
 
-        // 判断邮箱是否已经存在
-        User user2 = baseMapper.selectByEmail(user.getEmail());
-        if (Objects.nonNull(user2)) {
-            throw new RuntimeException("邮箱已存在");
-        }
+
+        isEmailAndNameExist(user);
 
         // 处理密码(加密)
         String password = passwordEncoder.encode(user.getPassword());
@@ -122,6 +125,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 将用户信息插入到数据库中
         baseMapper.insert(user);
 
+    }
+
+    @Override
+    public void isEmailAndNameExist(User user) {
+        User user1 = baseMapper.selectByUsername(user.getUsername());
+        if (Objects.nonNull(user1)) {
+            throw new RuntimeException("用户名已存在");
+        }
+
+        // 判断邮箱是否已经存在
+        User user2 = baseMapper.selectByEmail(user.getEmail());
+        if (Objects.nonNull(user2)) {
+            throw new RuntimeException("邮箱已存在");
+        }
+    }
+
+    @Override
+    public void sendEmail(User user) {
+        //生成4位数验证码
+        String code = String.valueOf((int)((Math.random()*9+1)*1000));
+        // 发送邮件
+        mailUtil.sendSimpleMail(user.getEmail(),"Plooks验证码","你的验证码是："+ code +"，有效时间为5分钟(如非本人操作，请忽略此邮件)");
+        // 将验证码存入redis中
+        redisCache.setCacheObject("user:email:" + user.getEmail(), code, 60 * 5);
     }
 
 }

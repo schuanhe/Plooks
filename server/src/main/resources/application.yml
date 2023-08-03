@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local # 指定当前环境为 local
   datasource:
     url: jdbc:mysql://localhost:3306/tb_plooks?characterEncoding=utf-8&serverTimezone=UTC
     username: root
@@ -15,6 +17,30 @@ spring:
   redis:
     host: localhost
     port: 6379
+  mail:
+    # 配置 SMTP 服务器地址
+    host: smtp.exmail.qq.com
+    # 发送者邮箱，已开通POP3/SMTP服务的邮箱，也就是你自己的
+    username: xxx@qq.com
+    # 配置密码，注意不是真正的密码，而是刚刚申请到的授权码
+    password: xxx
+    # 配置发件人名称
+    nickname: Plook邮箱验证码
+
+    # 端口号465或587（QQ邮箱发送邮件仅支持587端口协议）
+    port: 465
+    # 默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    # 配置SSL 加密工厂
+    properties:
+      mail:
+        smtp:
+          ssl:
+            # 开启 SSL 加密
+            enable: true
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
 
 
 # mybatis-plus
@@ -24,11 +50,8 @@ mybatis-plus:
   global-config: # 全局配置
     db-config: # 数据库配置
       id-type: auto # 主键类型
-      field-strategy: not_empty # 字段验证策略
       logic-delete-value: 1 # 逻辑删除值
       logic-not-delete-value: 0 # 逻辑未删除值
-      # 数据库大写下划线转换
-      column-underline: true
   configuration: # 配置
     map-underscore-to-camel-case: true # 开启驼峰命名
     cache-enabled: false # 关闭缓存

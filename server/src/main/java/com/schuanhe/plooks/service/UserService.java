@@ -2,6 +2,7 @@ package com.schuanhe.plooks.service;
 
 import com.schuanhe.plooks.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.schuanhe.plooks.domain.form.LoginForm;
 
 import java.util.Map;
 
@@ -28,9 +29,20 @@ public interface UserService extends IService<User> {
 
     /**
      * 注册
-     * @param user 用户信息
+     * @param loginForm 注册信息
      * @throws RuntimeException 注册失败抛出异常
      */
-    void register(User user) throws RuntimeException;
+    void register(LoginForm loginForm) throws RuntimeException;
 
+    /**
+     * 验证用户名和邮箱是否存在
+     * @param user 用户信息
+     */
+    void isEmailAndNameExist(User user) throws RuntimeException;
+
+    /**
+     * 发送邮件
+     * @param user 邮箱
+     */
+    void sendEmail(User user) throws RuntimeException;
 }

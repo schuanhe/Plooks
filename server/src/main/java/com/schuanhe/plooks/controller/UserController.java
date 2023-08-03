@@ -9,10 +9,7 @@ import com.schuanhe.plooks.utils.ResponseResult;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +58,7 @@ public class UserController {
         System.out.println(cache);
         if(cache >= 3){
             //需要验证码
-            if (!checkCaptcha(loginForm))
+            if (checkCaptcha(loginForm))
                 return ResponseResult.fail(-1,"请输入正确的验证码");
         }
 
@@ -73,55 +70,46 @@ public class UserController {
     }
 
     /**
-     * 注册
+     * 注册,需要验证码and邮箱验证码
      */
     @PostMapping("/register")
-    public ResponseResult<String> register(@RequestBody LoginForm loginForm){
+    public ResponseResult<String> register(@RequestBody LoginForm loginForm) {
         //判断表单是否符合要求
-        if(loginForm == null || loginForm.getUser() == null){
+        if(loginForm == null || loginForm.getUser() == null)
             return ResponseResult.fail("表单不能为空");
-        }
         //判断用户名和密码是否为空
-        if(loginForm.getUser().getUsername() == null || loginForm.getUser().getPassword() == null || loginForm.getUser().getEmail() == null){
+        if(loginForm.getUser().getUsername() == null || loginForm.getUser().getPassword() == null || loginForm.getUser().getEmail() == null)
             return ResponseResult.fail("表单不完整");
+        //注册
+        try {
+            userService.isEmailAndNameExist(loginForm.getUser());
+            userService.register(loginForm);
+        }catch (RuntimeException e){
+            return ResponseResult.fail(e.getMessage());
         }
-        //需要验证码
+        return ResponseResult.success("注册成功");
+    }
+
+    /**
+     * 发送邮箱验证码
+     */
+    @PostMapping("/register/email")
+    public ResponseResult<String> sendEmail(@RequestBody LoginForm loginForm){
+        //判断表单是否符合要求
+        if(loginForm == null || loginForm.getUser().getUsername() ==null || loginForm.getUser().getEmail() == null)
+            return ResponseResult.fail("表单不完整");
         if (checkCaptcha(loginForm))
             return ResponseResult.fail(-1,"请输入正确的验证码");
-        //注册
-        User user = loginForm.getUser();
-
-        //获取ip地址
-        String ipAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
-        user.setClientIp(ipAddress);
-
+        //判断邮箱和用户名是否已经被注册
         try {
-            userService.register(user);
-        } catch (RuntimeException e) {
-            // 注册失败
+            userService.isEmailAndNameExist(loginForm.getUser());
+        }catch (RuntimeException e){
             return ResponseResult.fail(e.getMessage());
         }
 
-
-        return ResponseResult.success("注册成功");
-
-
-    }
-
-    private boolean checkCaptcha(@RequestBody LoginForm loginForm) {
-        if (loginForm.getUuid() == null || loginForm.getCode() == null) {
-            return false;
-        }
-        String uuid = loginForm.getUuid();
-        String code = loginForm.getCode();
-        String redisCode = redisCache.getCacheObject("user:captcha:" + uuid);
-        if (!code.equals(redisCode)) {
-            return false;
-        }
-        //验证成功，删除验证码并且重置错误计数器
-        redisCache.deleteObject("user:captcha:" + uuid);
-        redisCache.deleteObject("user:login:error:" + loginForm.getUser().getUsername());
-        return true;
+        //发送邮箱验证码
+        userService.sendEmail(loginForm.getUser());
+        return ResponseResult.success("发送成功");
     }
 
     /**
@@ -162,4 +150,26 @@ public class UserController {
         captcha.out(outputStream);
 
     }
+
+    /**
+     * 检查验证码
+     * @param loginForm 表单
+     * @return 是否正确
+     */
+    private boolean checkCaptcha(LoginForm loginForm) {
+        if (loginForm.getUuid() == null || loginForm.getCode() == null) {
+            return true;
+        }
+        String uuid = loginForm.getUuid();
+        String code = loginForm.getCode();
+        String redisCode = redisCache.getCacheObject("user:captcha:" + uuid);
+        if (!code.equals(redisCode)) {
+            return true;
+        }
+        //验证成功，删除验证码并且重置错误计数器
+        //redisCache.deleteObject("user:captcha:" + uuid); // 测试阶段验证码不删除，可以重复使用
+        redisCache.deleteObject("user:login:error:" + loginForm.getUser().getUsername());
+        return false;
+    }
+
 }

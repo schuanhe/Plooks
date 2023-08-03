@@ -72,7 +72,7 @@ public class UserDetailsImpl implements UserDetails {
     // 账户是否被锁定
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getStatus().equals(String.valueOf(1));
     }
 
     // 密码是否过期
@@ -84,6 +84,6 @@ public class UserDetailsImpl implements UserDetails {
     // 账户是否可用
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.getStatus().equals(String.valueOf(2));
     }
 }
