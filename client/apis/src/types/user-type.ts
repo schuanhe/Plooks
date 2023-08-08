@@ -1,7 +1,15 @@
-export interface UserLoginType {
+// User 类
+export interface UserType {
+    id?: number
+    username?: string
     email: string
     password?: string
+}
+
+export interface UserLoginType {
+    user: UserType
     code?: string //验证码
+    uuid?: string //uuid
 }
 
 export interface UserRegisterType {

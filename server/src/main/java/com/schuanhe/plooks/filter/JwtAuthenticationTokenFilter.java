@@ -1,11 +1,15 @@
 package com.schuanhe.plooks.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.utils.JwtUtil;
 import com.schuanhe.plooks.utils.RedisCache;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,10 +27,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private RedisCache redisCache;
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         if (!StringUtils.hasText(token)) {
             //放行
             filterChain.doFilter(request, response);
@@ -43,15 +48,25 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throw new RuntimeException("token非法");
         }
         //从redis中获取用户信息
-        //String redisKey = "login:" + userid;
-        //LoginUser loginUser = redisCache.getCacheObject(redisKey);
-        //if(Objects.isNull(loginUser)){
-        //    throw new RuntimeException("用户未登录");
-        //}
-        ////存入SecurityContextHolder
-        //// 获取权限信息封装到Authentication中
-        //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,loginUser.getAuthorities());
-        //SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        //String redisKey =
+        UserDetailsImpl loginUser= redisCache.getCacheObject("user:info:" + userid);
+
+
+
+// 反序列化
+//        UserDetailsImpl user = objectMapper.readValue((byte[]) json, UserDetailsImpl.class);
+
+    // 将JSON解析为UserDetailsImpl对象
+    //    UserDetailsImpl loginUser = objectMapper.readValue((byte[]) json, UserDetailsImpl.class);
+
+        if(Objects.isNull(loginUser)){
+            throw new RuntimeException("token过期");
+        }
+        System.out.println("过了安全验证=========");
+        //存入SecurityContextHolder
+        // 获取权限信息封装到Authentication中
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,loginUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //放行
         filterChain.doFilter(request, response);
     }

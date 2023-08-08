@@ -55,13 +55,16 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
-                .antMatchers("/user/login").anonymous()
+                .antMatchers("${base-url}/user/login").anonymous()
                 // 对于获取验证码接口 允许匿名访问
+                .antMatchers("${base-url}/user/getCode").anonymous()
+                // 对于刷新token接口 允许匿名访问
+                .antMatchers("${base-url}/user/token/refresh").anonymous()
                 .antMatchers("/**").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //在xxx过滤器之前
-        //http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling()
                 //配置认证异常处理器

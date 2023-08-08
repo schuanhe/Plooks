@@ -1,8 +1,15 @@
+/**
+ * 该模块导出了一个 Axios 实例，用于发送 HTTP 请求。
+ * 请求拦截器会在每个请求前检查是否存在 access_token，如果不存在则会检查是否存在 refresh_token，如果存在则会使用 refresh_token 获取新的 access_token。
+ * 响应拦截器会在每个响应后检查是否返回 TOKEN_EXPRIED 错误码，如果是则会使用 refresh_token 获取新的 access_token 并重新发送请求。
+ * @module request
+ */
 import axios from "axios";
 import type { AxiosInstance } from "axios";
 import { getAccessToken } from "./api/token";
 import { globalConfig as config, storageData as storage, statusCode } from "@plooks/utils";
 
+//拼接url
 const baseURL = config.domain ? `http${config.https ? 's' : ''}://${config.domain}` : '';
 
 const service: AxiosInstance = axios.create({

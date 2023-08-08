@@ -1,6 +1,6 @@
 const title = "Plooks 一起看!"; //网站标题
 const https = false; //是否启用https
-const domain = "124.222.222.58:9000"; //域名
+const domain = "localhost:8080"; //域名
 const icp = "icp备案信息"; //备案信息
 const security = "公网安备信息" //公网安备信息
 

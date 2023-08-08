@@ -30,7 +30,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private RedisCache redisCache;
 
-
     @Override
 // 根据用户名加载用户信息，用于Spring Security认证
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,6 +43,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 使用构建的查询条件查询数据库中的用户信息
         User user = userMapper.selectOne(wrapper);
 
+        //如果查询不到数据就通过抛出异常来给出提示
+        if(Objects.isNull(user)){
+            throw new RuntimeException("用户名或密码错误");
+        }
         //TODO: 从数据库中查询用户拥有的权限列表
         List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
 

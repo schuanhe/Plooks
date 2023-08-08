@@ -69,11 +69,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- fastjson 依赖 -->
+        <!-- fastjson 依赖(高了会报错) -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>2.0.25</version>
+            <version>1.2.83</version>
         </dependency>
         <!-- easy-captcha 图像验证码依赖 -->
         <dependency>

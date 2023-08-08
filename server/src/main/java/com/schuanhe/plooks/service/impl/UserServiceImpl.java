@@ -64,14 +64,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         // 将 JWT 以键值对的形式存储到 Map 中
         Map<String, String> jwt = new HashMap<>();
-        jwt.put("accessToken", accessToken);
-        jwt.put("refreshToken", refreshToken);
+        jwt.put("access_token", accessToken);
+        jwt.put("refresh_token", refreshToken);
 
         // 将 accessToken放到redis中
         redisCache.setCacheObject("user:token:" + accessToken, userid, 60 * 60);
 
         // 将登录用户信息存储到 Redis 缓存中，缓存的键为 "login:" + userid
-        redisCache.setCacheObject("login:" + userid, loginUser);
+        redisCache.setCacheObject("user:info:" + userid, loginUser);
+
+        //删除错误次数
+        redisCache.deleteObject("user:login:error:" + user.getUsername());
 
         // 返回一个包含登录信息的 ResponseResult 对象，表示登录成功
         return jwt;

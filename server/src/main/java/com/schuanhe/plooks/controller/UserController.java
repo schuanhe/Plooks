@@ -127,8 +127,8 @@ public class UserController {
     /**
      * 验证码
      */
-    @RequestMapping("/captchaImage")
-    public void captcha(HttpServletResponse response) throws Exception{
+    @RequestMapping("/captchaImage/{uuid}")
+    public void captcha(HttpServletResponse response, @PathVariable("uuid") String uuid) throws Exception {
 
         ServletOutputStream outputStream = response.getOutputStream();
 
@@ -140,12 +140,11 @@ public class UserController {
         String result = captcha.text();
 
         // 随机生成uuid，存入redis，设置过期时间
-        String uuid = UUID.randomUUID().toString();
+        //String uuid = UUID.randomUUID().toString(); //使用前端的uuid
+
         // 将验证码和uuid存入redis
         redisCache.setCacheObject("user:captcha:" + uuid, result,60*5);
         // 将uuid和验证码返回给前端
-        response.setHeader("uuid",uuid); // 将uuid放入响应头
-        response.setHeader("Access-Control-Expose-Headers","uuid"); // 告诉前端可以获取响应头的uuid
         response.setContentType("image/png");
         captcha.out(outputStream);
 
@@ -166,9 +165,8 @@ public class UserController {
         if (!code.equals(redisCode)) {
             return true;
         }
-        //验证成功，删除验证码并且重置错误计数器
+        //验证成功，删除验证码
         //redisCache.deleteObject("user:captcha:" + uuid); // 测试阶段验证码不删除，可以重复使用
-        redisCache.deleteObject("user:login:error:" + loginForm.getUser().getUsername());
         return false;
     }
 
