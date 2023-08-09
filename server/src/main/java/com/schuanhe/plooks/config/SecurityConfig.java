@@ -4,20 +4,16 @@ import com.schuanhe.plooks.filter.JwtAuthenticationTokenFilter;
 import com.schuanhe.plooks.handler.impl.AccessDeniedHandlerImpl;
 import com.schuanhe.plooks.handler.impl.AuthenticationEntryPointImpl;
 import com.schuanhe.plooks.handler.impl.MyDaoAuthenticationProviderImpl;
-import com.schuanhe.plooks.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.ldap.EmbeddedLdapServerContextSourceFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -43,6 +39,8 @@ public class SecurityConfig {
     private AccessDeniedHandlerImpl accessDeniedHandler;
 
 
+    @Value("${base-url}")
+    private String baseUrl;
 
 
     @Bean
@@ -55,12 +53,15 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
-                .antMatchers("${base-url}/user/login").anonymous()
-                // 对于获取验证码接口 允许匿名访问
-                .antMatchers("${base-url}/user/getCode").anonymous()
-                // 对于刷新token接口 允许匿名访问
-                .antMatchers("${base-url}/user/token/refresh").anonymous()
-                .antMatchers("/**").anonymous()
+                .antMatchers(
+                        //登录
+                        baseUrl + "/user/login",
+                        //刷新token
+                        baseUrl + "/user/token/refresh",
+                        //获取验证码
+                        baseUrl + "/user/captchaImage/**",
+                        //注册发送验证码
+                        baseUrl + "/user/register/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //在xxx过滤器之前

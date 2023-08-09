@@ -45,4 +45,6 @@ public interface UserService extends IService<User> {
      * @param user 邮箱
      */
     void sendEmail(User user) throws RuntimeException;
+
+    User getUserInfo(String token);
 }

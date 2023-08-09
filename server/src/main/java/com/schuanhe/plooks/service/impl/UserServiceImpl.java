@@ -6,6 +6,7 @@ import com.schuanhe.plooks.domain.form.LoginForm;
 import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.mapper.UserMapper;
+import com.schuanhe.plooks.utils.CoreUtils;
 import com.schuanhe.plooks.utils.JwtUtil;
 import com.schuanhe.plooks.utils.MailUtil;
 import com.schuanhe.plooks.utils.RedisCache;
@@ -152,6 +153,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         mailUtil.sendSimpleMail(user.getEmail(),"Plooks验证码","你的验证码是："+ code +"，有效时间为5分钟(如非本人操作，请忽略此邮件)");
         // 将验证码存入redis中
         redisCache.setCacheObject("user:email:" + user.getEmail(), code, 60 * 5);
+    }
+
+    @Override
+    public User getUserInfo(String token) {
+        try {
+            User user = null;
+            String userid = JwtUtil.getUserid(token);
+            UserDetailsImpl userDetails = redisCache.getCacheObject("user:info:" + userid);
+            // 如果redis中没有用户信息，则从数据库中获取用户信息
+            if (userDetails == null) {
+                user = baseMapper.selectById(userid);
+            } else {
+                user = userDetails.getUser();
+            }
+            return CoreUtils.desensitization(user); // 脱敏处理
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

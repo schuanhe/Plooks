@@ -9,12 +9,12 @@ import com.schuanhe.plooks.utils.ResponseResult;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.UUID;
 
 
 
@@ -27,6 +27,18 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/test")
+    public ResponseResult<String> test(){
+        return ResponseResult.success("测试成功");
+    }
+
+    //需要管理员权限
+    @GetMapping("/admin")
+    @PreAuthorize("hasAnyAuthority('system:test:list')")
+    public ResponseResult<String> admin(){
+        return ResponseResult.success("管理员权限");
+    }
 
 
     /**
@@ -148,6 +160,18 @@ public class UserController {
         response.setContentType("image/png");
         captcha.out(outputStream);
 
+    }
+
+    /**
+     * 用户获取个人信息
+     */
+    @GetMapping("/info/get")
+    public ResponseResult<User> getUserInfo(@RequestHeader("Authorization") String token){
+        User user = userService.getUserInfo(token);
+        if(user == null){
+            return ResponseResult.fail("获取用户信息失败");
+        }
+        return ResponseResult.success(user);
     }
 
     /**
