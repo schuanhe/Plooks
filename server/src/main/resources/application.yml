@@ -59,5 +59,12 @@ mybatis-plus:
 
 debug: true
 
+# 七牛云配置
+qiniu:
+  access: xxx
+  secret: xxx
+  bucket: xxx
+  path: http://qiniu.xxx.com/
+
 # 自定义配置
 base-url: /v1/api # 基础路径

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -128,12 +129,14 @@ public class UserController {
      * 刷新token
      */
     @GetMapping("/token/refresh")
-    public ResponseResult<String> refreshToken(@RequestHeader("Authorization") String refreshToken){
+    public ResponseResult<Map<String,String>> refreshToken(@RequestHeader("Authorization") String refreshToken){
         String token = userService.refreshToken(refreshToken);
         if(token == null){
             return ResponseResult.fail("刷新token失败");
         }
-        return ResponseResult.success(token);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
+        return ResponseResult.success(map);
     }
 
     /**

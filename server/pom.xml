@@ -81,6 +81,12 @@
             <artifactId>easy-captcha</artifactId>
             <version>1.6.2</version>
         </dependency>
+        <!--七牛云jdk-->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>7.14.0</version>
+        </dependency>
         <!-- mysql 数据库驱动 依赖 -->
         <dependency>
             <groupId>com.mysql</groupId>
