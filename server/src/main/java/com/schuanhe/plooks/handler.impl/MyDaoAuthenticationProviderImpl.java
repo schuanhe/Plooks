@@ -38,6 +38,9 @@ public class MyDaoAuthenticationProviderImpl extends DaoAuthenticationProvider {
             super.additionalAuthenticationChecks(userDetails, authentication);
 
         }catch (BadCredentialsException e){
+            // 如果是邮箱登录那么就是密码对应密码(没有加密)
+            if (userDetails.getPassword().equals(authentication.getCredentials().toString()))
+                return;
             redisCache.increment("user:login:error:" + userDetails.getUsername(),1);
             throw new BadCredentialsException("账户或密码错误");
         }

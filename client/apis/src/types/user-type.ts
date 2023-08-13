@@ -12,11 +12,6 @@ export interface UserLoginType {
     uuid?: string //uuid
 }
 
-export interface UserRegisterType {
-    email: string
-    password: string
-    code: string //验证码
-}
 
 export interface UserInfoType {
     uid: number
@@ -50,4 +45,13 @@ export interface AdminModifyUserInfoType {
     email: string,
     name: string,
     sign: string,
+}
+
+// 邮箱验证码发送实体
+export interface EmailCodeType {
+    email: string,
+    code: string,
+    uuid: string,
+    username?: string,
+    scene: Number // 1: 注册 2: 登录 3: 修改密码
 }

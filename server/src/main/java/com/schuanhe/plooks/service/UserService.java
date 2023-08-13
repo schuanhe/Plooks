@@ -20,6 +20,8 @@ public interface UserService extends IService<User> {
      */
     Map<String,String> login(User user);
 
+    Map<String, String> loginEmail(String email);
+
     /**
      * 刷新token
      * @param refreshToken 刷新token
@@ -41,10 +43,17 @@ public interface UserService extends IService<User> {
     void isEmailAndNameExist(User user) throws RuntimeException;
 
     /**
+     * 验证邮箱是否存在
+     */
+    boolean isEmailExist(String email) throws RuntimeException;
+
+    /**
      * 发送邮件
      * @param user 邮箱
      */
     void sendEmail(User user) throws RuntimeException;
 
     User getUserInfo(String token);
+
+
 }

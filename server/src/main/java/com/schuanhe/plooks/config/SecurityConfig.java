@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .antMatchers(
                         //登录
                         baseUrl + "/user/login",
+                        baseUrl + "/user/login/**",
                         //刷新token
                         baseUrl + "/user/token/refresh",
                         //获取验证码

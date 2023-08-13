@@ -1,5 +1,5 @@
 import request from '../request';
-import type { AdminModifyUserInfoType, ModifyPwdType, ModifyUserInfoType, UserLoginType, UserRegisterType } from '../types/user-type'
+import type { AdminModifyUserInfoType, ModifyPwdType, ModifyUserInfoType, UserLoginType } from '../types/user-type'
 
 // 登录
 export const loginAPI = (login: UserLoginType) => {
@@ -12,7 +12,7 @@ export const emailLoginAPI = (login: UserLoginType) => {
 }
 
 // 注册
-export const registerAPI = (register: UserRegisterType) => {
+export const registerAPI = (register: UserLoginType) => {
     return request.post('v1/user/register', register);
 }
 

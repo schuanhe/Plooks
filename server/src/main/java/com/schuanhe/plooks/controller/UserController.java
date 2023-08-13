@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +84,48 @@ public class UserController {
     }
 
     /**
+     * 邮箱登录验证码
+     */
+    @PostMapping("/login/email")
+    public ResponseResult<Map<String,String>> loginEmail(@RequestBody LoginForm loginForm){
+        //判断表单是否符合要求
+        if(loginForm == null|| loginForm.getUser().getEmail() == null|| loginForm.getCode() == null)
+            return ResponseResult.fail("表单不完整");
+        //判断邮箱验证码
+        if (checkEmailCaptcha(loginForm))
+            return ResponseResult.fail(-1,"验证码错误或已过期");
+        //验证码正确登录
+        User user = loginForm.getUser();
+        Map<String,String> token = userService.loginEmail(user.getEmail());
+        return ResponseResult.success(token);
+    }
+
+
+    /**
+     * 邮箱登录验证码
+     */
+    @PostMapping("/login/email/code")
+    public ResponseResult<String> loginSendEmail(@RequestBody LoginForm loginForm){
+        System.out.println("登录前时间"+new Date());
+        //判断表单是否符合要求
+        if(loginForm == null|| loginForm.getUser().getEmail() == null)
+            return ResponseResult.fail("表单不完整");
+        if (checkCaptcha(loginForm))
+            return ResponseResult.fail(-1,"请输入正确的验证码");
+        //判断邮箱和用户名是否已经被注册
+
+        if (userService.isEmailExist(loginForm.getUser().getEmail())){
+            //发送邮箱验证码
+            userService.sendEmail(loginForm.getUser());
+            System.out.println("登录后时间"+new Date());
+            return ResponseResult.success("发送成功");
+        }
+
+        return ResponseResult.fail("邮箱未注册");
+    }
+
+
+    /**
      * 注册,需要验证码and邮箱验证码
      */
     @PostMapping("/register")
@@ -109,7 +152,7 @@ public class UserController {
     @PostMapping("/register/email")
     public ResponseResult<String> sendEmail(@RequestBody LoginForm loginForm){
         //判断表单是否符合要求
-        if(loginForm == null || loginForm.getUser().getUsername() ==null || loginForm.getUser().getEmail() == null)
+        if(loginForm == null || loginForm.getUser().getUsername() == null || loginForm.getUser().getEmail() == null)
             return ResponseResult.fail("表单不完整");
         if (checkCaptcha(loginForm))
             return ResponseResult.fail(-1,"请输入正确的验证码");
@@ -180,7 +223,7 @@ public class UserController {
     /**
      * 检查验证码
      * @param loginForm 表单
-     * @return 是否正确
+     * @return 是否有异常
      */
     private boolean checkCaptcha(LoginForm loginForm) {
         if (loginForm.getUuid() == null || loginForm.getCode() == null) {
@@ -196,5 +239,26 @@ public class UserController {
         //redisCache.deleteObject("user:captcha:" + uuid); // 测试阶段验证码不删除，可以重复使用
         return false;
     }
+
+    /**
+     * 邮箱验证码校验
+     * @param loginForm 表单
+     * @return 是否有异常
+     */
+    private boolean checkEmailCaptcha(LoginForm loginForm) {
+        if (loginForm.getUser().getEmail() == null || loginForm.getCode() == null) {
+            return true;
+        }
+        String email = loginForm.getUser().getEmail();
+        String code = loginForm.getCode();
+        String redisCode = redisCache.getCacheObject("user:email:" + email);
+        if (!code.equals(redisCode)) {
+            return true;
+        }
+        //验证成功，删除验证码
+        redisCache.deleteObject("user:email:" + email); // 测试阶段验证码不删除，可以重复使用
+        return false;
+    }
+
 
 }

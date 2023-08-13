@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ public class MailUtil {
     /**
      * 普通邮件发送
      */
+    @Async
     public void sendSimpleMail(String to, String subject, String content) {
         // 构建一个邮件对象
         SimpleMailMessage message = new SimpleMailMessage();

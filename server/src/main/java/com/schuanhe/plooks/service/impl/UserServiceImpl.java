@@ -81,6 +81,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return jwt;
     }
 
+    /**
+     * 邮箱登录
+     * @param email 提供邮箱即可
+     * @return jwt
+     */
+    @Override
+    public Map<String, String> loginEmail(String email) {
+        return login(baseMapper.selectByEmail(email));
+    }
+
     @Override
     public String refreshToken(String refreshToken) {
         // 从 refreshToken 中获取用户ID
@@ -146,12 +156,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
+    public boolean isEmailExist(String email) throws RuntimeException {
+        User user = baseMapper.selectByEmail(email);
+        return Objects.nonNull(user);
+    }
+
+    @Override
     public void sendEmail(User user) {
         //生成4位数验证码
         String code = String.valueOf((int)((Math.random()*9+1)*1000));
         // 发送邮件
+        System.out.println("邮件发送前时间"+new Date());
         mailUtil.sendSimpleMail(user.getEmail(),"Plooks验证码","你的验证码是："+ code +"，有效时间为5分钟(如非本人操作，请忽略此邮件)");
         // 将验证码存入redis中
+        System.out.println("邮件发送后时间"+new Date());
         redisCache.setCacheObject("user:email:" + user.getEmail(), code, 60 * 5);
     }
 
