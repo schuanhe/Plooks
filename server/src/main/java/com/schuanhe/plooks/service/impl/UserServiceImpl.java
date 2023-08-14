@@ -137,7 +137,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
         // 将用户信息插入到数据库中
-        baseMapper.insert(user);
+        int insert = baseMapper.insert(user);
+        if (insert != 1) {
+            throw new RuntimeException("注册失败");
+        }
+        // 删除验证码
+        redisCache.deleteObject("user:email:" + user.getEmail());
 
     }
 
@@ -166,10 +171,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //生成4位数验证码
         String code = String.valueOf((int)((Math.random()*9+1)*1000));
         // 发送邮件
-        System.out.println("邮件发送前时间"+new Date());
+        System.out.println("邮件发送验证码："+code);
         mailUtil.sendSimpleMail(user.getEmail(),"Plooks验证码","你的验证码是："+ code +"，有效时间为5分钟(如非本人操作，请忽略此邮件)");
         // 将验证码存入redis中
-        System.out.println("邮件发送后时间"+new Date());
         redisCache.setCacheObject("user:email:" + user.getEmail(), code, 60 * 5);
     }
 

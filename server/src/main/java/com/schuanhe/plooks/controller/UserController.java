@@ -152,16 +152,13 @@ public class UserController {
     @PostMapping("/register/email")
     public ResponseResult<String> sendEmail(@RequestBody LoginForm loginForm){
         //判断表单是否符合要求
-        if(loginForm == null || loginForm.getUser().getUsername() == null || loginForm.getUser().getEmail() == null)
+        if(loginForm == null || loginForm.getUser().getEmail() == null)
             return ResponseResult.fail("表单不完整");
         if (checkCaptcha(loginForm))
             return ResponseResult.fail(-1,"请输入正确的验证码");
-        //判断邮箱和用户名是否已经被注册
-        try {
-            userService.isEmailAndNameExist(loginForm.getUser());
-        }catch (RuntimeException e){
-            return ResponseResult.fail(e.getMessage());
-        }
+        //判断邮箱是否已经被注册
+        if (userService.isEmailExist(loginForm.getUser().getEmail()))
+            return ResponseResult.fail("邮箱已被注册");
 
         //发送邮箱验证码
         userService.sendEmail(loginForm.getUser());
