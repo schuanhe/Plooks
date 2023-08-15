@@ -6,7 +6,7 @@
                 <common-avatar :url="item.avatar" :size="60"></common-avatar>
             </div>
             <!--昵称和个签-->
-            <span class="follow-name" @click="goUserSpace(item.uid)">{{ item.name }}</span>
+            <span class="follow-name" @click="goUserSpace(item.uid)">{{ item.nickname }}</span>
             <span class="follow-sign">{{ item.sign }}</span>
         </div>
     </div>

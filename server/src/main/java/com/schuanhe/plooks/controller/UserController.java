@@ -10,6 +10,7 @@ import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
@@ -208,7 +209,7 @@ public class UserController {
     /**
      * 用户获取个人信息
      */
-    @GetMapping("/info/get")
+    @GetMapping("/info")
     public ResponseResult<User> getUserInfo(@RequestHeader("Authorization") String token){
         User user = userService.getUserInfo(token);
         if(user == null){
@@ -218,12 +219,113 @@ public class UserController {
     }
 
     /**
+     * 通过id获取用户部分信息
+     */
+    @GetMapping("/info/{id}")
+    public ResponseResult<User> getUserInfoById(@PathVariable("id") Integer id){
+        User user = userService.getUserInfoById(id);
+        if(user == null){
+            return ResponseResult.fail("获取用户信息失败");
+        }
+        return ResponseResult.success(user);
+    }
+
+    /**
+     * 通过用户名获取用户id
+     */
+    @GetMapping("/id/{username}")
+    public ResponseResult<Map<String,Integer>> getUserIdByUsername(@PathVariable("username") String username){
+        Integer id = userService.getUserIdByUsername(username);
+        if(id == null){
+            return ResponseResult.fail("获取用户id失败");
+        }
+
+        Map<String,Integer> map = new HashMap<>();
+        map.put("id",id);
+
+        return ResponseResult.success(map);
+    }
+
+    /**
+     * 邮箱修改密码验证
+     */
+    @PostMapping("/modify/email/code")
+    public ResponseResult<String> modifyPasswordSendEmail(@RequestBody LoginForm loginForm){
+        //判断表单是否符合要求
+        if(loginForm == null|| loginForm.getUser().getEmail() == null)
+            return ResponseResult.fail("表单不完整");
+        if (checkCaptcha(loginForm))
+            return ResponseResult.fail(-1,"请输入正确的验证码");
+        if (userService.isEmailExist(loginForm.getUser().getEmail())){
+            //发送邮箱验证码
+            userService.sendEmail(loginForm.getUser());
+            return ResponseResult.success("发送成功");
+        }
+
+        return ResponseResult.fail("邮箱未注册");
+    }
+
+    /**
+     * 邮箱修改密码
+     */
+    @PostMapping("/modify/email")
+    public ResponseResult<String> modifyPasswordByEmail(@RequestBody LoginForm loginForm){
+        //判断表单是否符合要求
+        if(loginForm == null || loginForm.getUser() == null)
+            return ResponseResult.fail("表单不能为空");
+        //判断用户名和密码是否为空
+        if(loginForm.getUser().getPassword() == null || loginForm.getUser().getEmail() == null || loginForm.getCode() == null)
+            return ResponseResult.fail("表单不完整");
+        //修改密码
+        try {
+            userService.modifyPasswordByEmail(loginForm);
+        }catch (RuntimeException e){
+            return ResponseResult.fail(e.getMessage());
+        }
+        return ResponseResult.success("修改成功");
+    }
+
+    /**
+     * 修改封面
+     */
+    @PutMapping("/cover")
+    public ResponseResult<String> modifyCover(@RequestHeader("Authorization") String token, Map<String, String> requestBody ){
+        String spacecover = requestBody.get("spacecover");
+
+        if(token.equals("") || spacecover == null || spacecover.equals(""))
+            return ResponseResult.fail("表单不完整");
+        try {
+            userService.modifyCover(token,spacecover);
+        }catch (RuntimeException e){
+            return ResponseResult.fail(e.getMessage());
+        }
+        return ResponseResult.success("修改成功");
+    }
+
+    /**
+     * 用户修改个人信息
+     */
+    @PutMapping("/info")
+    public ResponseResult<String> modifyUserInfo(@RequestHeader("Authorization") String token, @RequestBody User user){
+        if(token.equals("") || user == null)
+            return ResponseResult.fail("表单不完整");
+        try {
+            userService.modifyUserInfo(token,user);
+        }catch (RuntimeException e){
+            return ResponseResult.fail(e.getMessage());
+        }
+        return ResponseResult.success("修改成功");
+    }
+
+
+
+    /**
      * 检查验证码
      * @param loginForm 表单
      * @return 是否有异常
      */
     private boolean checkCaptcha(LoginForm loginForm) {
-        if (loginForm.getUuid() == null || loginForm.getCode() == null) {
+        if (!StringUtils.hasLength(loginForm.getUuid()) || !StringUtils.hasLength(loginForm.getCode())) {
             return true;
         }
         String uuid = loginForm.getUuid();
@@ -243,7 +345,7 @@ public class UserController {
      * @return 是否有异常
      */
     private boolean checkEmailCaptcha(LoginForm loginForm) {
-        if (loginForm.getUser().getEmail() == null || loginForm.getCode() == null) {
+        if (!StringUtils.hasLength(loginForm.getUser().getEmail()) || !StringUtils.hasLength(loginForm.getCode())) {
             return true;
         }
         String email = loginForm.getUser().getEmail();

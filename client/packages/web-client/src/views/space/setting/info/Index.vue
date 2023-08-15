@@ -10,7 +10,7 @@
                 <p class="uid form-item">{{ userInfo.uid }}</p>
             </n-form-item>
             <n-form-item :label="`${t('common.nickname')}:`">
-                <n-input class="form-input name" v-model:value="userInfo.name" placeholder="请输入昵称" maxlength="20"
+                <n-input class="form-input name" v-model:value="userInfo.nickname" placeholder="请输入昵称" maxlength="20"
                     show-count />
             </n-form-item>
             <n-form-item :label="`${t('common.gender')}:`">
@@ -68,7 +68,7 @@ const descSize = {
 const userInfo = ref<UserInfoType>({
     uid: 0,
     avatar: "",
-    name: "",
+    nickname: "",
     sign: "",
     gender: 0,
     birthday: "",
@@ -111,13 +111,13 @@ const changeUpload = (status: string, data: any) => {
 const modifyUserInfo = () => {
     const modifyForm: ModifyUserInfoType = {
         avatar: userInfo.value.avatar,
-        name: userInfo.value.name,
+        nickname: userInfo.value.nickname,
         sign: userInfo.value.sign || "",
         gender: userInfo.value.gender || 0,
         birthday: userInfo.value.birthday || '1970-1-1',
     }
 
-    if (!modifyForm.name) {
+    if (!modifyForm.nickname) {
         notification.error({
             content: "请填写昵称",
             duration: 5000,

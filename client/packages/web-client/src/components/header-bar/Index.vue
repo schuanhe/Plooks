@@ -21,7 +21,7 @@
                     </div>
                     <div class="header-menu">
                         <div class="menu-item">
-                            <span class="btn" @click="goPage('Space')">{{ userInfo.name }}</span>
+                            <span class="btn" @click="goPage('Space')">{{ userInfo.nickname }}</span>
                         </div>
                         <div class="menu-item">
                             <span class="btn" @click="logout">{{ t("common.logOut") }}</span>
@@ -102,7 +102,7 @@ const search = () => {
 const isLogin = ref(false);
 const userInfo = ref<UserInfoType>({
     uid: 0,
-    name: "",
+    nickname: "",
     avatar: ""
 });
 

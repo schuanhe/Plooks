@@ -19,6 +19,14 @@ public interface UserMapper extends BaseMapper<User> {
 
     // 根据邮箱查询用户
     User selectByEmail(String email);
+
+    // 通过邮箱修改密码
+    Integer updatePasswordByEmail(User user);
+
+    // 通过id修改用户背景图
+    Integer updateCoverById(Integer id, String cover);
+
+    Integer updateUserInfoById(User user);
 }
 
 

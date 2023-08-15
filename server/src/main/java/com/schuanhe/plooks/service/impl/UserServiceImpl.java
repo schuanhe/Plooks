@@ -69,10 +69,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         jwt.put("refresh_token", refreshToken);
 
         // 将 accessToken放到redis中
-        redisCache.setCacheObject("user:token:" + accessToken, userid, 60 * 60);
+        redisCache.setCacheObject("user:token:" + accessToken, userid, 60 * 5);
 
         // 将登录用户信息存储到 Redis 缓存中，缓存的键为 "login:" + userid
         redisCache.setCacheObject("user:info:" + userid, loginUser);
+        // 用户名对应的用户ID
+        redisCache.setCacheObject("user:info:username" + user.getUsername(), userid);
 
         //删除错误次数
         redisCache.deleteObject("user:login:error:" + user.getUsername());
@@ -135,6 +137,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
 
+        // 设置默认生日1970-01-01
+        user.setBirthday(new Date(0));
+        // 设置默认昵称
+        user.setNickname("用户" + CoreUtils.getRandomString(4));
 
         // 将用户信息插入到数据库中
         int insert = baseMapper.insert(user);
@@ -193,6 +199,105 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public User getUserInfoById(Integer id) {
+        // 先从缓存中获取用户信息
+        UserDetailsImpl userDetails = redisCache.getCacheObject("user:info:" + id);
+        // 如果缓存中没有用户信息，则从数据库中获取用户信息
+        if (userDetails == null) {
+            User user = baseMapper.selectById(id);
+            return CoreUtils.removeSensitiveInfo(user); // 脱敏处理
+        } else {
+            return CoreUtils.removeSensitiveInfo(userDetails.getUser()); // 脱敏处理
+        }
+    }
+
+    @Override
+    public Integer getUserIdByUsername(String username) {
+        // 先从缓存中获取用户信息
+        Integer userid = redisCache.getCacheObject("user:info:username" + username);
+        // 如果缓存中没有用户信息，则从数据库中获取用户信息
+        if (userid == null) {
+            User user = baseMapper.selectByUsername(username);
+            return user.getId();
+        } else {
+            return userid;
+        }
+
+    }
+
+    @Override
+    public void modifyPasswordByEmail(LoginForm loginForm) {
+        // 邮箱验证码校验
+        String code = redisCache.getCacheObject("user:email:" + loginForm.getUser().getEmail());
+        if (code==null || !code.equals(loginForm.getCode())) {
+            throw new RuntimeException("验证码错误");
+        }
+
+        // 处理密码(加密)
+        String password = passwordEncoder.encode(loginForm.getUser().getPassword());
+        loginForm.getUser().setPassword(password);
+
+        // 将用户信息插入到数据库中
+        int update = baseMapper.updatePasswordByEmail(loginForm.getUser());
+        if (update != 1) {
+            throw new RuntimeException("修改失败");
+        }
+        // 删除验证码
+        redisCache.deleteObject("user:email:" + loginForm.getUser().getEmail());
+    }
+
+    @Override
+    public void modifyCover(String token, String spacecover) {
+        String userid = getIdByToken(token);
+        int update = baseMapper.updateCoverById(Integer.valueOf(userid), spacecover);
+        if (update != 1) {
+            throw new RuntimeException("修改失败");
+        }
+        updateRedisCache(userid);
+    }
+
+
+    @Override
+    public void modifyUserInfo(String token, User user) {
+        String userid = getIdByToken(token);
+        user.setId(Integer.valueOf(userid));
+        int update = baseMapper.updateUserInfoById(user);
+        if (update != 1) {
+            throw new RuntimeException("修改失败");
+        }
+        updateRedisCache(userid);
+    }
+
+    // 更新Redis缓存
+    private void updateRedisCache(String userid) {
+        // 老旧的用户信息
+        UserDetailsImpl userDetailsOld = redisCache.getCacheObject("user:info:" + userid);
+        // 删除缓存
+        redisCache.deleteObject("user:info:" + userid);
+        userDetailsOld.setUser(baseMapper.selectById(userid));
+        redisCache.setCacheObject("user:info:" + userid, userDetailsOld);
+    }
+
+
+    // 根据token获取用户id
+    private String getIdByToken(String token) throws RuntimeException{
+        String userid;
+        try {
+            // 获取用户ID（先看看缓存）
+            userid = redisCache.getCacheObject("user:token:" + token);
+            if (userid == null) {
+                userid = JwtUtil.getUserid(token);
+                if (userid == null) {
+                    throw new RuntimeException("token为空");
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("token解析错误");
+        }
+        return userid;
     }
 
 }

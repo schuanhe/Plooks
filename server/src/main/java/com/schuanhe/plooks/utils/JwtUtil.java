@@ -126,8 +126,7 @@ public class JwtUtil {
 
 
     /**
-     * 刷新token
-     * 刷新token前已经判断过有效性，所以这里不需要再判断
+     * 获取token中的数据
      * @param refreshToken 刷新token
      * @return  token
      */

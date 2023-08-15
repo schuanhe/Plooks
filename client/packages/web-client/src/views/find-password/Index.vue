@@ -1,5 +1,5 @@
 <template>
-    <div v-title :data-title="`找回密码-${globalConfig.title}`">
+    <div v-title :data-title="`找回密码-${config.title}`">
         <header-bar></header-bar>
         <div class="find-password">
             <steps class="steps" :current="current" :title-list="['填写账号', '重置密码', '操作成功']"></steps>
@@ -8,6 +8,11 @@
                     <n-form-item label="邮箱" path="email">
                         <n-input placeholder="请输入绑定的邮箱" v-model:value="modifyForm.email"></n-input>
                     </n-form-item>
+                    <!-- 图像验证码 -->
+                    <n-form-item label="验证码" path="code">
+                        <n-input placeholder="请输入验证码" v-model:value="modifyForm.code" />
+                        <n-image :src="captcha.src" preview-disabled @click="OpenCaptcha" />
+                    </n-form-item>
                     <n-button class="submit" type="primary" @click="checkUser">验证</n-button>
                 </n-form>
             </div>
@@ -15,6 +20,7 @@
                 <n-form ref="formRef" :rules="rules" :model="modifyForm" label-width="auto">
                     <n-form-item label="邮箱">
                         <span>{{ desensiEmail(modifyForm.email) }}</span>
+
                     </n-form-item>
                     <n-form-item label="密码" path="password">
                         <n-input placeholder="请输入密码" type="password" v-model:value="modifyForm.password" />
@@ -24,7 +30,6 @@
                     </n-form-item>
                     <n-form-item label="验证码" path="code">
                         <n-input placeholder="请输入验证码" v-model:value="modifyForm.code" />
-                        <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
                     </n-form-item>
                     <n-button class="submit" type="primary" @click="submitForm">保存</n-button>
                 </n-form>
@@ -38,18 +43,16 @@
             </div>
         </div>
     </div>
-    <slider-captcha v-model:show="showCaptcha" :email="modifyForm.email" @success="captchaSuccess"></slider-captcha>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import HeaderBar from "@/components/header-bar/Index.vue"
-import { globalConfig, statusCode } from '@plooks/utils';
+import { globalConfig as config, statusCode,createUuid } from '@plooks/utils';
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
-import { NResult, NInput, NButton, NForm, NFormItem, useMessage } from "naive-ui";
-import { resetpwdCheckAPI, mpdifyPwdAPI } from "@plooks/apis";
-import { SliderCaptcha } from "@plooks/components"
-import useSendCode from "@/hooks/send-code-hooks";
+import { NResult, NInput, NButton, NForm, NFormItem, useMessage, NImage } from "naive-ui";
+import { mpdifyPwdAPI,sendEmailCodeAPI } from "@plooks/apis";
+import type { UserLoginType,UserType,EmailCodeType } from "@plooks/apis";
 import { useRouter } from "vue-router";
 
 import Steps from "@/components/steps/Index.vue"
@@ -57,20 +60,46 @@ import Steps from "@/components/steps/Index.vue"
 const message = useMessage();
 
 const current = ref(1);
-let captchaUsers = "";// 人机验证使用者
-const showCaptcha = ref(false);
+
+
 const modifyForm = reactive({
     email: "",
     password: "",
     reenteredPassword: "",
-    code: ""
+    code: "",
+    uuid:""
 })
+
+
+// 提交表单
+
+
+
+// 验证码相关
+const baseURL = config.domain ? `http${config.https ? 's' : ''}://${config.domain}` : '';
+// 默认uuid
+let euuid = createUuid();
+// 登录图片验证码
+const captcha = ref({
+    "uuid": euuid,
+    "src": baseURL + "/api/v1/user/captchaImage/" + euuid
+});
+
+// 开启(刷新) 登录图片验证码
+const OpenCaptcha = () => {
+    euuid = createUuid();
+    captcha.value.uuid = euuid;
+    captcha.value.src = baseURL + "/api/v1/user/captchaImage/" + euuid;
+}
+
+
 
 const validatePasswordSame = (rule: FormItemRule, value: string): boolean => {
     return value === modifyForm.password
 }
 
 const rules: FormRules = {
+
     email: [
         { required: true, message: "请输入邮箱", trigger: ['blur', 'input'] },
         { type: "email", message: "请输入正确的邮箱地址", trigger: ['blur', 'input'] },
@@ -88,18 +117,28 @@ const checkUser = () => {
     if (!modifyForm.email) {
         message.error("邮箱不能为空");
         return;
-    };
-    resetpwdCheckAPI(modifyForm.email).then((res) => {
-        if (res.data.code === statusCode.CAPTCHA_REQUIRED) {
-            captchaUsers = "resetpwd";
-            showCaptcha.value = true;
-            return;
-        }
+    }
+    if (!modifyForm.code) {
+        message.error("验证码不能为空");
+        return;
+    }
+
+    const emailCode: EmailCodeType = {
+        email: modifyForm.email,
+        code: modifyForm.code,
+        uuid: captcha.value.uuid,
+        scene: 3
+    }
+
+    sendEmailCodeAPI(emailCode).then((res) => {
         if (res.data.code === statusCode.OK) {
             current.value = 2;
+            // 清空验证码
+            modifyForm.code = "";
+            message.success("发送验证码成功，注意查收");
         } else {
-            message.error(res.data.msg);
-        }
+            message.error(res.data.message);
+        }        
     })
 }
 
@@ -108,30 +147,27 @@ const desensiEmail = (email: string) => {
     return email.replace(/(.{0,3}).*@(.*)/, "$1***@$2")
 }
 
-const { disabledSend, sendBtnText, sendEmailCodeAsync } = useSendCode();
-const beforeSendCode = () => {
-    if (!modifyForm.email) {
-        return;
-    }
-    sendEmailCodeAsync(modifyForm.email).then((res) => {
-        if (res === statusCode.CAPTCHA_REQUIRED) {
-            captchaUsers = "emailcode";
-            showCaptcha.value = true;
-        }
-    })
-}
 
 // 提交表单
 const formRef = ref<FormInst | null>(null);
 const submitForm = () => {
     formRef.value?.validate((errors) => {
         if (!errors) {
-            mpdifyPwdAPI(modifyForm).then((res) => {
+
+            const modify: UserLoginType = reactive({
+                user: reactive<UserType>({
+                    password: modifyForm.password,
+                    email: modifyForm.email,
+                }),
+                code: modifyForm.code,
+            })
+
+            mpdifyPwdAPI(modify).then((res) => {
                 if (res.data.code === statusCode.OK) {
                     current.value = 3;
                     message.success("修改成功");
                 } else {
-                    message.error(res.data.msg);
+                    message.error(res.data.message);
                 }
             })
         } else {
@@ -145,14 +181,6 @@ const goHome = () => {
     router.push({ name: "Home" });
 }
 
-// 人机验证通过
-const captchaSuccess = () => {
-    if (captchaUsers === "resetpwd") {
-        checkUser();
-    } else {
-        beforeSendCode();
-    }
-}
 </script>
 
 <style lang="less" scoped>

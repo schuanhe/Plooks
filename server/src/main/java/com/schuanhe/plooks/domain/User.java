@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -21,6 +22,8 @@ public class User implements Serializable {
     /**
      *  主键
      */
+
+    @JsonProperty(value = "uid")
     @TableId(type = IdType.AUTO)
     private Integer id;
 
@@ -43,6 +46,11 @@ public class User implements Serializable {
      * 用户名
      */
     private String username;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
 
     /**
      * 邮箱

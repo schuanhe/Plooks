@@ -24,7 +24,7 @@ target/
 logs/
 
 # 暂时忽略部分docs目录下的文件
-docs/api/
+docs/apis/
 
 
 # 本地配置文件

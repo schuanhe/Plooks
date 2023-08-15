@@ -56,4 +56,13 @@ public interface UserService extends IService<User> {
     User getUserInfo(String token);
 
 
+    User getUserInfoById(Integer id);
+
+    Integer getUserIdByUsername(String username);
+
+    void modifyPasswordByEmail(LoginForm loginForm);
+
+    void modifyCover(String token, String spacecover);
+
+    void modifyUserInfo(String token, User user);
 }

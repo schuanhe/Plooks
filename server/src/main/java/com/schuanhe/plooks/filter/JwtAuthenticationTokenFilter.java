@@ -1,8 +1,11 @@
 package com.schuanhe.plooks.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.utils.JwtUtil;
 import com.schuanhe.plooks.utils.RedisCache;
+import com.schuanhe.plooks.utils.ResponseResult;
+import com.schuanhe.plooks.utils.WebUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +45,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         UserDetailsImpl loginUser= redisCache.getCacheObject("user:info:" + userid);
 
         if(Objects.isNull(loginUser)){
-            throw new RuntimeException("token过期");
+            //认证异常处理(用户未登录)
+            filterChain.doFilter(request, response);
+            return;
         }
         //将缓存的用户信息存入SecurityContextHolder
         // 获取权限信息封装到Authentication中

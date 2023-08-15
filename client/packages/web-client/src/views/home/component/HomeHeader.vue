@@ -23,7 +23,7 @@
                 </div>
                 <div class="header-menu">
                     <div class="menu-item">
-                        <span class="btn" @click="goPage('Space')">{{ userInfo.name }}</span>
+                        <span class="btn" @click="goPage('Space')">{{ userInfo.nickname }}</span>
                     </div>
                     <div class="menu-item">
                         <span class="btn" @click="logout">{{ t("common.logOut") }}</span>
@@ -77,7 +77,7 @@ const { showLogin } = storeToRefs(loginStore);
 // 用户信息
 const userInfo = ref<UserInfoType>({
     uid: 0,
-    name: "",
+    nickname: "",
     avatar: "",
     spacecover: ""
 });

@@ -15,7 +15,7 @@ export interface UserLoginType {
 
 export interface UserInfoType {
     uid: number
-    name: string
+    nickname: string
     avatar: string
     spacecover?: string
     email?: string
@@ -27,23 +27,17 @@ export interface UserInfoType {
 }
 
 export interface ModifyUserInfoType {
-    name: string,
+    nickname: string,
     avatar: string,
     gender: number,
     sign: string,
     birthday: string
 }
 
-export interface ModifyPwdType {
-    email: string
-    password: string
-    code: string //验证码
-}
-
 export interface AdminModifyUserInfoType {
     id: number,
     email: string,
-    name: string,
+    nickname: string,
     sign: string,
 }
 

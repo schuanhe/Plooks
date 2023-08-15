@@ -1,5 +1,5 @@
 import request from '../request';
-import type { AdminModifyUserInfoType, ModifyPwdType, ModifyUserInfoType, UserLoginType } from '../types/user-type'
+import type { AdminModifyUserInfoType, ModifyUserInfoType, UserLoginType } from '../types/user-type'
 
 // 登录
 export const loginAPI = (login: UserLoginType) => {
@@ -18,17 +18,17 @@ export const registerAPI = (register: UserLoginType) => {
 
 // 获取用户信息
 export const getUserInfoAPI = () => {
-    return request.get('v1/user/info/get');
+    return request.get('v1/user/info');
 }
 
 // 修改用户信息
 export const modifyUserInfoAPI = (modify: ModifyUserInfoType) => {
-    return request.post('v1/user/info/modify', modify);
+    return request.put('v1/user/info', modify);
 }
 
 // 修改用户封面图
 export const modifySpaceCoverAPI = (url: string) => {
-    return request.post('v1/user/cover/modify', { spaceCover: url });
+    return request.put('v1/user/cover', { spaceCover: url });
 }
 
 //通过用户ID获取用户信息
@@ -41,14 +41,10 @@ export const getUserIdAPI = (name: string) => {
     return request.get(`v1/user/uid?name=${name}`);
 }
 
-// 重置密码验证
-export const resetpwdCheckAPI = (email: string) => {
-    return request.get(`v1/user/resetpwd/check?email=${email}`);
-}
 
 // 重置密码
-export const mpdifyPwdAPI = (modifyPwd: ModifyPwdType) => {
-    return request.post('v1/user/pwd/modify', modifyPwd);
+export const mpdifyPwdAPI = (modifyPwd: UserLoginType) => {
+    return request.post('v1/user/modify/email', modifyPwd);
 }
 
 // 管理员获取用户列表
