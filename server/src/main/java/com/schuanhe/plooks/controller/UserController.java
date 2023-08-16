@@ -1,6 +1,8 @@
 package com.schuanhe.plooks.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.form.LoginForm;
 import com.schuanhe.plooks.service.UserService;
@@ -289,13 +291,15 @@ public class UserController {
      * 修改封面
      */
     @PutMapping("/cover")
-    public ResponseResult<String> modifyCover(@RequestHeader("Authorization") String token, Map<String, String> requestBody ){
-        String spacecover = requestBody.get("spacecover");
-
-        if(token.equals("") || spacecover == null || spacecover.equals(""))
+    public ResponseResult<String> modifyCover(@RequestHeader("Authorization") String token, @RequestBody String url){
+        if(token.equals("") || url == null || url.equals(""))
             return ResponseResult.fail("表单不完整");
         try {
-            userService.modifyCover(token,spacecover);
+            JSONObject jsonObject = JSONObject.parseObject(url);
+            String urlJson = jsonObject.getString("url");
+            if(urlJson == null || urlJson.equals(""))
+                urlJson = url;
+            userService.modifyCover(token,urlJson);
         }catch (RuntimeException e){
             return ResponseResult.fail(e.getMessage());
         }

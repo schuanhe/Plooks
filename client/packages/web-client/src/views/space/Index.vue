@@ -1,14 +1,14 @@
 <template>
-    <div class="space" v-title :data-title="`${userInfo.name}的个人中心`">
+    <div class="space" v-title :data-title="`${userInfo.nickname}的个人中心`">
         <header-bar></header-bar>
         <div class="space-container">
             <div class="space-header">
                 <button class="upload-btn" @click="uploadClick">上传封面图片</button>
-                <img class="cover" v-if="userInfo.spacecover" :src="getResourceUrl(userInfo.spacecover)" alt="用户封面图" />
+                <img class="cover" v-if="userInfo.spaceCover" alt="用户封面" :src="getResourceUrl(userInfo.spaceCover)">
                 <div class="header-content">
                     <common-avatar :url="userInfo.avatar" :size="70" :iconsize="36"></common-avatar>
                     <div class="content-name">
-                        <p class="name">{{ userInfo.name }}
+                        <p class="name">{{ userInfo.nickname }}
                             <n-icon :color="userInfo.gender === 1 ? '#1890ff' : '#eb2f96'" size="20">
                                 <male v-if="userInfo.gender === 1"></male>
                                 <female v-else-if="userInfo.gender === 2"></female>
@@ -152,9 +152,9 @@ const { videoCount } = storeToRefs(videoCountStore);
 
 const userInfo = ref<UserInfoType>({
     uid: 0,
-    name: "",
+    nickname: "",
     avatar: "",
-    spacecover: ""
+    spaceCover: ""
 });
 
 const userData = reactive({
@@ -174,12 +174,13 @@ const uploadClick = () => {
 
 //上传变化的回调
 const changeUpload = (status: string, data: any) => {
+    let url;
     switch (status) {
         case "success":
             //更新封面图
-            const url = data.data.url;
+            url = data.data.url;
             modifySpaceCoverAPI(url).then((res) => {
-                if (res.data.code = statusCode.OK) {
+                if (res.data.code === statusCode.OK) {
                     getUserInfo();
                 }
             })
@@ -237,6 +238,9 @@ onBeforeMount(() => {
     }
     getFollowData(userInfo.value.uid);
 })
+
+
+
 
 </script>
 

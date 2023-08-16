@@ -1,6 +1,6 @@
 package com.schuanhe.plooks.controller;
 
-import com.schuanhe.plooks.service.QiniuService;
+import com.schuanhe.plooks.service.UploadService;
 import com.schuanhe.plooks.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ import java.util.Map;
 public class UploadController {
 
     @Autowired
-    private QiniuService qiniuService;
+    private UploadService qiniuService;
 
     @PostMapping("/image")
     public ResponseResult<Map<String, String>> uploadImage(@RequestParam("image") MultipartFile image) throws IOException {

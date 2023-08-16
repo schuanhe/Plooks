@@ -79,7 +79,7 @@ const userInfo = ref<UserInfoType>({
     uid: 0,
     nickname: "",
     avatar: "",
-    spacecover: ""
+    space_cover: ""
 });
 
 // 加载用户信息

@@ -28,7 +28,7 @@ export const modifyUserInfoAPI = (modify: ModifyUserInfoType) => {
 
 // 修改用户封面图
 export const modifySpaceCoverAPI = (url: string) => {
-    return request.put('v1/user/cover', { spaceCover: url });
+    return request.put('v1/user/cover', { url });
 }
 
 //通过用户ID获取用户信息

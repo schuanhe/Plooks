@@ -11,7 +11,7 @@
                     <common-avatar :url="info.author.avatar" :size="26" :iconsize="16"></common-avatar>
                 </div>
                 <div class="name-date">
-                    <span class="name" @click="goUser(info.author.uid)">{{ info.author.name }}</span>
+                    <span class="name" @click="goUser(info.author.uid)">{{ info.author.nickname }}</span>
                     <span> · </span>
                     <n-time :time="new Date(info.created_at)" type="relative" />
                 </div>

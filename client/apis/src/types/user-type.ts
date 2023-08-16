@@ -17,12 +17,12 @@ export interface UserInfoType {
     uid: number
     nickname: string
     avatar: string
-    spacecover?: string
+    spaceCover?: string
     email?: string
     gender?: number
     sign?: string
     birthday?: string
-    created_at?: string
+    createdAt?: string
     role?: number
 }
 

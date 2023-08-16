@@ -7,7 +7,7 @@
                 <div v-for="(item, index) in msgList" :key="index">
                     <div class="msg-user-item" @click="getMsgContent(item, index)">
                         <common-avatar class="msg-avatar" :url="item.user.avatar" :size="45"></common-avatar>
-                        <span class="msg-name">{{ item.user.name }}</span>
+                        <span class="msg-name">{{ item.user.nickname }}</span>
                         <n-time class="msg-date" :time="new Date(item.created_at)" type="relative"></n-time>
                         <div class="dot" v-if="!item.status"></div>
                     </div>
@@ -77,9 +77,9 @@ const msgForm = reactive({
 // 用户信息
 const userInfo = ref<UserInfoType>({
     uid: 0,
-    name: "",
+    nickname: "",
     avatar: "",
-    spacecover: ""
+    space_cover: ""
 });
 
 //获取消息列表
@@ -115,7 +115,7 @@ const initSendUser = (fid: number) => {
             msgList.value.unshift({
                 user: {
                     uid: user.uid,
-                    name: user.name,
+                    nickname: user.nickname,
                     avatar: user.avatar
                 },
                 created_at: new Date(),
@@ -142,7 +142,7 @@ const getMsgContent = (item: WhisperListType, index: number) => {
     noMore.value = false;
     msgDetails.value = [];
     msgForm.fid = item.user.uid;
-    targetUser.name = item.user.name;
+    targetUser.name = item.user.nickname;
     targetUser.avatar = item.user.avatar;
     getMoreMsgContent(item.user.uid);
     //已读消息

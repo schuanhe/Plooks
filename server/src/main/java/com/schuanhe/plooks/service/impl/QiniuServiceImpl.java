@@ -8,21 +8,21 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
-import com.schuanhe.plooks.service.QiniuService;
+import com.schuanhe.plooks.service.UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 
 @Slf4j
 @Service
-public class QiniuServiceImpl implements QiniuService, InitializingBean {
+public class QiniuServiceImpl implements UploadService, InitializingBean {
 
     @Autowired
     private UploadManager uploadManager;

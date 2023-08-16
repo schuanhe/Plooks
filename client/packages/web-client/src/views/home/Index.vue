@@ -10,7 +10,7 @@
                     <div class="recommended-carousel">
                         <HomeCarousel></HomeCarousel>
                     </div>
-                    <video-item v-for="item in videoList" :info="item"></video-item>
+                    <video-item v-for="item in videoList" :key="item.vid" :info="item"></video-item>
                 </div>
             </div>
         </div>
