@@ -62,7 +62,7 @@ const getAllPartition = () => {
         if (res.data.code === statusCode.OK) {
             partitionInfo.allPartition = res.data.data.partitions;
             partitionInfo.partitions = partitionInfo.allPartition.filter((item) => {
-                return item.parent_id === 0;
+                return item.parentId === 0;
             });
             if (partitionInfo.selectedPartition !== 0) {
                 getPartitionList(partitionInfo.selectedPartition);
@@ -80,7 +80,7 @@ const getAllPartition = () => {
 // 获取分区列表
 const getPartitionList = (fid: number) => {
     partitionInfo.subpartition = partitionInfo.allPartition.filter((item) => {
-        return item.parent_id === fid;
+        return item.parentId === fid;
     });
 }
 

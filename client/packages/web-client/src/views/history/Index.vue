@@ -5,7 +5,7 @@
         </n-affix>
         <!-- 视频列表 -->
         <div class="history-list">
-            <div v-for="item in historyList">
+            <div v-for="item in historyList" :key="item.date">
                 <span class="date-title">{{ relativeDate(item.date) }}</span>
                 <div class="video-list">
                     <div class="video-item" v-for="(history, index) in item.videoList" :key="index"

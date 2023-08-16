@@ -11,7 +11,7 @@
             </n-input>
         </div>
         <div class="card-list">
-            <video-item v-for="item in videoList" :info="item" :keywords="keywords"></video-item>
+            <video-item v-for="item in videoList" :key="item.vid" :info="item" :keywords="keywords"></video-item>
         </div>
     </div>
 </template>

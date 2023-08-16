@@ -39,7 +39,7 @@
                         <n-time type="date" :time="new Date(collection?.created_at || 0)"></n-time>
                         <span>・</span>
                         <span class="open">{{ collection?.open? t("common.open"): t("common.private") }}</span>
-                        <span class="author" @click="goSpace(author?.uid || 0)">{{ author?.name }}</span>
+                        <span class="author" @click="goSpace(author?.uid || 0)">{{ author?.nickname }}</span>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@ const showSubpartition = ref(false);//是否显示二级分区
 //改变分区
 const partitionChange = (parentId: number) => {
     subpartitions.value = partitionList.value.filter((item) => {
-        return item.parent_id === parentId;
+        return item.parentId === parentId;
     })
     showSubpartition.value = true;
 }
@@ -38,16 +38,20 @@ onBeforeMount(() => {
     // 获取分区列表
     getPartitionAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            partitionList.value = res.data.data.partitions;
+            partitionList.value = res.data.data;
             partitions.value = partitionList.value.filter((item) => {
-                return item.parent_id === 0;
+                return item.parentId === 0;
             })
+
+            console.log(partitionList.value);
+            console.log(partitions.value);
+            
             
         }
     }).catch((err) => {
         notification.error({
             title: '获取分区失败',
-            content: "原因:" + err.response.data.msg,
+            content: "原因:" + err.response.data.message,
             duration: 5000,
         })
     });

@@ -146,7 +146,7 @@ const getPartitionName = (id: number) => {
             })
 
             const partition = partitionList.find((item) => {
-                return item.id === subpartition?.parent_id;
+                return item.id === subpartition?.parentId;
             })
 
             partitionText.value = `${partition?.content}/${subpartition?.content}`;

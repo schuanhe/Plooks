@@ -148,7 +148,7 @@ const getPartition = () => {
         if (res.data.code === statusCode.OK) {
             const partitions = res.data.data.partitions as PartitionType[];
             partitionList.value = partitions.filter((item) => {
-                return item.parent_id === 0;
+                return item.parentId === 0;
             })
         }
     })

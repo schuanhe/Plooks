@@ -1,7 +1,7 @@
 export interface PartitionType {
     id: number,
     content: string
-    parent_id: number
+    parentId: number
 }
 
 export interface AddPartitionType {
