@@ -3,7 +3,7 @@ import type { ModifyVideoType, UploadVideoType } from '../types/video-type';
 
 //上传视频信息
 export const uploadVideoInfoAPI = (uploadVideo: UploadVideoType) => {
-    return request.post('v1/video/info/upload', uploadVideo);
+    return request.post('v1/video/info', uploadVideo);
 }
 
 //获取视频状态

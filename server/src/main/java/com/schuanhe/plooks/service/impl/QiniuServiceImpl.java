@@ -83,6 +83,12 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
         }
         return response;
     }
+
+    @Override
+    public void uploadVideo(InputStream inputStream, Integer vid) {
+
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception { 
         this.putPolicy = new StringMap();

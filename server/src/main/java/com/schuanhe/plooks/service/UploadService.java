@@ -32,4 +32,11 @@ public interface UploadService {
      * @throws IOException 删除失败抛出异常
      */
     Response delete(String key) throws IOException;
+
+    /**
+     * 上传视频（路径）
+     * @param inputStream 视频流
+     * @param vid 视频id
+     */
+    void uploadVideo(InputStream inputStream, Integer vid);
 }

@@ -79,7 +79,7 @@ const userInfo = ref<UserInfoType>({
     uid: 0,
     nickname: "",
     avatar: "",
-    space_cover: ""
+    spaceCover: ""
 });
 
 //获取消息列表

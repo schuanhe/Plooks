@@ -31,4 +31,10 @@ public class UploadController {
         return ResponseResult.success(map);
     }
 
+    @PostMapping("/video/{vid}")
+    public ResponseResult<?> uploadVideo(@RequestParam("video") MultipartFile video, @RequestParam("vid") Integer vid) throws IOException {
+        qiniuService.uploadVideo(video.getInputStream(), vid);
+        return ResponseResult.success();
+    }
+
 }
