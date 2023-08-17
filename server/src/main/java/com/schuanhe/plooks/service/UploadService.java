@@ -1,7 +1,7 @@
 package com.schuanhe.plooks.service;
 
-import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.schuanhe.plooks.domain.Resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +15,21 @@ public interface UploadService {
      * @return 文件路径
      * @throws IOException 上传失败抛出异常
      */
-    String uploadFile(File file) throws IOException;
+    String uploadFile(File file, String path) throws IOException;
 
     /**
      * 上传文件
      * @param inputStream 文件流
+     * @param path 文件路径
      * @return 文件路径
      * @throws IOException 上传失败抛出异常
      */
-    String uploadFile(InputStream inputStream) throws IOException;
+    String uploadFile(InputStream inputStream, String path) throws IOException;
+
+    /**
+     * 断点续传
+     */
+    String uploadFileS(InputStream inputStream, String path) throws IOException;
 
     /**
      * 删除文件
@@ -33,10 +39,4 @@ public interface UploadService {
      */
     Response delete(String key) throws IOException;
 
-    /**
-     * 上传视频（路径）
-     * @param inputStream 视频流
-     * @param vid 视频id
-     */
-    void uploadVideo(InputStream inputStream, Integer vid);
 }

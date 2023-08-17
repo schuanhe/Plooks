@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface VideoMapper extends BaseMapper<Video> {
 
     void insertVideo(Video video);
+
 }
 
 

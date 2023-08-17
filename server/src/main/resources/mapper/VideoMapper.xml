@@ -9,4 +9,5 @@
         insert into videos (title, cover, `desc`, copyright, partition_id, uid, status, created_at)
         values (#{title}, #{cover}, #{desc}, #{copyright}, #{partition}, #{uid}, #{status}, #{createdAt})
     </insert>
+
 </mapper>

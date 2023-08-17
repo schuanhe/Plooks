@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.ResourcesMapper">
+
+    <resultMap id="BaseResultMap" type="com.schuanhe.plooks.domain.Resources">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+            <result property="vid" column="vid" jdbcType="INTEGER"/>
+            <result property="uid" column="uid" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="originalUrl" column="original_url" jdbcType="VARCHAR"/>
+            <result property="duration" column="duration" jdbcType="DOUBLE"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="quality" column="quality" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,created_at,updated_at,
+        deleted_at,vid,uid,
+        title,url,original_url,
+        duration,status,quality
+    </sql>
+</mapper>
