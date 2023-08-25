@@ -10,7 +10,7 @@
                 <span class="desc">{{ `${t("common.desc")}：${item.desc}` }}</span>
                 <span class="desc">
                     {{ t("common.createdAt") }}：
-                    <n-time :time="new Date(item.created_at)"></n-time>
+                    <n-time :time="new Date(item.createdAt)"></n-time>
                 </span>
             </div>
             <div class="card-right">

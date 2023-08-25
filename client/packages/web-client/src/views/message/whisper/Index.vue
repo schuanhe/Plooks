@@ -8,7 +8,7 @@
                     <div class="msg-user-item" @click="getMsgContent(item, index)">
                         <common-avatar class="msg-avatar" :url="item.user.avatar" :size="45"></common-avatar>
                         <span class="msg-name">{{ item.user.nickname }}</span>
-                        <n-time class="msg-date" :time="new Date(item.created_at)" type="relative"></n-time>
+                        <n-time class="msg-date" :time="new Date(item.createdAt)" type="relative"></n-time>
                         <div class="dot" v-if="!item.status"></div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@ const initSendUser = (fid: number) => {
                     nickname: user.nickname,
                     avatar: user.avatar
                 },
-                created_at: new Date(),
+                createdAt: new Date(),
                 status: true
             });
             targetUser.name = user.name;
@@ -206,7 +206,7 @@ const sendMsg = () => {
                 fid: 0,
                 from_id: userInfo.value.uid,
                 content: msgForm.content,
-                created_at: ""
+                createdAt: ""
             });
             msgForm.content = "";
             sendLoading.value = false;
@@ -252,7 +252,7 @@ const websocketOnmessage = (e: any) => {
             fid: msgForm.fid,
             from_id: res.fid,
             content: res.content,
-            created_at: ""
+            createdAt: ""
         });
         nextTick(() => {
             toBottom();

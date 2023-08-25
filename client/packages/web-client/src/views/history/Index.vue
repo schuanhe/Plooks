@@ -48,7 +48,7 @@ const getVideoList = () => {
                 }
                 // 处理历史记录
                 res.data.data.history.map((item: HistoryVideoType) => {
-                    const date = timeStrToDateStr(item.created_at);
+                    const date = timeStrToDateStr(item.createdAt);
                     const index = historyMap.get(date);
                     if (index !== undefined) {
                         historyList.value[index].videoList.push(item);

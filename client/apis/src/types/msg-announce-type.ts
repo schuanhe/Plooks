@@ -2,7 +2,7 @@ export interface AnnounceType {
     id: number,
     title: string,
     content: string,
-    created_at: string,
+    createdAt: string,
     url: string,
     important: boolean
 }

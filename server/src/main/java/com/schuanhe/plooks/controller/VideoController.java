@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,33 @@ public class VideoController {
             return ResponseResult.error("提交失败");
         }
     }
+
+
+    /**
+     * 稿件管理
+     *
+     */
+    @GetMapping("/upload/{size}/{page}")
+    public ResponseResult<?> uploadVideo(@PathVariable Integer size, @PathVariable Integer page){
+        // 获取稿件信息
+        List<Video> uploadVideos = videoService.getUploadVideo(page, size);
+        // 获取稿件总数
+        long count = videoService.getUploadVideoCount();
+
+        // 返回数据
+        if (uploadVideos == null) {
+            return ResponseResult.error("稿件不存在");
+        }
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("count", count);
+        data.put("videos", uploadVideos);
+
+
+        return ResponseResult.success(data);
+    }
+
 
 
     //视频消息校验

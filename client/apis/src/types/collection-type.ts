@@ -4,7 +4,7 @@ export interface CollectionType {
     cover?: string,
     desc?: string,
     open?: boolean,
-    created_at?: string
+    createdAt?: string
 }
 
 export interface ModifyCollectionType {
@@ -21,5 +21,5 @@ export interface CollectionInfoType {
     cover: string,
     desc: string,
     open: boolean,
-    created_at: string
+    createdAt: string
 }

@@ -3,6 +3,8 @@ package com.schuanhe.plooks.mapper;
 import com.schuanhe.plooks.domain.Video;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author ASUS
 * @description 针对表【videos(视频表)】的数据库操作Mapper
@@ -15,6 +17,8 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     Video selectById(Integer vid);
 
+
+    List<Video> selectVideoByUid(Integer uid, int i, Integer size);
 }
 
 

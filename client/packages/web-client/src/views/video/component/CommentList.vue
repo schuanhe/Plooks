@@ -13,9 +13,9 @@
         <div class="comment-user">
             <common-avatar :url="item.author.avatar"></common-avatar>
             <div class="user-name">
-                <span @click="goUserSpace(item.author.uid)">{{ item.author.name }}</span>
+                <span @click="goUserSpace(item.author.uid)">{{ item.author.nickname }}</span>
             </div>
-            <n-time class="comment-time" type="relative" :time="new Date(item.created_at)"></n-time>
+            <n-time class="comment-time" type="relative" :time="new Date(item.createdAt)"></n-time>
             <div class="comment-btn">
                 <n-button v-if="userInfo" text @click="showReply(index, null, true)">{{ t("common.reply") }}</n-button>
                 <n-button v-if="item.author.uid === userInfo.uid" text @click="deleteClick(item.id, null, index)">{{
@@ -28,7 +28,7 @@
             <div v-if="item.content.indexOf('@') === -1">
                 <span>{{ item.content }}</span>
             </div>
-            <div class="content-text" v-else v-for="content in handleMention(item.content)">
+            <div class="content-text" :key="content.value" v-else v-for="content in handleMention(item.content)">
                 <span :class="content.class" @click="goMention(content.key)">{{ content.value }}</span>
             </div>
         </div>
@@ -50,9 +50,9 @@
                     <div class="info">
                         <common-avatar :url="reply.author.avatar" :size="26" :iconsize="18"></common-avatar>
                         <div class="reply-user-name">
-                            <span @click="goUserSpace(reply.author.uid)">{{ reply.author.name }}</span>
+                            <span @click="goUserSpace(reply.author.uid)">{{ reply.author.nickname }}</span>
                         </div>
-                        <n-time class="reply-time" type="relative" :time="new Date(reply.created_at)"></n-time>
+                        <n-time class="reply-time" type="relative" :time="new Date(reply.createdAt)"></n-time>
                     </div>
                     <div class="reply-btn">
                         <n-button v-if="userInfo" text @click="showReply(index, reply, false)">
@@ -68,7 +68,7 @@
                     <div v-if="reply.content.indexOf('@') === -1">
                         <span>{{ reply.content }}</span>
                     </div>
-                    <div class="content-text" v-else v-for="content in handleMention(reply.content)">
+                    <div class="content-text" :key="content.value" v-else v-for="content in handleMention(reply.content)">
                         <span :class="content.class" @click="goMention(content.key)">{{ content.value }}</span>
                     </div>
                 </div>
@@ -133,7 +133,7 @@ const replyForm = reactive<AddCommentType>({
 
 const userInfo = ref<UserInfoType>({
     uid: 0,
-    name: "",
+    nickname: "",
     avatar: ""
 });
 
@@ -160,11 +160,11 @@ const submitComment = () => {
                     id: res.data.data.id,
                     author: {
                         uid: userInfo.value.uid,
-                        name: userInfo.value.name,
+                        nickname: userInfo.value.nickname,
                         avatar: userInfo.value.avatar,
                     },
                     content: commentForm.content,
-                    created_at: new Date().getTime(),
+                    createdAt: new Date().getTime(),
                     reply: [],
                     page: 1,
                     noMore: true
@@ -217,11 +217,11 @@ const submitReply = (comment: CommentType) => {
                     id: res.data.data.id,
                     author: {
                         uid: userInfo.value.uid,
-                        name: userInfo.value.name,
+                        nickname: userInfo.value.nickname,
                         avatar: userInfo.value.avatar,
                     },
                     content: replyForm.content,
-                    created_at: new Date().getTime(),
+                    createdAt: new Date().getTime(),
                 }
                 comment.reply.push(newReply);
             }
@@ -264,10 +264,10 @@ const showReply = (index: number, reply: ReplyType | null, isComment: boolean) =
         showReplyFlag.value[i] = false;
     }
     if (!isComment && reply) {
-        replyUserName = reply.author.name;
+        replyUserName = reply.author.nickname;
         replyForm.replyUserId = reply.author.uid;
         replyForm.replyContent = reply.content;
-        replyTip.value = `回复 @${reply.author.name}: `;
+        replyTip.value = `回复 @${reply.author.nickname}: `;
     }
     showReplyFlag.value[index] = true;
 }

@@ -4,5 +4,5 @@ import type { BaseVideoType } from "./video-type";
 export interface AtMessageType {
     video: BaseVideoType,
     user: UserInfoType,
-    created_at: string,
+    createdAt: string,
 }

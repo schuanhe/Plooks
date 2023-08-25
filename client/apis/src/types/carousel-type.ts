@@ -11,5 +11,5 @@ export interface CarouselType {
     title: string,
     url?: string,
     color: string,
-    created_at: string
+    createdAt: string
 }

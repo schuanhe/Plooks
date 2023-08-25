@@ -26,7 +26,7 @@
                             <span>{{ videoInfo!.clicks }} {{ t("video.clicks") }}</span>
                             <span>
                                 {{ t("video.uploadedAt") }}
-                                <n-time :time="new Date(videoInfo!.created_at)"></n-time>
+                                <n-time :time="new Date(videoInfo!.createdAt)"></n-time>
                             </span>
                         </div>
                     </div>

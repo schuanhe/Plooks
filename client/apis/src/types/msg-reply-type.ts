@@ -4,7 +4,7 @@ import type { BaseVideoType } from "./video-type";
 export interface ReplyMessageType {
     video: BaseVideoType,
     user: UserInfoType,
-    created_at: string,
+    createdAt: string,
     content: string,
     target_reply_content: string,
     root_content: string,

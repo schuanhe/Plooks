@@ -1,15 +1,15 @@
 package com.schuanhe.plooks.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Video;
-import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.mapper.VideoMapper;
 import com.schuanhe.plooks.utils.WebUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
 * @author ASUS
@@ -52,6 +52,27 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         video.setId(vid);
         video.setStatus(500);
         return baseMapper.updateById(video) > 0;
+    }
+
+    @Override
+    public List<Video> getUploadVideo(Integer page, Integer size) {
+        // 获取当前登录用户id
+        Integer uid = WebUtils.getUserId();
+
+        // 获取当前登录用户上传的视频
+        // 通过uid获取视频信息
+        return baseMapper.selectVideoByUid(uid, (page - 1) * size, size);
+    }
+
+    @Override
+    public Long getUploadVideoCount() {
+        // 获取当前登录用户id
+        Integer uid = WebUtils.getUserId();
+        QueryWrapper<Video> wrapper = new QueryWrapper<>();
+        // 获取当前登录用户上传的视频总数
+        wrapper.eq("uid", uid);
+
+        return baseMapper.selectCount(wrapper);
     }
 
 }

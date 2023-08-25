@@ -36,7 +36,7 @@
                     <span class="title">{{ collection?.name }}</span>
                     <span class="desc">{{ t("common.desc") }}：{{ collection?.desc }}</span>
                     <div class="desc">
-                        <n-time type="date" :time="new Date(collection?.created_at || 0)"></n-time>
+                        <n-time type="date" :time="new Date(collection?.createdAt || 0)"></n-time>
                         <span>・</span>
                         <span class="open">{{ collection?.open? t("common.open"): t("common.private") }}</span>
                         <span class="author" @click="goSpace(author?.uid || 0)">{{ author?.nickname }}</span>

@@ -3,7 +3,7 @@
         <div class="announce-item" v-for="(item, index) in announceList" :key="index">
             <div class="title">
                 <p class="item-title">{{ item.title }}</p>
-                <n-time class="item-time" :time="new Date(item.created_at)"></n-time>
+                <n-time class="item-time" :time="new Date(item.createdAt)"></n-time>
             </div>
             <span>{{ item.content }}</span>
             <span class="link" v-if="item.url">

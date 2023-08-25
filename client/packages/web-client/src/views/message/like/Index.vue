@@ -6,10 +6,10 @@
             </div>
             <div class="item-center">
                 <p class="title">
-                    <span class="user-name" @click="goUserSpace(item.user.uid)">{{ item.user.name }}</span>
+                    <span class="user-name" @click="goUserSpace(item.user.uid)">{{ item.user.nickname }}</span>
                     <span> 赞了我的视频</span>
                 </p>
-                <n-time class="msg-time" :time="new Date(item.created_at)"></n-time>
+                <n-time class="msg-time" :time="new Date(item.createdAt)"></n-time>
             </div>
             <div class="item-right">
                 <img :src="getResourceUrl(item.video.cover)" alt="封面" :title="item.video.title"

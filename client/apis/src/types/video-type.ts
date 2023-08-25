@@ -6,7 +6,7 @@ export interface BaseVideoType {
     title: string,
     cover: string,
     desc: string,
-    created_at: string
+    createdAt: string
 }
 
 // 上传视频

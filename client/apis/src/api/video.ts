@@ -48,7 +48,7 @@ export const getCollectVideoAPI = (id: number, page: number, page_size: number) 
 
 //获取我的视频
 export const getUploadVideoAPI = (page: number, page_size: number) => {
-    return request.get(`v1/video/upload/get?page=${page}&page_size=${page_size}`);
+    return request.get(`v1/video/upload/${page_size}/${page}`);
 }
 
 //通过用户ID获取视频

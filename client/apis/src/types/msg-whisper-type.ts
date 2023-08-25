@@ -7,7 +7,7 @@ export interface WhisperType {
 
 export interface WhisperListType {
     user: UserInfoType,
-    created_at: string | Date,
+    createdAt: string | Date,
     status: boolean
 }
 
@@ -15,5 +15,5 @@ export interface WhisperDetailsType {
     fid: number,
     from_id: number,
     content: string,
-    created_at: string
+    createdAt: string
 }

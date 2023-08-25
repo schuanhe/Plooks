@@ -13,7 +13,7 @@
                 <div class="name-date">
                     <span class="name" @click="goUser(info.author.uid)">{{ info.author.nickname }}</span>
                     <span> · </span>
-                    <n-time :time="new Date(info.created_at)" type="relative" />
+                    <n-time :time="new Date(info.createdAt)" type="relative" />
                 </div>
             </div>
         </div>

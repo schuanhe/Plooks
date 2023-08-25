@@ -11,7 +11,7 @@ export interface HistoryVideoType {
     part: number,
     time: number,
     video: BaseVideoType,
-    created_at: string
+    createdAt: string
 }
 
 

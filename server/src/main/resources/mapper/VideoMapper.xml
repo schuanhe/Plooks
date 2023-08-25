@@ -14,4 +14,8 @@
         select * from videos where id = #{id}
     </select>
 
+    <select id="selectVideoByUid" resultType="com.schuanhe.plooks.domain.Video">
+        select * from videos where uid = #{uid} order by created_at desc limit #{i}, #{size}
+    </select>
+
 </mapper>

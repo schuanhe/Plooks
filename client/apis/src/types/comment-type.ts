@@ -15,7 +15,7 @@ export interface CommentType {
     content: string,
     author: UserInfoType,
     reply: Array<ReplyType>,
-    created_at: number,
+    createdAt: number,
     page: number,//回复页码
     noMore: boolean
 }
@@ -24,5 +24,5 @@ export interface ReplyType {
     id: string,
     content: string,
     author: UserInfoType,
-    created_at: number,
+    createdAt: number,
 }

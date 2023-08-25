@@ -6,7 +6,7 @@
         <img class="cover" :src="getResourceUrl(item.cover)" />
         <div class="info">
             <span class="title">{{ item.title }}</span>
-            <n-time class="time" :time="new Date(item.created_at)"></n-time>
+            <n-time class="time" :time="new Date(item.createdAt)"></n-time>
             <span class="clicks">{{ t("common.clicks") }}: {{ item.clicks }}</span>
         </div>
     </div>

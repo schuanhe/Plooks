@@ -58,7 +58,7 @@ const videoInfo = reactive({
     desc: "",
     copyright: true,
     partition: 0,
-    created_at: ""
+    createdAt: ""
 })
 
 const isModify = ref(false);

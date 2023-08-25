@@ -51,7 +51,7 @@ const videoInfo = ref<VideoStatusType>({
     copyright: false,
     partition: 0,
     resources: [],
-    created_at: ""
+    createdAt: ""
 });
 
 

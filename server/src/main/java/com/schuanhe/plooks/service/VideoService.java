@@ -3,6 +3,8 @@ package com.schuanhe.plooks.service;
 import com.schuanhe.plooks.domain.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author ASUS
 * @description 针对表【videos(视频表)】的数据库操作Service
@@ -26,4 +28,12 @@ public interface VideoService extends IService<Video> {
 
 
     boolean submitReview(Integer vid);
+
+    List<Video> getUploadVideo(Integer page, Integer size);
+
+    /**
+     * 获取当前登录用户上传视频总数
+     * @return 上传视频总数
+     */
+    Long getUploadVideoCount();
 }
