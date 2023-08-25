@@ -1,6 +1,11 @@
 package com.schuanhe.plooks.utils;
 
 import com.schuanhe.plooks.domain.User;
+import com.schuanhe.plooks.domain.model.UserDetailsImpl;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Random;
 
@@ -54,6 +59,11 @@ public class CoreUtils {
     }
 
 
+    /**
+     * 生成随机字符串
+     * @param i 字符串长度
+     * @return 随机字符串
+     */
     public static String getRandomString(int i) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder sb = new StringBuilder();
@@ -63,6 +73,8 @@ public class CoreUtils {
         }
         return sb.toString();
     }
+
+
 
 
 }

@@ -13,6 +13,8 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     void insertVideo(Video video);
 
+    Video selectById(Integer vid);
+
 }
 
 

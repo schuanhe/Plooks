@@ -10,4 +10,8 @@
         values (#{title}, #{cover}, #{desc}, #{copyright}, #{partition}, #{uid}, #{status}, #{createdAt})
     </insert>
 
+    <select id="selectById" resultType="com.schuanhe.plooks.domain.Video">
+        select * from videos where id = #{id}
+    </select>
+
 </mapper>

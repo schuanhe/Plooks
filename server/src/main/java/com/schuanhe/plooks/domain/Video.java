@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,6 +55,8 @@ public class Video implements Serializable {
     /**
      * 视频简介
      */
+    //注解来指定字段名
+    @TableField(value = "`desc`")
     private String desc;
 
     /**
@@ -79,8 +82,14 @@ public class Video implements Serializable {
     /**
      * 分区ID
      */
-    @TableField(value = "partition_id")
+    @TableField(value = "`partition_id`")
     private Integer partition;
+
+    /**
+     * 视频资源
+     */
+    @TableField(exist = false)
+    private List<Resources> resources;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

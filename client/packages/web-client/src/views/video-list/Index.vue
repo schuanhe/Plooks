@@ -56,6 +56,9 @@ const route = useRoute();
 const router = useRouter();
 const notification = useNotification();
 
+
+// 获取
+
 // 获取所有分区
 const getAllPartition = () => {
     getPartitionAPI().then((res) => {

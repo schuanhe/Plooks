@@ -5,6 +5,7 @@ import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.mapper.VideoMapper;
+import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     @Override
     public Integer uploadVideoInfo(Video video) {
 
-        //通过上下文获取
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer id = userDetails.getUser().getId();
+        //获取当前登录用户id
+        Integer id = WebUtils.getUserId();
 
         //设置视频作者id
         video.setUid(id);
@@ -37,6 +37,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         baseMapper.insertVideo(video);
 
         return video.getId();
+    }
+
+    @Override
+    public Video getVideoInfo(Integer vid) {
+        // 获取视频信息
+        return baseMapper.selectById(vid);
     }
 
 }

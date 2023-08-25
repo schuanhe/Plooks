@@ -1,7 +1,9 @@
 package com.schuanhe.plooks.controller;
 
 
+import com.schuanhe.plooks.domain.Resources;
 import com.schuanhe.plooks.domain.Video;
+import com.schuanhe.plooks.service.ResourcesService;
 import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +23,9 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private ResourcesService resourcesService;
 
 
     /**
@@ -34,6 +40,29 @@ public class VideoController {
         Integer vid = videoService.uploadVideoInfo(video);
         Map<String, Integer> data = new HashMap<>();
         data.put("vid", vid);
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 视频状态
+     * @return 视频状态
+     */
+    @GetMapping("status/{vid}")
+    public ResponseResult<?> videoStatus(@PathVariable String vid){
+        // 获取视频信息
+        Video videoInfo = videoService.getVideoInfo(Integer.valueOf(vid));
+        //通过vid获取相关资源
+        List<Resources> resourcesByVid = resourcesService.getResourcesByVid(Integer.valueOf(vid));
+        //传入相关资源
+        videoInfo.setResources(resourcesByVid);
+        // 返回数据
+        if (videoInfo.getId() == null || resourcesByVid == null) {
+            return ResponseResult.error("视频不存在");
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("video", videoInfo);
+
         return ResponseResult.success(data);
     }
 

@@ -85,6 +85,7 @@ const changeUpload = (status: string, data: any) => {
             currentCover.value = data.data.url;
             emits("finish", currentCover.value);
             notification.success({
+                //是
                 title: '上传完成',
                 duration: 3000,
             });

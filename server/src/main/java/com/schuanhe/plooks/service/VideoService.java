@@ -10,6 +10,19 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface VideoService extends IService<Video> {
 
+    /**
+     * 上传视频信息
+     * @param video 视频信息
+     * @return 视频id
+     */
     Integer uploadVideoInfo(Video video);
+
+    /**
+     * 获取视频信息
+     * @param vid 视频id
+     * @return 视频信息
+     */
+    Video getVideoInfo(Integer vid);
+
 
 }

@@ -1,10 +1,13 @@
 package com.schuanhe.plooks.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Resources;
 import com.schuanhe.plooks.service.ResourcesService;
 import com.schuanhe.plooks.mapper.ResourcesMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author ASUS
@@ -15,12 +18,16 @@ import org.springframework.stereotype.Service;
 public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
     implements ResourcesService{
 
-    @Override
-    public void add(Integer vid, String url) {
-        Resources resources = new Resources();
-        resources.setVid(vid);
 
-        baseMapper.insert(resources);
+    @Override
+    public List<Resources> getResourcesByVid(Integer vid) {
+        // 通过视频vid获取视频资源(可能有多个资源)
+
+        //创建查询条件
+         QueryWrapper<Resources> queryWrapper = new QueryWrapper<>();
+         queryWrapper.eq("vid", vid);
+
+        return baseMapper.selectList(queryWrapper);
     }
 }
 

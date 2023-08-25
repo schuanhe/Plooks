@@ -1,6 +1,8 @@
 package com.schuanhe.plooks.config;
 
 
+import com.qiniu.http.Client;
+import com.qiniu.processing.OperationManager;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
@@ -44,6 +46,11 @@ public class QiniuFileConfig {
     @Bean
     public BucketManager bucketManager() {
         return new BucketManager(auth(), qiniuConfiguration());
+    }
+
+    @Bean
+    public Client client() {
+        return new Client(qiniuConfiguration());
     }
 
 }

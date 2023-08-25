@@ -3,7 +3,7 @@
         <video-uploader :vid="vid" @finish="finishUpload"></video-uploader>
         <div class="video-box">
             <n-scrollbar style="max-height: 300px;">
-                <div class="video-item" v-for="(item, index) in resourceList">
+                <div class="video-item" :key="index" v-for="(item, index) in resourceList">
                     <div class="item-left">
                         <n-icon class="item-icon">
                             <video-icon></video-icon>

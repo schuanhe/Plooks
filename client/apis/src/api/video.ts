@@ -8,7 +8,7 @@ export const uploadVideoInfoAPI = (uploadVideo: UploadVideoType) => {
 
 //获取视频状态
 export const getVideoStatusAPI = (vid: number) => {
-    return request.get('v1/video/status?vid=' + vid);
+    return request.get('v1/video/status/' + vid);
 }
 
 //修改视频信息

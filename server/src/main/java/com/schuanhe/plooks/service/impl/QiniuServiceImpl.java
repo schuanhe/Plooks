@@ -1,13 +1,17 @@
 package com.schuanhe.plooks.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.qiniu.common.QiniuException;
+import com.qiniu.http.Client;
 import com.qiniu.http.Response;
+import com.qiniu.processing.OperationManager;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.storage.model.FileInfo;
 import com.qiniu.storage.persistent.FileRecorder;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
@@ -24,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.Date;
 
 
 @Slf4j
@@ -34,6 +39,11 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
     private UploadManager uploadManager;
     @Autowired
     private BucketManager bucketManager;
+
+    @Autowired
+    private Client client;
+
+
     @Autowired
     private Auth auth;
 
@@ -79,6 +89,7 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
         String return_path = url + "/" + putRet.key;
         log.info("文件名称={}", return_path);
         return return_path;
+
     }
 
     @Override
@@ -122,47 +133,44 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
         return null;
     }
 
-    /** * 删除七牛云上的相关文件 * * @param key * @return * @throws QiniuException */
+    /**
+     * 删除七牛云上的相关文件 * * @param key * @return * @throws QiniuException
+     */
     @Override
-    public Response delete(String key) throws QiniuException { 
+    public Response delete(String key) throws QiniuException {
         Response response = this.bucketManager.delete(bucket, key);
         int retry = 0;
-        while (response.needRetry() && retry++ < 3) { 
+        while (response.needRetry() && retry++ < 3) {
             response = this.bucketManager.delete(bucket, key);
         }
         return response;
     }
 
-    public double getVideoDuration(String key) {
-        //Auth auth = Auth.create(accessKey, secretKey);
-        //Configuration cfg = new Configuration(Region.region0());
-        //String videoUrl = StringUtils.join(new String[]{"http://", bucket, ".qiniu.com/", key}, "");
-        //
-        //String persistentId = UrlSafeBase64.encodeToString(videoUrl);
-        //
-        //String api = "http://api.qiniu.com/status/get/prefop?id=" + persistentId;
-        //try {
-        //    Response response = auth.authorization(api).get(api);
-        //    String result = response.bodyString();
-        //    // Parse the result and extract the video duration
-        //    // The result may contain other information as well
-        //    // Example: {"id": "z1.6126fabc6e0e5137e001773d", "code": 3, "desc": "success", "inputBucket": "video-bucket", "inputKey": "sample.mp4", "items": [{"cmd": "avinfo", "code": 0, "desc": "success", "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98", "returnOld": true, "returnOldKey": "sample.mp4", "returnOldHash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98", "returnOldMime": "video/mp4", "size": 2843765, "type": 0}]}
-        //
-        //    // Parse the JSON response to get video duration
-        //    // For example:
-        //    double duration = 0.0; // Extracted duration from the response
-        //
-        //    return duration;
-        //} catch (QiniuException e) {
-        //    e.printStackTrace();
-        //    return -1; // Indicates an error
-        //}
-        return 0;
+    @Override
+    public Resources getVideo(String url) throws Exception {
+        // 新文件信息
+        Resources resources = new Resources();
+        //拼接请求地址
+        String requestUrl = url + "?avinfo";
+
+        Response response = client.get(requestUrl, null);
+        //解析为json对象
+        JSONObject jsonObject = JSON.parseObject(response.bodyString());
+        //获取视频时长
+        double doubleValue = jsonObject.getJSONObject("format").getDoubleValue("duration");
+        // 设置视频上传时间
+        Date time = new Date();
+
+        resources.setDuration(doubleValue);
+        resources.setCreatedAt(time);
+        resources.setUrl(url);
+
+        return resources;
     }
 
 
     @Override
-    public void afterPropertiesSet() throws Exception { 
+    public void afterPropertiesSet() throws Exception {
         this.putPolicy = new StringMap();
         putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"width\":$(imageInfo.width), \"height\":${imageInfo.height}}");
         // 自定义文件名字
@@ -170,8 +178,10 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
     }
 
 
-    /** * 获取上传凭证 * * @return */
-    private String getUploadToken() { 
+    /**
+     * 获取上传凭证 * * @return
+     */
+    private String getUploadToken() {
         return this.auth.uploadToken(bucket, null, 3600, putPolicy);
     }
 }
