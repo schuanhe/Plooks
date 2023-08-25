@@ -47,7 +47,7 @@ public class VideoController {
      * 视频状态
      * @return 视频状态
      */
-    @GetMapping("status/{vid}")
+    @GetMapping("/status/{vid}")
     public ResponseResult<?> videoStatus(@PathVariable String vid){
         // 获取视频信息
         Video videoInfo = videoService.getVideoInfo(Integer.valueOf(vid));
@@ -64,6 +64,24 @@ public class VideoController {
         data.put("video", videoInfo);
 
         return ResponseResult.success(data);
+    }
+
+    /**
+     * 提交审核
+     */
+    @PostMapping("/review/{vid}")
+    public ResponseResult<?> submitReview(@PathVariable String vid){
+        // 判断vid是否合法
+        if (vid == null) {
+            return ResponseResult.error("视频不存在");
+        }
+        // 提交审核
+        boolean submitReview = videoService.submitReview(Integer.valueOf(vid));
+        if (submitReview) {
+            return ResponseResult.success("提交成功");
+        } else {
+            return ResponseResult.error("提交失败");
+        }
     }
 
 

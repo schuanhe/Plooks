@@ -32,7 +32,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
         //设置创建时间
         video.setCreatedAt(new Date());
-        video.setStatus(100);
+        video.setStatus(300);
 
         baseMapper.insertVideo(video);
 
@@ -43,6 +43,15 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     public Video getVideoInfo(Integer vid) {
         // 获取视频信息
         return baseMapper.selectById(vid);
+    }
+
+    @Override
+    public boolean submitReview(Integer vid) {
+        // 提交审核
+        Video video = new Video();
+        video.setId(vid);
+        video.setStatus(500);
+        return baseMapper.updateById(video) > 0;
     }
 
 }

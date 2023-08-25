@@ -38,7 +38,7 @@ export const searchVideoAPI = (page: number, pageSize: number, keywords: string)
 
 //提交审核
 export const submitReviewAPI = (id: number) => {
-    return request.post('v1/video/review/submit', { id });
+    return request.post('v1/video/review/' + id);
 }
 
 //获取收藏夹内的视频

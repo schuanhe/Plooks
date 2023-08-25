@@ -25,4 +25,5 @@ public interface VideoService extends IService<Video> {
     Video getVideoInfo(Integer vid);
 
 
+    boolean submitReview(Integer vid);
 }
