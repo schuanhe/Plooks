@@ -18,4 +18,6 @@ public interface ResourcesService extends IService<Resources> {
      * @return 视频资源
      */
     List<Resources> getResourcesByVid(Integer vid);
+
+    boolean deleteResource(Integer id);
 }

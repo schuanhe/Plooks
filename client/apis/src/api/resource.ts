@@ -8,5 +8,5 @@ export const modifyTitleAPI = (resourceTitle: BaseResourceType) => {
 
 //删除资源
 export const deleteResourceAPI = (id: number) => {
-    return request.post('v1/resource/delete', { id });
+    return request.delete('v1/resource/' + id);
 }

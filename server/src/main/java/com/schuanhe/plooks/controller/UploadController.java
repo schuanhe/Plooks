@@ -63,7 +63,7 @@ public class UploadController {
         }
 
         // 保存到数据库
-        resources.setStatus(0);
+        resources.setStatus(500); //等待审核
         resources.setVid(vid);
         resources.setUid(userId);
 

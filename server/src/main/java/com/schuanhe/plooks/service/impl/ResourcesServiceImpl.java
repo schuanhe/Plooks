@@ -29,6 +29,12 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
 
         return baseMapper.selectList(queryWrapper);
     }
+
+    @Override
+    public boolean deleteResource(Integer id) {
+        // 删除视频资源
+        return baseMapper.deleteById(id) > 0;
+    }
 }
 
 
