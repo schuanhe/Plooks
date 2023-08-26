@@ -121,7 +121,7 @@ public class VideoController {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put("count", count);
+        data.put("total", count);
         data.put("videos", uploadVideos);
 
 
