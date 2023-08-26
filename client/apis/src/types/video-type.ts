@@ -15,7 +15,7 @@ export interface UploadVideoType {
     cover: string,
     desc: string,
     copyright: boolean,
-    partition: number
+    partitionId: number
 }
 
 // 修改视频信息
@@ -27,7 +27,7 @@ export interface ModifyVideoType extends BaseVideoType {
 export interface VideoStatusType extends BaseVideoType {
     status: number,
     copyright: boolean,
-    partition: number,
+    partitionId: number,
     resources: ResourceType[]
 }
 

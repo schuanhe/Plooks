@@ -29,7 +29,7 @@ export default {
         next: "次へ",
         nickname: "ニックネーム",
         open: "公開",
-        partition: "パーティション",
+        partitionId: "パーティション",
         private: "プライバシー",
         publish: "発表",
         pwd: "パスワード",

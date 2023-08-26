@@ -82,8 +82,8 @@ public class Video implements Serializable {
     /**
      * 分区ID
      */
-    @TableField(value = "`partition_id`")
-    private Integer partition;
+    @TableField(value = "partition_id")
+    private Integer partitionId;
 
     /**
      * 视频资源

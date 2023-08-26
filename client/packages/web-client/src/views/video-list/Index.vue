@@ -91,7 +91,7 @@ const getPartitionList = (fid: number) => {
 const selectPartition = (id: number) => {
     if (partitionInfo.selectedPartition === id) return;
     let newQuery = JSON.parse(JSON.stringify(route.query));
-    newQuery.partition = id;
+    newQuery.partitionId = id;
     partitionInfo.selectedPartition = id;
     partitionInfo.selectedSubpartition = 0;
     router.replace({ query: newQuery });
@@ -155,7 +155,7 @@ const lazyLoading = () => {
 }
 
 onBeforeMount(() => {
-    partitionInfo.selectedPartition = Number(route.query.partition);
+    partitionInfo.selectedPartition = Number(route.query.partitionId);
     partitionInfo.selectedSubpartition = Number(route.query.subpartition) || 0;
     getAllPartition();
     getVideoList();

@@ -29,7 +29,7 @@ export default {
         next: "next",
         nickname: "nickname",
         open: "open",
-        partition: "partition",
+        partitionId: "partition",
         private: "private",
         publish: "publish",
         pwd: "password",

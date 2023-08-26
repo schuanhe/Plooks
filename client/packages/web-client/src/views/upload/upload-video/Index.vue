@@ -49,7 +49,7 @@ const videoInfo = ref<VideoStatusType>({
     cover: "",
     desc: "",
     copyright: false,
-    partition: 0,
+    partitionId: 0,
     resources: [],
     createdAt: ""
 });

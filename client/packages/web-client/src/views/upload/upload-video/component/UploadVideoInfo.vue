@@ -12,7 +12,7 @@
             <n-form-item :label="t('upload.copyright')">
                 <n-switch v-model:value="videoInfo.copyright" />
             </n-form-item>
-            <n-form-item :label="t('common.partition')">
+            <n-form-item :label="t('common.partitionId')">
                 <n-input v-if="partitionText" disabled :value="partitionText"></n-input>
                 <partition-selector v-else @selected="selectedPartition"></partition-selector>
             </n-form-item>
@@ -40,6 +40,7 @@ const props = defineProps<{
     info: VideoStatusType
 }>();
 
+
 // i18n
 const { t } = useI18n();
 
@@ -57,7 +58,7 @@ const videoInfo = reactive({
     cover: "",
     desc: "",
     copyright: true,
-    partition: 0,
+    partitionId: 0,
     createdAt: ""
 })
 
@@ -73,7 +74,7 @@ const finishUpload = (cover: string) => {
 
 //选中分区
 const selectedPartition = (value: number) => {
-    videoInfo.partition = value;
+    videoInfo.partitionId = value;
 }
 
 //上传视频信息
@@ -94,7 +95,7 @@ const uploadInfo = () => {
         });
         return;
     }
-    if (!videoInfo.partition) {
+    if (!videoInfo.partitionId) {
         notification.error({
             title: '上传失败',
             content: "请选择视频分区",
@@ -139,8 +140,10 @@ const modifyVideoInfo = () => {
 const getPartitionName = (id: number) => {
     let partitionList: Array<PartitionType> = [];
     getPartitionAPI().then((res) => {
+        
         if (res.data.code === statusCode.OK) {
             partitionList = res.data.data.partitions;
+
             const subpartition = partitionList.find((item) => {
                 return item.id === id;
             })
@@ -162,7 +165,8 @@ onMounted(() => {
         videoInfo.desc = props.info.desc;
         videoInfo.cover = props.info.cover;
         videoInfo.copyright = props.info.copyright;
-        getPartitionName(props.info.partition);
+        videoInfo.partitionId = props.info.partitionId;
+        getPartitionName(props.info.partitionId);
     }
     showUpload.value = true;
 })

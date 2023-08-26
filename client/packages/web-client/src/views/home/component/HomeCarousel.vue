@@ -3,7 +3,7 @@
         <div ref="carouselContainer" class="carousel-container"
             :style="`width: ${data.containerWidth}%;transition: ${data.transition};transform: ${data.transform}`"
             @mouseover="manualSwitching(null, false)" @mouseleave="manualSwitching(null, true)">
-            <div class="carousel-item" :style="`width: ${data.itemWidth}% `" v-for="item in data.playList">
+            <div class="carousel-item" :style="`width: ${data.itemWidth}% `" :key="item.id" v-for="item in data.playList">
                 <img class="carousel-img" :src="getResourceUrl(item.img)" :alt="item.title" />
                 <div class="carousel-mask" :style="`background-color: ${item.color}`"></div>
             </div>

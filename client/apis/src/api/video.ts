@@ -13,7 +13,7 @@ export const getVideoStatusAPI = (vid: number) => {
 
 //修改视频信息
 export const modifyVideoInfoAPI = (modifyVideo: ModifyVideoType) => {
-    return request.post('v1/video/info/modify', modifyVideo);
+    return request.put('v1/video/info', modifyVideo);
 }
 
 //获取视频信息
@@ -22,8 +22,8 @@ export const getVideoInfoAPI = (vid: number, ios: number = 0) => {
 }
 
 //获取视频列表
-export const getVideoListAPI = (page: number, pageSize: number, partition: number) => {
-    return request.get(`v1/video/list?page=${page}&page_size=${pageSize}&partition=${partition}`);
+export const getVideoListAPI = (page: number, pageSize: number, partitionId: number) => {
+    return request.get(`v1/video/list?page=${page}&page_size=${pageSize}&partition=${partitionId}`);
 }
 
 //获取推荐视频列表
@@ -62,8 +62,8 @@ export const deleteVideoAPI = (id: number) => {
 }
 
 //管理员获取视频列表
-export const adminGetVideoListAPI = (page: number, pageSize: number, partition: number) => {
-    return request.get(`v1/video/manage/list?page=${page}&page_size=${pageSize}&partition=${partition}`);
+export const adminGetVideoListAPI = (page: number, pageSize: number, partitionId: number) => {
+    return request.get(`v1/video/manage/list?page=${page}&page_size=${pageSize}&partition=${partitionId}`);
 }
 
 //管理员搜索视频

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,10 +28,14 @@ public class PartitionController {
      * 获取分区列表
      */
     @GetMapping
-    public ResponseResult<List<Partition>> getPartitionList() {
+    public ResponseResult<Map<String,List<Partition>>> getPartitionList() {
         // 获取分区列表(去除时间字段和已删除字段)
         List<Partition> partitionList = partitionService.partitionList();
-        return ResponseResult.success(partitionList);
+
+        Map<String,List<Partition>> data = new HashMap<>();
+        data.put("partitions",partitionList);
+
+        return ResponseResult.success(data);
     }
 
 }

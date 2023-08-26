@@ -37,7 +37,7 @@
                     </span>
                 </div>
                 <div class="menu-group">
-                    <span class="menu-item menu-item-only-text" v-for="item in partitionList"
+                    <span class="menu-item menu-item-only-text" :key="item.id" v-for="item in partitionList"
                         @click="goVideoList(item.id)">
                         {{ item.content }}
                     </span>
@@ -50,7 +50,7 @@
                             </n-dropdown>
                         </span>
                         <span>
-                            <a :href="globalConfig.mobile">移动端</a>
+                            <!-- <a :href="globalConfig.mobile">移动端</a> -->
                         </span>
                         <span>
                             <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">
@@ -136,7 +136,7 @@ const languages = [
 ]
 
 // 修改语言
-const selectLanguage = (lang: "zh-CN" | "en-US" | "ja-JP") => {
+const selectLanguage = (lang: "zh-CN" | "en-US") => {
     i18n.global.locale = lang;
     localStorage.setItem('locale',lang);
 }
@@ -156,7 +156,7 @@ const getPartition = () => {
 
 // 前往视频列表页
 const goVideoList = (id: number) => {
-    router.push({ name: "VideoList", query: { partition: id } });
+    router.push({ name: "VideoList", query: { partitionId: id } });
 }
 
 // 前往个人空间

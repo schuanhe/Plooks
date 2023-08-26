@@ -38,15 +38,10 @@ onBeforeMount(() => {
     // 获取分区列表
     getPartitionAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            partitionList.value = res.data.data;
+            partitionList.value = res.data.data.partitions;
             partitions.value = partitionList.value.filter((item) => {
                 return item.parentId === 0;
-            })
-
-            console.log(partitionList.value);
-            console.log(partitions.value);
-            
-            
+            })            
         }
     }).catch((err) => {
         notification.error({

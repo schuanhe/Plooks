@@ -45,6 +45,23 @@ public class VideoController {
     }
 
     /**
+     * 修改视频信息
+     */
+    @PutMapping("/info")
+    public ResponseResult<?> updateVideoInfo(@RequestBody Video video) {
+        ResponseResult<String> validationResult = validateVideoInfo(video);
+        if (validationResult != null) {
+            return validationResult;
+        }
+        boolean result = videoService.updateById(video);
+        if (result) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error("修改失败");
+        }
+    }
+
+    /**
      * 视频状态
      * @return 视频状态
      */
@@ -127,7 +144,7 @@ public class VideoController {
         if (video.getCopyright() == null) {
             return ResponseResult.error("视频版权不能为空");
         }
-        if (video.getPartition() == null) {
+        if (video.getPartitionId() == null) {
             return ResponseResult.error("分区ID不能为空");
         }
         return null; // Validation successful

@@ -30,7 +30,7 @@ export default {
         next: "下一步",
         nickname: "昵称",
         open: "公开",
-        partition: "分区",
+        partitionId: "分区",
         private: "私密",
         publish: "发表",
         pwd: "密码",
