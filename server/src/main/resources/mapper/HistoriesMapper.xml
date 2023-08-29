@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.HistoriesMapper">
+
+    <resultMap id="BaseResultMap" type="com.schuanhe.plooks.domain.Histories">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+            <result property="vid" column="vid" jdbcType="INTEGER"/>
+            <result property="uid" column="uid" jdbcType="INTEGER"/>
+            <result property="part" column="part" jdbcType="INTEGER"/>
+            <result property="time" column="time" jdbcType="DOUBLE"/>
+    </resultMap>
+
+
+
+</mapper>

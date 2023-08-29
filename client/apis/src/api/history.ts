@@ -8,7 +8,7 @@ export const addHistoryAPI = (addHistory: AddHistoryType) => {
 
 // 获取播放进度
 export const getHistoryProgressAPI = (vid: number) => {
-    return request.get(`v1/history/progress/get?vid=${vid}`);
+    return request.get(`v1/history/progress/${vid}`);
 }
 
 // 获取历史记录

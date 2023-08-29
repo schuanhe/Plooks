@@ -7,6 +7,7 @@ import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.service.ResourcesService;
 import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.service.VideoService;
+import com.schuanhe.plooks.utils.RedisCache;
 import com.schuanhe.plooks.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,9 @@ public class VideoController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisCache redisCache;
+
 
     /**
      * 通过id获取视频
@@ -41,6 +45,7 @@ public class VideoController {
     @GetMapping("/{vid}")
     public ResponseResult<?> getVideoById(@PathVariable("vid") String vid) {
         Video video = new Video();
+
         try {
             //将vid转换为int类型，错误则返回
             int vidInt = Integer.parseInt(vid);
@@ -50,6 +55,19 @@ public class VideoController {
             return ResponseResult.fail("vid格式错误");
         }
 
+        // 获取视频信息
+        // 先获取redis中的视频信息
+
+        Video redisVideo = redisCache.getCacheObject("video:info:" + video.getId());
+
+        // 如果redis中有视频信息，则直接返回
+        if (redisVideo != null) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("video", redisVideo);
+            return ResponseResult.success(data);
+        }
+
+        // 如果redis中没有视频信息，则从数据库中获取
         video = videoService.getById(video);
 
         // 获取视频资源
@@ -72,6 +90,9 @@ public class VideoController {
         User userInfo = userService.getUserInfoById(uid);
 
         video.setAuthor(userInfo);
+
+        // 将视频信息添加到redis中
+        redisCache.setCacheObject("video:info:" + video.getId(), video);
 
         Map<String, Object> data = new HashMap<>();
         data.put("video", video);
