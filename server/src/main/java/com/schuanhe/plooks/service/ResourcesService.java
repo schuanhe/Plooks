@@ -20,4 +20,7 @@ public interface ResourcesService extends IService<Resources> {
     List<Resources> getResourcesByVid(Integer vid);
 
     boolean deleteResource(Integer id);
+
+
+    Integer saveAndGetId(Resources resources);
 }

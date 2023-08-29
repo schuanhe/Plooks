@@ -32,7 +32,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
         //设置创建时间
         video.setCreatedAt(new Date());
-        video.setStatus(300);
+        video.setStatus(100);
 
         baseMapper.insertVideo(video);
 

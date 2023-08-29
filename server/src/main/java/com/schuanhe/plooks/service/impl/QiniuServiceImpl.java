@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -33,7 +34,7 @@ import java.util.Date;
 
 @Slf4j
 @Service
-public class QiniuServiceImpl implements UploadService, InitializingBean {
+public class QiniuServiceImpl implements InitializingBean {
 
     @Autowired
     private UploadManager uploadManager;
@@ -58,23 +59,6 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
     private StringMap putPolicy;
 
 
-    @Override
-    public String uploadFile(File file, String path) throws IOException {
-        Response response = this.uploadManager.put(file, path, getUploadToken());
-        //如果失败重试3次
-        int retry = 0;
-        while (response.needRetry() && retry < 3) {
-            response = this.uploadManager.put(file, null, getUploadToken());
-            retry++;
-        }
-        //解析结果
-        DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
-        String return_path = url + "/" + putRet.key;
-        log.info("文件名称={}", return_path);
-        return return_path;
-    }
-
-    @Override
     public String uploadFile(InputStream inputStream, String path) throws IOException {
         Response response = this.uploadManager.put(inputStream, path, getUploadToken(), null, null);
         //如果失败重试3次
@@ -92,7 +76,6 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
 
     }
 
-    @Override
     public String uploadFileS(InputStream inputStream, String path) throws IOException {
         //构造一个带指定 Region 对象的配置类
         Configuration cfg = new Configuration(Region.huanan());
@@ -133,10 +116,7 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
         return null;
     }
 
-    /**
-     * 删除七牛云上的相关文件 * * @param key * @return * @throws QiniuException
-     */
-    @Override
+
     public Response delete(String key) throws QiniuException {
         Response response = this.bucketManager.delete(bucket, key);
         int retry = 0;
@@ -146,7 +126,6 @@ public class QiniuServiceImpl implements UploadService, InitializingBean {
         return response;
     }
 
-    @Override
     public Resources getVideo(String url) throws Exception {
         // 新文件信息
         Resources resources = new Resources();

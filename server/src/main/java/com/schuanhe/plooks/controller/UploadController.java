@@ -24,7 +24,7 @@ import java.util.Map;
 public class UploadController {
 
     @Autowired
-    private UploadService qiniuService;
+    private UploadService uploadFile;
 
     @Autowired
     private ResourcesService resourcesService;
@@ -35,42 +35,39 @@ public class UploadController {
 
         String path = "image/" + System.currentTimeMillis() + ".jpg";
 
-        String url = qiniuService.uploadFile(image.getInputStream(), path);
+        String url = uploadFile.uploadImage(image.getInputStream(), path);
         HashMap<String, String> map = new HashMap<>();
         map.put("url", url);
         return ResponseResult.success(map);
     }
 
     @PostMapping("/video/{vid}")
-    public ResponseResult<String> uploadVideo(@RequestParam("video") MultipartFile video, @PathVariable("vid") Integer vid) throws IOException {
+    public ResponseResult<String> uploadVideo(@RequestParam("video") MultipartFile video, @PathVariable("vid") String vid) throws IOException {
         //通过spring security上下文获取UserDetails
         Integer userId = WebUtils.getUserId();
         if (userId == null) {
             return ResponseResult.fail("请先登录");
         }
-        // 设置文件路径
-        String path = "video/" + vid + System.currentTimeMillis() + ".mp4";
-        Resources resources;
+
         try {
-            String url = qiniuService.uploadFile(video.getInputStream(), path);
-            resources = qiniuService.getVideo(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseResult.fail("上传失败");
+            //将vid转换为int类型，错误则返回
+            Integer vidInt = Integer.valueOf(vid);
+            //新增资源
+            Resources resources = new Resources();
+            resources.setVid(vidInt);
+            resources.setUid(userId);
+            resources.setStatus(200);
+
+            //保存资源并且返回资源id
+            Integer rid = resourcesService.saveAndGetId(resources);
+
+            uploadFile.uploadFile(video.getInputStream(), vidInt, rid);
+
+        }catch (NumberFormatException e){
+            return ResponseResult.fail("vid格式错误");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseResult.fail("文件解析失败");
-        }
-
-        // 保存到数据库
-        resources.setStatus(500); //等待审核
-        resources.setVid(vid);
-        resources.setUid(userId);
-
-        // 保存到数据库
-        boolean save = resourcesService.save(resources);
-        if (!save) {
-            return ResponseResult.fail("上传失败");
         }
 
         return ResponseResult.success("上传成功");

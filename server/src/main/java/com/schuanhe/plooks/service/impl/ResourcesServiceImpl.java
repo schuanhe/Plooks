@@ -35,6 +35,13 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
         // 删除视频资源
         return baseMapper.deleteById(id) > 0;
     }
+
+    @Override
+    public Integer saveAndGetId(Resources resources) {
+        // 保存视频资源
+        baseMapper.insert(resources);
+        return resources.getId();
+    }
 }
 
 

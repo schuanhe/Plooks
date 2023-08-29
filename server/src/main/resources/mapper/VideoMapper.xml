@@ -7,7 +7,7 @@
 
     <insert id="insertVideo" parameterType="com.schuanhe.plooks.domain.Video" useGeneratedKeys="true" keyProperty="id">
         insert into videos (title, cover, `desc`, copyright, partition_id, uid, status, created_at)
-        values (#{title}, #{cover}, #{desc}, #{copyright}, #{partition}, #{uid}, #{status}, #{createdAt})
+        values (#{title}, #{cover}, #{desc}, #{copyright}, #{partitionId}, #{uid}, #{status}, #{createdAt})
     </insert>
 
     <select id="selectById" resultType="com.schuanhe.plooks.domain.Video">
