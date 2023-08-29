@@ -2,8 +2,10 @@ package com.schuanhe.plooks.controller;
 
 
 import com.schuanhe.plooks.domain.Resources;
+import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.service.ResourcesService;
+import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,57 @@ public class VideoController {
 
     @Autowired
     private ResourcesService resourcesService;
+
+    @Autowired
+    private UserService userService;
+
+
+    /**
+     * 通过id获取视频
+     * @return 用户和视频的信息
+     */
+    @GetMapping("/{vid}")
+    public ResponseResult<?> getVideoById(@PathVariable("vid") String vid) {
+        Video video = new Video();
+        try {
+            //将vid转换为int类型，错误则返回
+            int vidInt = Integer.parseInt(vid);
+            video.setId(vidInt);
+
+        } catch (NumberFormatException e) {
+            return ResponseResult.fail("vid格式错误");
+        }
+
+        video = videoService.getById(video);
+
+        // 获取视频资源
+        List<Resources> resources = resourcesService.getResourcesByVid(video.getId());
+
+        if (resources == null || resources.size() < 1) {
+            return ResponseResult.fail("视频不存在");
+        }
+
+        // 将资源添加到视频中
+        video.setResources(resources);
+
+        Integer uid = video.getUid();
+
+        if (uid == null) {
+            return ResponseResult.fail("视频作者不存在");
+        }
+
+        //获取用户信息
+        User userInfo = userService.getUserInfoById(uid);
+
+        video.setAuthor(userInfo);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("video", video);
+
+
+        return ResponseResult.success(data);
+    }
+
 
 
     /**

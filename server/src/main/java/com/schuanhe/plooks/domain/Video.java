@@ -91,6 +91,12 @@ public class Video implements Serializable {
     @TableField(exist = false)
     private List<Resources> resources;
 
+    /**
+     * 用户信息
+     */
+    @TableField(exist = false)
+    private User author;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
