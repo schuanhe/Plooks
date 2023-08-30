@@ -104,8 +104,12 @@ const videoInfo = ref<VideoType>();
 const getVideoInfo = (vid: number) => {
     getVideoInfoAPI(vid).then((res) => {
         if (res.data.code === statusCode.OK) {
+            console.log(res.data);
+            
             videoInfo.value = res.data.data.video;
             resources.value = res.data.data.video.resources;
+            console.log(resources.value);
+            
             //设置播放的资源
             if (!resources.value[part.value - 1]) {
                 part.value = 1;

@@ -76,7 +76,7 @@ const getTrackIndex = (quality: number) => {
 const loadPart = async (part: number) => {
     loadResource(part);
     startTime = await getHistoryProgress();
-    await getDanmaku(part);
+    // await getDanmaku(part);
     playerKey.value = Date.now();
 }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.ArchiveMapper">
+    <insert id="insertLike">
+        insert into `like` (uid, vid, created_at, updated_at)
+        values (#{uid}, #{vid}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateLikeById">
+        update `like` set deleted_at = #{deletedAt}, updated_at = #{updatedAt} where id = #{id}
+    </update>
+
+    <select id="getCollectCount" resultType="java.lang.Integer">
+        select count(*) from collect where vid = #{vid} and deleted_at is null
+    </select>
+
+    <select id="getLikeCount" resultType="java.lang.Integer">
+        select count(*) from `like` where vid = #{vid} and deleted_at is null
+    </select>
+
+    <select id="hasLike" resultType="java.lang.Integer">
+        select count(*) from `like` where vid = #{vid} and uid = #{uid} and deleted_at is null
+    </select>
+    <select id="hasCollect" resultType="java.lang.Integer">
+        select count(*) from collect where vid = #{vid} and uid = #{uid} and deleted_at is null
+    </select>
+    <select id="hasLikeNoDelete" resultType="com.schuanhe.plooks.domain.Archive$Like">
+        select * from `like` where vid = #{vid} and uid = #{uid}
+    </select>
+
+</mapper>
