@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.mapper.VideoMapper;
+import com.schuanhe.plooks.utils.RedisCache;
 import com.schuanhe.plooks.utils.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +21,9 @@ import java.util.List;
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     implements VideoService {
+
+    @Autowired
+    private RedisCache redisCache;
 
     @Override
     public Integer uploadVideoInfo(Video video) {
@@ -41,8 +46,20 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
     @Override
     public Video getVideoInfo(Integer vid) {
+
+        // 先获取redis中的视频信息
+        Video video = redisCache.getCacheObject("video:info:no:" + vid);
+
+        // 如果redis中没有视频信息
+        if (video == null) {
+            // 获取视频信息
+            video = baseMapper.selectById(vid);
+            // 将视频信息存入redis
+            redisCache.setCacheObject("video:info:no:" + vid, video);
+        }
+
         // 获取视频信息
-        return baseMapper.selectById(vid);
+        return video;
     }
 
     @Override

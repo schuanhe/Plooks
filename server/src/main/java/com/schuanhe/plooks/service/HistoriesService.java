@@ -4,6 +4,9 @@ import com.schuanhe.plooks.domain.Histories;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.schuanhe.plooks.utils.ResponseResult;
 
+import java.util.List;
+import java.util.Map;
+
 /**
 * @author ASUS
 * @description 针对表【histories(历史记录表)】的数据库操作Service
@@ -11,5 +14,9 @@ import com.schuanhe.plooks.utils.ResponseResult;
 */
 public interface HistoriesService extends IService<Histories> {
 
-    Histories getProgressByVid(int vidInt, Integer userId);
+    Histories getProgressByVid(int vid, Integer uid);
+
+    void addHistory(Histories histories);
+
+    List<Histories> getHistoryList(int size, int page, Integer uid);
 }

@@ -23,4 +23,5 @@
 ### video
 | 备注 | 数据类型 | 路径 |
 | --- | --- | --- |
-| 视频信息 | Video | video:info:{id} |
+| 视频信息 | Video | video:info:{vid} |
+| 视频信息(不带资源) | Video | video:info:no:{vid} |

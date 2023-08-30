@@ -19,7 +19,13 @@ public interface ResourcesService extends IService<Resources> {
      */
     List<Resources> getResourcesByVid(Integer vid);
 
-    boolean deleteResource(Integer id);
+
+    /**
+     * 根据视频id删除视频资源
+     * @param vid 视频id
+     * @return 是否删除成功
+     */
+    boolean deleteResource(Integer vid);
 
 
     Integer saveAndGetId(Resources resources);

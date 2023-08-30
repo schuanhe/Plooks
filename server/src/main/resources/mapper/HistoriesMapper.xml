@@ -14,7 +14,8 @@
             <result property="part" column="part" jdbcType="INTEGER"/>
             <result property="time" column="time" jdbcType="DOUBLE"/>
     </resultMap>
-
-
+    <select id="getHistoryList" resultType="com.schuanhe.plooks.domain.Histories">
+        select * from histories where uid = #{uid} and deleted_at is null order by updated_at desc limit #{i}, #{size}
+    </select>
 
 </mapper>

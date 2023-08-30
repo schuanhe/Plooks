@@ -59,6 +59,12 @@ public class Histories implements Serializable {
      */
     private Double time;
 
+    /**
+     * 视频信息
+     */
+    @TableField(exist = false)
+    private Video video;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
