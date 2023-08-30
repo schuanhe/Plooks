@@ -2,7 +2,7 @@
     <div class="video-head">
         <span class="head-title">{{ t("video.userVideo") }}</span>
     </div>
-    <div class="card-box" v-for="item in videoList" @click="govideo(item.vid)">
+    <div class="card-box" :key="item.vid" v-for="item in videoList" @click="govideo(item.vid)">
         <img class="cover" :src="getResourceUrl(item.cover)" />
         <div class="info">
             <span class="title">{{ item.title }}</span>

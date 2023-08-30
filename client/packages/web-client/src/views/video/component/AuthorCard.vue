@@ -19,7 +19,7 @@
             </div>
             <!--昵称和个签-->
             <div class="author-info">
-                <p @click="goUserSpace(authorInfo.uid)">{{ authorInfo.name }}</p>
+                <p @click="goUserSpace(authorInfo.uid)">{{ authorInfo.nickname }}</p>
                 <p>{{ authorInfo.sign }}</p>
             </div>
             <div class="follow-btn">

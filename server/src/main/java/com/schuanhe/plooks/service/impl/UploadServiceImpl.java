@@ -24,7 +24,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public String uploadImage(InputStream inputStream, String path) throws IOException {
-        return null;
+        String url = qiniuService.uploadFile(inputStream, path);
+        return url;
     }
 
     @Override

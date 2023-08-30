@@ -39,7 +39,7 @@ public class HistoriesController {
      * @param page 页码
      * @return 历史记录列表
      */
-    @GetMapping("/list/{size}/{page}")
+    @GetMapping("/video/list/{size}/{page}")
     public ResponseResult<?> getHistoryList(@PathVariable String size, @PathVariable String page) {
         int sizeInt;
         int pageInt;
