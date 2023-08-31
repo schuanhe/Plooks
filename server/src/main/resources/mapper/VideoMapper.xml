@@ -43,5 +43,8 @@
         SELECT count(*) FROM videos
         WHERE status = 0
     </select>
+    <select id="selectRecommendVideo" resultType="com.schuanhe.plooks.domain.Video">
+        SELECT * FROM videos WHERE status = 0 ORDER BY clicks DESC LIMIT #{size}
+    </select>
 
 </mapper>

@@ -226,6 +226,21 @@ public class VideoController {
         return ResponseResult.success(data);
     }
 
+    /**
+     * 获取推荐视频
+     * @param size 获取数量
+     * @return 推荐视频
+     */
+    @GetMapping("/recommended/{size}")
+    public ResponseResult<?> recommendVideo(@PathVariable Integer size) {
+        // 获取推荐视频
+        List<Video> recommendVideo = videoService.getRecommendVideo(size);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("videos", recommendVideo);
+        return ResponseResult.success(data);
+    }
+
 
 
     //视频消息校验

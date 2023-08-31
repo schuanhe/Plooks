@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.MessageMapper">
+
+    <select id="getAnnouncement" resultType="com.schuanhe.plooks.domain.Message$Announces">
+        select * from announces where deleted_at is null and important = 0
+    </select>
+    <select id="getImportantAnnouncement" resultType="com.schuanhe.plooks.domain.Message$Announces">
+        select * from announces where deleted_at is null and important = 1
+    </select>
+</mapper>

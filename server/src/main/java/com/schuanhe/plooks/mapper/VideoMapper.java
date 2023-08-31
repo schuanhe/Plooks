@@ -31,6 +31,8 @@ public interface VideoMapper extends BaseMapper<Video> {
     int selectGoodVideoCountByPartitionIds(List<Integer> partitions);
 
     int selectGoodVideoCount();
+
+    List<Video> selectRecommendVideo(Integer size);
 }
 
 

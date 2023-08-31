@@ -122,12 +122,12 @@ public class RedisCache
      * 缓存List数据
      *
      * @param key 缓存的键值
-     * @param dataList 待缓存的List数据
+     * @param dataList 待缓存的List数据(左边先出)
      * @return 缓存的对象
      */
     public <T> long setCacheList(final String key, final List<T> dataList)
     {
-        Long count = redisTemplate.opsForList().rightPushAll(KEY_PREFIX_VALUE + key, dataList);
+        Long count = redisTemplate.opsForList().leftPushAll(KEY_PREFIX_VALUE + key, dataList);
         return count == null ? 0 : count;
     }
 
@@ -140,6 +140,14 @@ public class RedisCache
     public <T> List<T> getCacheList(final String key)
     {
         return redisTemplate.opsForList().range(KEY_PREFIX_VALUE + key, 0, -1);
+    }
+
+    /**
+     * 获得缓存的list对象，有起始位置
+     */
+    public <T> List<T> getCacheList(final String key, int start, int end)
+    {
+        return redisTemplate.opsForList().range(KEY_PREFIX_VALUE + key, start, end);
     }
 
     /**

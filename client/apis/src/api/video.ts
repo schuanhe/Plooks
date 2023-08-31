@@ -28,7 +28,7 @@ export const getVideoListAPI = (page: number, pageSize: number, partitionId: num
 
 //获取推荐视频列表
 export const getRecommendedVideoAPI = (pageSize: number) => {
-    return request.get(`v1/video/recommended?page_size=${pageSize}`);
+    return request.get(`v1/video/recommended/${pageSize}`);
 }
 
 // 搜索视频

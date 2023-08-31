@@ -3,12 +3,12 @@ import type { AddAnnounceType } from '../types/msg-announce-type';
 
 //获取公告
 export const getAnnounceAPI = (page: number, page_size: number) => {
-    return request.get(`v1/message/announce/get?page=${page}&page_size=${page_size}`);
+    return request.get(`v1/message/announce/${page_size}/${page}`);
 }
 
 //获取最新重要公告
 export const getImportantAnnounceAPI = () => {
-    return request.get('v1/message/announce/important/get');
+    return request.get('v1/message/announce/important');
 }
 
 //添加公告

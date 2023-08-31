@@ -8,7 +8,7 @@ export const addCarouselAPI = (carousel: AddCarouselType) => {
 
 // 获取轮播图
 export const getCarouselAPI = () => {
-    return request.get(`v1/carousel/get`);
+    return request.get(`v1/carousel`);
 }
 
 // 删除轮播图

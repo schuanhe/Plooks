@@ -1,6 +1,7 @@
 import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.service.impl.PartitionServiceImpl;
+import com.schuanhe.plooks.utils.RedisCache;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,9 @@ public class PartitionServiceTest {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private RedisCache redisCache;
+
     @Test
     public void testPartitionList() {
         System.out.println(partitionServiceImpl.partitionList());
@@ -22,9 +26,8 @@ public class PartitionServiceTest {
 
     @Test
     public void getSubPartitionIds() {
-
-        List<Video> goodVideoList = videoService.getGoodVideoList(1, 10, 1);
-       goodVideoList.forEach(System.out::println);
+        boolean importantAnnouncement = redisCache.deleteObject("importantAnnouncement");
+        System.out.println(importantAnnouncement);
 
     }
 }

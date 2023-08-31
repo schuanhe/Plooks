@@ -181,6 +181,23 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         return count;
     }
 
+    @Override
+    public List<Video> getRecommendVideo(Integer size) {
+        // 通过redis获取推荐视频
+        List<Video> videos = redisCache.getCacheObject("video:good:recommend:list:" + size);
+        if (videos != null) {
+            return videos;
+        }
+        // 按照播放量排序获取视频
+        videos = baseMapper.selectRecommendVideo(size);
+        // 将视频信息存入redis
+        videos.forEach(video -> {
+            // 获取视频作者信息
+            video.setAuthor(userService.getUserInfoById(video.getUid()));
+        });
+        return videos;
+    }
+
 }
 
 
