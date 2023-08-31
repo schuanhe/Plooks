@@ -188,12 +188,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         try {
             User user = null;
             String userid = JwtUtil.getUserid(token);
-            UserDetailsImpl userDetails = redisCache.getCacheObject("user:info:" + userid);
+            user = redisCache.getCacheObject("user:info:user:" + userid);
             // 如果redis中没有用户信息，则从数据库中获取用户信息
-            if (userDetails == null) {
+            if (user == null) {
                 user = baseMapper.selectById(userid);
-            } else {
-                user = userDetails.getUser();
+                // 将用户信息存储到 Redis 缓存中
+                redisCache.setCacheObject("user:info:user:" + userid, user);
             }
             return CoreUtils.desensitization(user); // 脱敏处理
         } catch (Exception e) {
@@ -204,14 +204,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public User getUserInfoById(Integer id) {
         // 先从缓存中获取用户信息
-        UserDetailsImpl userDetails = redisCache.getCacheObject("user:info:" + id);
+        User user = redisCache.getCacheObject("user:info:user:" + id);
         // 如果缓存中没有用户信息，则从数据库中获取用户信息
-        if (userDetails == null) {
-            User user = baseMapper.selectById(id);
-            return CoreUtils.removeSensitiveInfo(user); // 脱敏处理
-        } else {
-            return CoreUtils.removeSensitiveInfo(userDetails.getUser()); // 脱敏处理
+        if (user == null) {
+            user = baseMapper.selectById(id);
+            // 将用户信息存储到 Redis 缓存中
+            redisCache.setCacheObject("user:info:user:" + id, user);
         }
+        return CoreUtils.removeSensitiveInfo(user); // 去除敏感信息
     }
 
     @Override
@@ -221,6 +221,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 如果缓存中没有用户信息，则从数据库中获取用户信息
         if (userid == null) {
             User user = baseMapper.selectByUsername(username);
+            // 将用户信息存储到 Redis 缓存中
+            redisCache.setCacheObject("user:info:username" + username, user.getId());
             return user.getId();
         } else {
             return userid;

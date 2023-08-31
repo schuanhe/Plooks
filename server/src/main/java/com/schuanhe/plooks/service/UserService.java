@@ -53,9 +53,20 @@ public interface UserService extends IService<User> {
      */
     void sendEmail(User user) throws RuntimeException;
 
+    /**
+     * 通过token获取用户信息
+     * 加密敏感信息
+     * @param token token
+     * @return 用户信息
+     */
     User getUserInfo(String token);
 
 
+    /**
+     * 去除敏感信息的用户信息
+     * @param id 用户id
+     * @return 用户信息
+     */
     User getUserInfoById(Integer id);
 
     Integer getUserIdByUsername(String username);

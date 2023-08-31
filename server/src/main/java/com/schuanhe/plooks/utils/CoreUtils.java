@@ -1,11 +1,6 @@
 package com.schuanhe.plooks.utils;
 
 import com.schuanhe.plooks.domain.User;
-import com.schuanhe.plooks.domain.model.UserDetailsImpl;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Random;
 

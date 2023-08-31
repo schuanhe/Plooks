@@ -28,7 +28,7 @@
             <div v-if="item.content.indexOf('@') === -1">
                 <span>{{ item.content }}</span>
             </div>
-            <div class="content-text" :key="content.value" v-else v-for="content in handleMention(item.content)">
+            <div class="content-text" v-else :key="content.value" v-for="content in handleMention(item.content)">
                 <span :class="content.class" @click="goMention(content.key)">{{ content.value }}</span>
             </div>
         </div>
@@ -68,7 +68,7 @@
                     <div v-if="reply.content.indexOf('@') === -1">
                         <span>{{ reply.content }}</span>
                     </div>
-                    <div class="content-text" :key="content.value" v-else v-for="content in handleMention(reply.content)">
+                    <div class="content-text" v-else :key="content.value" v-for="content in handleMention(reply.content)">
                         <span :class="content.class" @click="goMention(content.key)">{{ content.value }}</span>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, reactive, ref } from "vue";
 import useComment from '@/hooks/comment-hooks';
 import useMention from '@/hooks/mention-hooks';
 import { statusCode, storageData } from '@plooks/utils';

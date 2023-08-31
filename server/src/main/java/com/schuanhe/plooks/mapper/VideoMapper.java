@@ -19,6 +19,18 @@ public interface VideoMapper extends BaseMapper<Video> {
 
 
     List<Video> selectVideoByUid(Integer uid, int i, Integer size);
+
+    /**
+     * 获取所有子分区的正常视频
+     * @return 上传视频总数
+     */
+    List<Video> selectGoodVideoListByPartitionIds(List<Integer> partitions, int i, Integer size);
+
+    List<Video> selectGoodVideoList(int i, Integer size);
+
+    int selectGoodVideoCountByPartitionIds(List<Integer> partitions);
+
+    int selectGoodVideoCount();
 }
 
 

@@ -17,5 +17,31 @@
     <select id="selectVideoByUid" resultType="com.schuanhe.plooks.domain.Video">
         select * from videos where uid = #{uid} order by created_at desc limit #{i}, #{size}
     </select>
+    <select id="selectGoodVideoListByPartitionIds" resultType="com.schuanhe.plooks.domain.Video">
+        SELECT * FROM videos
+        WHERE partition_id IN
+        <foreach collection="partitions" item="partition" open="(" close=")" separator=",">
+            #{partition}
+        </foreach>
+        AND status = 0
+        limit #{i}, #{size}
+    </select>
+    <select id="selectGoodVideoList" resultType="com.schuanhe.plooks.domain.Video">
+        SELECT * FROM videos
+        WHERE status = 0
+        limit #{i}, #{size}
+    </select>
+    <select id="selectGoodVideoCountByPartitionIds" resultType="java.lang.Integer">
+        SELECT count(*) FROM videos
+        WHERE partition_id IN
+        <foreach collection="partitions" item="partition" open="(" close=")" separator=",">
+            #{partition}
+        </foreach>
+        AND status = 0
+    </select>
+    <select id="selectGoodVideoCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM videos
+        WHERE status = 0
+    </select>
 
 </mapper>

@@ -68,3 +68,9 @@ qiniu:
 
 # 自定义配置
 base-url: /v1/api # 基础路径
+
+# 缓存配置
+plooks:
+  video:
+    cache:
+      expire: 180 # 缓存过期时间，单位秒

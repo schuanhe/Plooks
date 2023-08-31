@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Resources;
 import com.schuanhe.plooks.service.ResourcesService;
 import com.schuanhe.plooks.mapper.ResourcesMapper;
+import com.schuanhe.plooks.utils.RedisCache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +20,25 @@ import java.util.List;
 public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
     implements ResourcesService{
 
+    @Autowired
+    private RedisCache redisCache;
 
     @Override
     public List<Resources> getResourcesByVid(Integer vid) {
         // 通过视频vid获取视频资源(可能有多个资源)
 
-        //创建查询条件
-         QueryWrapper<Resources> queryWrapper = new QueryWrapper<>();
-         queryWrapper.eq("vid", vid);
+        // 先获取redis中的视频资源
+        List<Resources> resources = redisCache.getCacheObject("video:info:resources:" + vid);
 
-        return baseMapper.selectList(queryWrapper);
+        // 如果redis中没有视频资源
+        if (resources == null) {
+            // 获取视频资源
+            resources = baseMapper.selectList(new QueryWrapper<Resources>().eq("vid", vid));
+            // 将视频资源存入redis
+            redisCache.setCacheObject("video:info:resources:" + vid, resources);
+        }
+
+        return resources;
     }
 
     @Override

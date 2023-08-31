@@ -1,5 +1,6 @@
 package com.schuanhe.plooks.service;
 
+import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -36,4 +37,17 @@ public interface VideoService extends IService<Video> {
      * @return 上传视频总数
      */
     Long getUploadVideoCount();
+
+    boolean updateVideoInfoById(Video video);
+
+    /**
+     * 获取所有正常的视频
+     * @param partition 分区
+     * @param page 页码
+     * @param size 每页数量
+     * @return 视频列表
+     */
+    List<Video> getGoodVideoList(Integer partition, Integer size, Integer page);
+
+    int getGoodVideoCount(Integer partition);
 }

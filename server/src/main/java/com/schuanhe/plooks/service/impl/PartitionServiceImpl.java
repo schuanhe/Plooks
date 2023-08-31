@@ -1,12 +1,15 @@
 package com.schuanhe.plooks.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Partition;
+import com.schuanhe.plooks.domain.Resources;
 import com.schuanhe.plooks.service.PartitionService;
 import com.schuanhe.plooks.mapper.PartitionsMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
 * @author ASUS
@@ -30,6 +33,24 @@ public class PartitionServiceImpl extends ServiceImpl<PartitionsMapper, Partitio
 
         return partitionList;
 
+    }
+
+    @Override
+    public List<Integer> getSubPartitionIds(Integer pid) {
+        List<Integer> pids = new java.util.ArrayList<>();
+        // 获取当前分区和父分区为pid的所有二级分区id
+        baseMapper.selectList(new QueryWrapper<Partition>().eq("parent_id", pid)).forEach(partition -> {
+            if (partition.getDeletedAt() == null || partition.getId() != null) {
+                // 如果二级分区未被删除，则将其id加入pids
+                pids.add(partition.getId());
+            }
+        });
+        if (pids.size() == 0) {
+            // 如果当前分区没有二级分区，则将当前分区id加入pids
+            pids.add(pid);
+        }
+
+        return pids;
     }
 }
 

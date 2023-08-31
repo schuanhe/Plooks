@@ -23,7 +23,7 @@ export const getVideoInfoAPI = (vid: number) => {
 
 //获取视频列表
 export const getVideoListAPI = (page: number, pageSize: number, partitionId: number) => {
-    return request.get(`v1/video/list?page=${page}&page_size=${pageSize}&partition=${partitionId}`);
+    return request.get(`v1/video/list/${partitionId}/${pageSize}/${page}`);
 }
 
 //获取推荐视频列表

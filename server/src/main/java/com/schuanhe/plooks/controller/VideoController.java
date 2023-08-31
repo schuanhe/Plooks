@@ -4,6 +4,7 @@ package com.schuanhe.plooks.controller;
 import com.schuanhe.plooks.domain.Resources;
 import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.Video;
+import com.schuanhe.plooks.service.PartitionService;
 import com.schuanhe.plooks.service.ResourcesService;
 import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.service.VideoService;
@@ -35,40 +36,40 @@ public class VideoController {
     private UserService userService;
 
     @Autowired
+    private PartitionService partitionService;
+
+    @Autowired
     private RedisCache redisCache;
 
 
     /**
      * 通过id获取视频
+     * info + resources + user
      * @return 用户和视频的信息
      */
     @GetMapping("/{vid}")
     public ResponseResult<?> getVideoById(@PathVariable("vid") String vid) {
-        Video video = new Video();
-
+        int vidInt;
         try {
             //将vid转换为int类型，错误则返回
-            int vidInt = Integer.parseInt(vid);
-            video.setId(vidInt);
-
+            vidInt = Integer.parseInt(vid);
         } catch (NumberFormatException e) {
             return ResponseResult.fail("vid格式错误");
         }
 
         // 获取视频信息
-        // 先获取redis中的视频信息
+        // 先获取redis中的视频信息(部分信息)
+        Video video = redisCache.getCacheObject("video:info:" + vidInt);
 
-        Video redisVideo = redisCache.getCacheObject("video:info:" + video.getId());
-
-        // 如果redis中有视频信息，则直接返回
-        if (redisVideo != null) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("video", redisVideo);
-            return ResponseResult.success(data);
+        if (video == null) {
+            // 如果redis中没有视频信息，则从数据库中获取
+            video = videoService.getVideoInfo(vidInt);
+            // 将视频信息存入redis
+            redisCache.setCacheObject("video:info:" + vidInt, video);
+            if (video == null) {
+                return ResponseResult.fail("视频不存在");
+            }
         }
-
-        // 如果redis中没有视频信息，则从数据库中获取
-        video = videoService.getById(video);
 
         // 获取视频资源
         List<Resources> resources = resourcesService.getResourcesByVid(video.getId());
@@ -90,9 +91,6 @@ public class VideoController {
         User userInfo = userService.getUserInfoById(uid);
 
         video.setAuthor(userInfo);
-
-        // 将视频信息添加到redis中
-        redisCache.setCacheObject("video:info:" + video.getId(), video);
 
         Map<String, Object> data = new HashMap<>();
         data.put("video", video);
@@ -127,7 +125,7 @@ public class VideoController {
         if (validationResult != null) {
             return validationResult;
         }
-        boolean result = videoService.updateById(video);
+        boolean result = videoService.updateVideoInfoById(video);
         if (result) {
             return ResponseResult.success();
         } else {
@@ -137,14 +135,23 @@ public class VideoController {
 
     /**
      * 视频状态
+     * info + resources
      * @return 视频状态
      */
     @GetMapping("/status/{vid}")
     public ResponseResult<?> videoStatus(@PathVariable String vid){
+        int vidInt;
+        // 判断vid是否合法
+        try {
+            vidInt = Integer.parseInt(vid);
+        } catch (NumberFormatException e) {
+            return ResponseResult.error("视频不存在");
+        }
+
         // 获取视频信息
-        Video videoInfo = videoService.getVideoInfo(Integer.valueOf(vid));
+        Video videoInfo = videoService.getVideoInfo(vidInt);
         //通过vid获取相关资源
-        List<Resources> resourcesByVid = resourcesService.getResourcesByVid(Integer.valueOf(vid));
+        List<Resources> resourcesByVid = resourcesService.getResourcesByVid(vidInt);
         //传入相关资源
         videoInfo.setResources(resourcesByVid);
         // 返回数据
@@ -199,6 +206,23 @@ public class VideoController {
         data.put("videos", uploadVideos);
 
 
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 视频列表
+     * @return
+     */
+    @GetMapping("/list/{partition}/{size}/{page}")
+    public ResponseResult<?> videoList(@PathVariable Integer partition, @PathVariable Integer size, @PathVariable Integer page) {
+        // 获取正常的视频信息
+        List<Video> videoList = videoService.getGoodVideoList(partition, size, page);
+        // 获取视频总数
+        int count = videoService.getGoodVideoCount(partition);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", count);
+        data.put("videos", videoList);
         return ResponseResult.success(data);
     }
 

@@ -18,4 +18,10 @@ public interface PartitionService extends IService<Partition> {
      * @return 分区列表
      */
     List<Partition> partitionList();
+
+    /**
+     * 获取当前分区所有二级分区id
+     * @return
+     */
+    List<Integer> getSubPartitionIds(Integer pid);
 }
