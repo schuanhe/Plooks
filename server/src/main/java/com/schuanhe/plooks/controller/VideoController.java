@@ -227,6 +227,22 @@ public class VideoController {
     }
 
     /**
+     * 通过id获取视频列表
+     */
+    @GetMapping("/user/list/{uid}/{size}/{page}")
+    public ResponseResult<?> videoListByUid(@PathVariable Integer uid, @PathVariable Integer size, @PathVariable Integer page) {
+        // 获取正常的视频信息
+        List<Video> videoList = videoService.getVideoListByUid(uid, size, page);
+        // 获取视频总数
+        int count = videoService.getVideoCountByUid(uid);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", count);
+        data.put("videos", videoList);
+        return ResponseResult.success(data);
+    }
+
+    /**
      * 获取推荐视频
      * @param size 获取数量
      * @return 推荐视频

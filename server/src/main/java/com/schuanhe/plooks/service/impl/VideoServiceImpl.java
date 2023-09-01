@@ -198,6 +198,39 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         return videos;
     }
 
+    @Override
+    public List<Video> getVideoListByUid(Integer uid, Integer size, Integer page) {
+        // 先获取redis中的视频信息
+        List<Video> videos = redisCache.getCacheList("video:list:" + uid, (page - 1) * size, page * size - 1);
+        if (videos.size() == 0) {
+            // 获取指定用户的视频
+            videos = baseMapper.selectVideoByUidAll(uid);
+            //获取视频作者信息
+            //videos.forEach(video -> {
+            //    video.setAuthor(userService.getUserInfoById(video.getUid()));
+            //});
+
+            // 将视频信息存入redis
+            redisCache.setCacheList("video:list:" + uid, videos);
+            videos = redisCache.getCacheList("video:list:" + uid, (page - 1) * size, page * size - 1);
+        }
+
+        return videos;
+    }
+
+    @Override
+    public int getVideoCountByUid(Integer uid) {
+        // 先获取redis中的视频总数
+        Integer count = redisCache.getCacheObject("video:count:" + uid);
+        if (count == null || count == 0) {
+            // 获取指定用户的视频总数
+            count = baseMapper.selectVideoCountByUid(uid);
+            // 将视频总数存入redis
+            redisCache.setCacheObject("video:count:" + uid, count);
+        }
+        return count;
+    }
+
 }
 
 

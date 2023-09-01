@@ -32,6 +32,7 @@ public class Comments {
         private long createdAt;
         private String content;
         private int uid;
+        private int fid;
         private boolean isDelete;
         private List<Integer> at;
         @TableField(exist = false)

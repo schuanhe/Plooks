@@ -46,5 +46,12 @@
     <select id="selectRecommendVideo" resultType="com.schuanhe.plooks.domain.Video">
         SELECT * FROM videos WHERE status = 0 ORDER BY clicks DESC LIMIT #{size}
     </select>
+    <select id="selectVideoByUidAll" resultType="com.schuanhe.plooks.domain.Video">
+        select * from videos where uid = #{uid} and status = 0 order by updated_at desc
+    </select>
+    <select id="selectVideoCountByUid" resultType="java.lang.Integer">
+        select count(*) from videos where uid = #{uid} and status = 0
+    </select>
+
 
 </mapper>

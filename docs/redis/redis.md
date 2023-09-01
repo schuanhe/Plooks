@@ -34,6 +34,12 @@
 | 视频列表(3分钟自动删除) | List<Video> | video:good:list:{pid}:{siz}:{page} |
 | 视频列表数据(3分钟自动删除) | int | video:good:count:{pid} |
 
+#### video:{uid}
+| 备注 | 数据类型 | 路径 | redis数据类型 |
+| --- | --- | --- | --- |
+| 用户视频列表(3分钟自动删除) | List<Video> | video:list:{uid} | list |
+| 用户视频数量 | int | video:count:{uid} | string |
+
 ### comments
 | 备注 | 数据类型 | 路径 | redis数据类型 |
 | --- | --- | --- | --- |

@@ -53,7 +53,7 @@ export const getUploadVideoAPI = (page: number, page_size: number) => {
 
 //通过用户ID获取视频
 export const getVideoListByUidAPI = (uid: number, page: number, page_size: number) => {
-    return request.get(`v1/video/user/get?uid=${uid}&page=${page}&page_size=${page_size}`);
+    return request.get(`v1/video/user/list/${uid}/${page_size}/${page}`);
 }
 
 //删除视频

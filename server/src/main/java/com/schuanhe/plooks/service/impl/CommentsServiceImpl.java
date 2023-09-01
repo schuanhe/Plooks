@@ -53,7 +53,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
                         comment.setReply(replies);
                     }
                 });
-
+                //先删除redis中的评论
+                redisCache.deleteObject("comments:comment:list:" + vid);
                 redisCache.setCacheList("comments:comment:list:" + vid,newComments);
                 // 从redis中获取评论
                 comments = redisCache.getCacheList("comments:comment:list:" + vid,(page- 1) * size,page * size - 1);

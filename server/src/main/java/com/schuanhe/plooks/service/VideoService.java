@@ -52,4 +52,9 @@ public interface VideoService extends IService<Video> {
     int getGoodVideoCount(Integer partition);
 
     List<Video> getRecommendVideo(Integer size);
+
+    List<Video> getVideoListByUid(Integer uid, Integer size, Integer page);
+
+    int getVideoCountByUid(Integer uid);
+
 }

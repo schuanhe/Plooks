@@ -12,7 +12,7 @@ export const unfollowAPI = (id: number) => {
 
 //获取关注状态
 export const getFollowStatusAPI = (fid: number) => {
-    return request.get(`v1/follow/status?fid=${fid}`)
+    return request.get(`v1/follow/status/${fid}`)
 }
 
 //获取关注数据
