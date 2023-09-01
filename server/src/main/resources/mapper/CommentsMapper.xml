@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.CommentsMapper">
+
+
+    <select id="getComment" resultType="com.schuanhe.plooks.domain.Comments$Comment">
+        select * from comment where comment.is_delete = false and vid = #{vid}
+    </select>
+</mapper>

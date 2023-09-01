@@ -34,3 +34,15 @@
 | 视频列表(3分钟自动删除) | List<Video> | video:good:list:{pid}:{siz}:{page} |
 | 视频列表数据(3分钟自动删除) | int | video:good:count:{pid} |
 
+### comments
+| 备注 | 数据类型 | 路径 | redis数据类型 |
+| --- | --- | --- | --- |
+| 评论列表(有评论删除后三分钟删除) | List<Comment> | comments:comment:list:{vid} | list |
+| 评论回复列表(有评论删除后三分钟删除) | List<Reply> | comments:reply:list:{cid} | list |
+
+
+### 缓存刷新
+| 备注 | 数据类型 | 路径 |
+| --- | --- | --- |
+| 视频评论缓存刷新 | boolean | refresh:comments:{vid} |
+

@@ -13,7 +13,7 @@ export const addReplyAPI = (postComment: AddCommentType) => {
 
 //获取评论
 export const getCommentListAPI = (vid: number, page: number, page_size: number) => {
-    return request.get(`v1/comment/get?vid=${vid}&page=${page}&page_size=${page_size}`);
+    return request.get(`v1/comment/${vid}/${page_size}/${page}`);
 }
 
 //获取回复
