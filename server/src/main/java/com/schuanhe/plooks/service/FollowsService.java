@@ -11,4 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface FollowsService extends IService<Follows> {
 
     boolean getFollowStatus(Integer fid);
+
+    void follow(Integer uid);
 }

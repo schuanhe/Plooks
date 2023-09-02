@@ -25,6 +25,21 @@ public class FollowsServiceImpl extends ServiceImpl<FollowsMapper, Follows>
 
         return follows != null;
     }
+
+    @Override
+    public void follow(Integer uid) {
+        Integer myUid = WebUtils.getUserId();
+
+        Follows follows = new Follows();
+        follows.setUid(myUid);
+        follows.setFid(uid);
+        assert myUid != null;
+        if (myUid.equals(uid)) {
+            return;
+        }
+
+        baseMapper.insert(follows);
+    }
 }
 
 

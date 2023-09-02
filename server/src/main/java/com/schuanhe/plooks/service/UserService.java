@@ -76,4 +76,5 @@ public interface UserService extends IService<User> {
     void modifyCover(String token, String spacecover);
 
     void modifyUserInfo(String token, User user);
+
 }

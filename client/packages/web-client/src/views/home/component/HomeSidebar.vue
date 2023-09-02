@@ -66,7 +66,7 @@
                     </div>
                     <div class="copyright">
                         <span>
-                            Powered by <a href="https://github.com/wangzmgit/leaf" target="_blank">wzmgit/leaf</a>
+                            Powered by <a href="https://github.com/schuanhe/plooks" target="_blank">schuanhe/plook</a>
                         </span>
                     </div>
                 </div>

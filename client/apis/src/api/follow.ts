@@ -2,12 +2,12 @@ import request from '../request'
 
 //关注
 export const followAPI = (id: number) => {
-    return request.post('v1/follow/add', { id });
+    return request.post('v1/follow/'+ id);
 }
 
 //取消关注
 export const unfollowAPI = (id: number) => {
-    return request.post('v1/follow/cancel', { id })
+    return request.delete('v1/follow/' + id )
 }
 
 //获取关注状态
