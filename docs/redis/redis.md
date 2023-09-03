@@ -51,4 +51,5 @@
 | 备注 | 数据类型 | 路径 |
 | --- | --- | --- |
 | 视频评论缓存刷新 | boolean | refresh:comments:{vid} |
+| 轮播图缓存刷新 | boolean | refresh:carousel |
 

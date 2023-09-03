@@ -11,7 +11,7 @@
         <div class="carousel-footer">
             <div class="tool">
                 <p class="title" v-if="carouselList[data.currentIndex]">
-                    {{ carouselList[data.currentIndex].title || "" }}
+                    {{ carouselList[data.currentIndex].title || "" }} 6666666666
                 </p>
                 <div class="dots">
                     <div class="dot" v-for="index of data.carouselCount" :key="index"
@@ -80,6 +80,8 @@ const initCarousel = () => {
             carouselContainer.value.style.transform = `translateX(-${data.itemWidth}%)`;
         }
     })
+    console.log(data);
+    
 }
 
 // 开启定期切换
@@ -113,6 +115,8 @@ const changeCurrentImg = (isNext: boolean) => {
         }
 
     }, 300)
+    
+    
 }
 
 //根据index切换图片
@@ -172,6 +176,9 @@ onBeforeMount(() => {
             initCarousel();
             startInterval();
         }
+
+        console.log(carouselList.value[data.currentIndex]);
+        
     })
 })
 </script>
