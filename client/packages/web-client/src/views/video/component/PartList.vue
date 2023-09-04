@@ -4,7 +4,7 @@
         <span class="part">({{ current }}/{{ resources?.length }})</span>
     </div>
     <n-scrollbar style="max-height: 300px;margin-bottom: 20px;">
-        <div :class="['video-item', current - 1 === index ? 'active-part' : '']" v-for="(item, index) in resources"
+        <div :class="['video-item', current - 1 === index ? 'active-part' : '']" :key="item.id" v-for="(item, index) in resources"
             @click="changePart(index)">
             <n-ellipsis class="item-left" style="max-height: 230px">
                 <span>P{{ index + 1 }} {{ item.title }}</span>

@@ -45,6 +45,9 @@ public class UploadServiceImpl implements UploadService {
 
         // 保存到数据库
         resourcesService.updateById(resources);
+        // 删除redis缓存
+
+
     }
 
 

@@ -84,7 +84,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         Video video = new Video();
         video.setId(vid);
         video.setStatus(500);
-        return baseMapper.updateById(video) > 0;
+        if (baseMapper.updateById(video) > 0){
+            //删除redis中的视频信息
+            redisCache.deleteObject("video:info:" + vid);
+            return true;
+        }
+        return false;
     }
 
     @Override

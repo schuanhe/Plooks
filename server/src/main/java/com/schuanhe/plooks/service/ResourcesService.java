@@ -29,4 +29,10 @@ public interface ResourcesService extends IService<Resources> {
 
 
     Integer saveAndGetId(Resources resources);
+
+    /**
+     * 根据id更新视频资源
+     * @param resources 视频资源
+     */
+    boolean updateById(Resources resources);
 }
