@@ -28,6 +28,11 @@
 | 视频作者信息 | User | video:info:author:{vid} |
 | 视频资源信息 | List<Resources> | video:info:resources:{vid} |
 
+#### video:danmuku
+| 备注 | 数据类型 | 路径 | redis数据类型 |
+| --- | --- | --- | --- |
+| 弹幕列表 | List<Danmuku> | video:info:danmukus:{vid}:{part} | list |
+
 #### video:list
 | 备注 | 数据类型 | 路径 |
 | --- | --- | --- |

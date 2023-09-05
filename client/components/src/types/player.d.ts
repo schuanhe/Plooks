@@ -1,4 +1,4 @@
-import type { DanmakuType } from "@plooks/apis";
+import type { AddDanmukuType, DanmukuType } from "@plooks/apis";
 
 export interface QualityType {
     [key: number]: {
@@ -8,11 +8,11 @@ export interface QualityType {
     }
 }
 
-export interface DanmakuOptionsType {
+export interface DanmukuOptionsType {
     open: boolean,
     placeholder?: string,
-    data?: Array<danmakuType>,
-    send?: (danmaku: danmakuType) => void
+    data?: Array<DanmukuType>,
+    send?: (Danmuku: AddDanmukuType) => void
 }
 
 
@@ -25,7 +25,7 @@ export interface OptionsType {
     customType?: (player: HTMLVideoElement, src: string) => void,
     customQualityChange?: (quality: string) => void, // 自定义清晰度切换
     theme?: string,//主题色,
-    danmaku?: danmakuOptionsType,
+    Danmuku?: DanmukuOptionsType,
     playbackSpeed?: Array<number>,// 播放速度
 }
 
@@ -36,4 +36,5 @@ export interface OptionType {
     resource: string | qualityType
     cover?: string, // 封面
     part: number, // 分P
+    Danmuku: Array<DanmukuType>, // 弹幕
 }

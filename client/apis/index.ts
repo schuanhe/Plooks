@@ -50,8 +50,8 @@ export * from "./src/types/msg-reply-type";
 export * from "./src/api/history";
 export * from "./src/types/history-type";
 
-export * from "./src/api/danmaku";
-export * from "./src/types/danmaku-type";
+export * from "./src/api/danmuku";
+export * from "./src/types/danmuku-type";
 
 export * from "./src/api/carousel";
 export * from "./src/types/carousel-type";

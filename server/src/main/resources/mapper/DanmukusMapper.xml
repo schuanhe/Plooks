@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.DanmukusMapper">
+
+    <resultMap id="BaseResultMap" type="com.schuanhe.plooks.domain.Danmukus">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+            <result property="vid" column="vid" jdbcType="INTEGER"/>
+            <result property="part" column="part" jdbcType="INTEGER"/>
+            <result property="text" column="text" jdbcType="VARCHAR"/>
+            <result property="time" column="time" jdbcType="INTEGER"/>
+            <result property="mode" column="mode" jdbcType="INTEGER"/>
+            <result property="color" column="color" jdbcType="VARCHAR"/>
+            <result property="uid" column="uid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,created_at,updated_at,
+        deleted_at,vid,part,
+        text,time,mode,
+        color,uid
+    </sql>
+</mapper>

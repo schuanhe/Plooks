@@ -6,83 +6,70 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * 资源表
- * @TableName resources
+ * 弹幕表
+ * @TableName danmukus
  */
-@TableName(value ="resources")
+@TableName(value ="danmukus")
 @Data
-public class Resources implements Serializable {
+public class Danmukus implements Serializable {
     /**
-     *
+     * 
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 上传时间
+     * 
      */
     private Date createdAt;
 
     /**
-     * 更新时间
+     * 
      */
     private Date updatedAt;
 
     /**
-     * 删除时间
+     * 
      */
     private Date deletedAt;
 
     /**
-     * 所属视频
+     * 视频ID
      */
     private Integer vid;
 
     /**
-     * 所属用户
+     * 分集ID
+     */
+    private Integer part;
+
+    /**
+     * 内容
+     */
+    private String text;
+
+    /**
+     * 时间
+     */
+    private Integer time;
+
+    /**
+     * 类型0滚动;1顶部;2底部
+     */
+    private Integer mode;
+
+    /**
+     * 颜色
+     */
+    private String color;
+
+    /**
+     * 用户ID
      */
     private Integer uid;
-
-    /**
-     * 分P使用的标题
-     */
-    private String title;
-
-    /**
-     * 视频链接
-     */
-    private String url;
-
-    /**
-     * 视频类型
-     */
-    private String type;
-
-    /**
-     * 原始链接
-     */
-    private String originalUrl;
-
-    /**
-     * 视频时长
-     */
-    private Double duration;
-
-    /**
-     * 审核状态
-     */
-    private Integer status;
-
-    /**
-     * 视频最大质量
-     */
-    private Integer quality;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

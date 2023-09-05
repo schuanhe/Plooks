@@ -9,12 +9,12 @@
     "@plooks/icons": "workspace:^1.0.0",
     "@plooks/utils": "workspace:^1.0.0",
     "artplayer": "^5.0.9",
+    "artplayer-plugin-danmuku": "^5.0.1",
     "artplayer-plugin-hls-quality": "^2.0.0",
     "dashjs": "^4.5.1",
     "hls.js": "^1.4.12",
     "swarmcloud-hls": "^2.8.1",
-    "vue": "^3.2.41",
-    "vue-wplayer": "^0.6.0"
+    "vue": "^3.2.41"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
