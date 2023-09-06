@@ -6,9 +6,12 @@ import com.schuanhe.plooks.domain.Danmukus;
 import com.schuanhe.plooks.service.DanmukusService;
 import com.schuanhe.plooks.mapper.DanmukusMapper;
 import com.schuanhe.plooks.utils.RedisCache;
+import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +51,11 @@ public class DanmukusServiceImpl extends ServiceImpl<DanmukusMapper, Danmukus>
             danmukus.setPart(1);
         if (danmukus.getMode() == null)
             danmukus.setMode(0);
+
+        danmukus.setUid(WebUtils.getUserId());
+        Date date = new Date();
+        danmukus.setCreatedAt(date);
+        danmukus.setUpdatedAt(date);
         // 保存弹幕
         baseMapper.insert(danmukus);
         // 将弹幕存入redis

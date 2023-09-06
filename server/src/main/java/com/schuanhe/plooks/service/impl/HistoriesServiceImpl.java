@@ -45,8 +45,19 @@ public class HistoriesServiceImpl extends ServiceImpl<HistoriesMapper, Histories
     @Override
     public void addHistory(Histories histories) {
         Date date = new Date();
-        histories.setCreatedAt(date);
         histories.setUpdatedAt(date);
+        // 判断是否存在历史记录
+        QueryWrapper<Histories> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("vid",histories.getVid());
+        List<Histories> histories1 = baseMapper.selectList(queryWrapper);
+
+        if (histories1.size() > 0){
+            histories.setId(histories1.get(0).getId()); // 设置历史记录id
+            baseMapper.updateById(histories); // 更新历史记录
+            return;
+        }
+
+        histories.setCreatedAt(date);
         // 添加历史记录
         baseMapper.insert(histories);
     }
@@ -54,7 +65,6 @@ public class HistoriesServiceImpl extends ServiceImpl<HistoriesMapper, Histories
     @Override
     public List<Histories> getHistoryList(int size, int page, Integer uid) {
         // 获取历史记录列表
-
 
         List<Histories> historyList = baseMapper.getHistoryList((page - 1) * size, size, uid);
         historyList.forEach(histories -> {

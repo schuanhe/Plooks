@@ -59,12 +59,6 @@ const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import("../views/result/page-not-found/Index.vue")
     },
     {
-        path: '/test',
-        name: "测试",
-        component: () => import("../test/index.vue")
-        
-    },
-    {
         path: '/:catchAll(.*)',
         redirect: {
             name: "404"

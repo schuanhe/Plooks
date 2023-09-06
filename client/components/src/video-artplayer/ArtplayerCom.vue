@@ -6,31 +6,30 @@
 import { ref, onMounted, onBeforeUnmount, nextTick, watch, reactive } from 'vue';
 import Artplayer from 'artplayer';
 import artplayerPluginDanmuku from 'artplayer-plugin-danmuku'
-// import Hls from 'swarmcloud-hls/dist/hls.min';
 import Hls from 'hls.js';
-import type { DanmukuType, ResourceType } from '@plooks/apis';
-import type { OptionType } from '../types/player';
-// import { HlsSwP2pEngine } from 'swarmcloud-hls';
+import type { AddDanmukuType, DanmukuType, ResourceType } from '@plooks/apis';
+import { getDanmukuAPI, getHistoryProgressAPI, sendDanmukuAPI } from '@plooks/apis';
+import { statusCode } from '@plooks/utils';
 
 
 const artRef = ref<HTMLDivElement | null>(null);
-let instance: Artplayer | null = null;
+const instance = ref<Artplayer | null>(null);
+
 
 // 定义组件的 props
 const props = defineProps<{
-  option: {
-    resource: Array<ResourceType>,
-    part: number,
-  },
-  danmuku: Array<DanmukuType>,
-}>();
+  resource: Array<ResourceType>,
+  vid: number,
+  part: number,
+}>()
+
 
 const emits = defineEmits(['get-instance']);
 
 // 创建 Artplayer 实例
 const createArtplayerInstance = () => {
-  instance = new Artplayer({
-    url: props.option.resource[props.option.part - 1].url,
+  instance.value = new Artplayer({
+    url: props.resource[props.part - 1].url,
     container: artRef.value as HTMLDivElement,
     playbackRate: false, // 播放速度
     pip: true, // 画中画
@@ -50,7 +49,18 @@ const createArtplayerInstance = () => {
     plugins: [
       artplayerPluginDanmuku({  // 弹幕
         // 弹幕数组
-        danmuku: props.danmuku,
+        danmuku: function () {
+                return new Promise((resolve, reject)=>{
+                    getDanmukuAPI(props.vid,props.part).then((res)=>{
+                        if (res.data.code === statusCode.OK) {
+                            const list = res.data.data.Danmuku;
+                            resolve(list);
+                        }else{
+                            reject(res.data.message);
+                        }
+                    })
+                })
+        },
         speed: 5, // 弹幕持续时间，单位秒，范围在[1 ~ 10]
         opacity: 1, // 弹幕透明度，范围在[0 ~ 1]
         fontSize: 25, // 字体大小，支持数字和百分比
@@ -97,55 +107,89 @@ const playM3u8 = (video: HTMLVideoElement, url: string, art: Artplayer) => {
 
 // 绑定播放器的各种事件
 const bindArtplayerEvents = () => {
-  if (instance) {
-    instance.on('play', () => {
-      console.log('play');
+
+  if (instance.value) {
+    instance.value.on('ready', () => {
+      //播放器准备完成,则设置播放进度
+      getHistoryProgress()
     });
-    instance.on('pause', () => {
+    instance.value.on('play', () => {
+      console.log('play');      
+    });
+    instance.value.on('pause', () => {
       console.log('pause');
     });
-    instance.on('destroy', () => {
+    instance.value.on('destroy', () => {
       console.log('destroy');
+    });
+
+    // 弹幕事件绑定(关闭ts校验)
+    //@ts-ignore
+    instance.value.on('artplayerPluginDanmuku:emit', (danmu) => {
+      //判断danmu.text是否存在
+      const danmuku = danmu as DanmukuType
+      const addDanmu:AddDanmukuType = {
+        ...props,
+        ...danmuku 
+      }
+      sendDanmu(addDanmu)
     });
   }
 };
 
 
 
-// 监听弹幕变化
-watch(props.danmuku, (newVal) => {
-  if (instance) {
-    console.log('弹幕变化', newVal);
-    
-    instance.plugins.artplayerPluginDanmuku.config({
-      danmuku: newVal,
-    })
-    // 重新加载弹幕
-    instance.plugins.artplayerPluginDanmuku.load()
-  }
-});
 
+// 获取播放进度
+const getHistoryProgress = async () => {
+    const res = await getHistoryProgressAPI(props.vid);
+    if (res.data.code === statusCode.OK) {
+        if (res.data.data.progress.part === props.part&&instance) {
+            // 更新播放进度
+            if (instance.value) {
+              instance.value.seek = res.data.data.progress.time;
+              instance.value.notice.show = '根据历史记录，已为您跳转到上次播放进度';
+            }
+        }
+    }
+}
+
+// 发送弹幕
+const sendDanmu = async (danmu:AddDanmukuType)=>{
+  console.log(danmu);
+  const res = await sendDanmukuAPI(danmu);
+    if (res.data.code === statusCode.OK) {
+      // 发送弹幕成功
+    }
+}
 
 
 // 销毁 Artplayer 实例
 const destroyArtplayerInstance = () => {
-  if (instance && instance.destroy) {
-    instance.destroy(false);
+  if (instance.value && instance.value.destroy) {
+    instance.value.destroy(false);
   }
 };
 
-
-
-
+// 切换实例
+const changeArtplayerInstance = () => {
+    destroyArtplayerInstance();
+    createArtplayerInstance();
+    bindArtplayerEvents();
+    nextTick(() => {
+            emits("get-instance", instance.value);
+            console.log("更新播放器成功");
+    });
+};
+watch(() => props.part, (val) => {
+  if (instance.value) {
+    // 设置更新的url
+    changeArtplayerInstance();
+  }
+});
 // 组件挂载时创建 Artplayer 实例
 onMounted(() => {
-  createArtplayerInstance(); // 创建 Artplayer 实例
-  bindArtplayerEvents(); // 绑定播放器的各种事件
-  nextTick(() => {
-    // 如果需要，可以通过 $emit 发送 Artplayer 实例
-    emits("get-instance", instance);
-    console.log("更新示例");
-  });
+  changeArtplayerInstance()
 });
 
 

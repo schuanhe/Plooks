@@ -80,7 +80,6 @@ const initCarousel = () => {
             carouselContainer.value.style.transform = `translateX(-${data.itemWidth}%)`;
         }
     })
-    console.log(data);
     
 }
 
@@ -176,9 +175,6 @@ onBeforeMount(() => {
             initCarousel();
             startInterval();
         }
-
-        console.log(carouselList.value[data.currentIndex]);
-        
     })
 })
 </script>

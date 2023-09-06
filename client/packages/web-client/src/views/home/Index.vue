@@ -56,9 +56,7 @@ onBeforeMount(() => {
     getRecommendedVideo();
     getImportantAnnounceAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            const announce: AnnounceType = res.data.data.announce;
-            console.log(announce);
-            
+            const announce: AnnounceType = res.data.data.announce;            
             const readAnnounceList: Array<number> = JSON.parse(localStorage.getItem("read_announce_id") || "[]")            
             if (announce.id !== 0 && !readAnnounceList.includes(announce.id)) {
                 readAnnounceList.push(announce.id);

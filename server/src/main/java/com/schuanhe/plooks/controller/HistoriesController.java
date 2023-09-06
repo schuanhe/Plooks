@@ -22,11 +22,17 @@ public class HistoriesController {
     @Autowired
     private HistoriesService historiesService;
 
-    @PostMapping()
+    /**
+     * 添加历史记录
+     * @param histories 历史记录
+     * @return 响应结果
+     */
+    @PostMapping
     public ResponseResult<?> addHistory(@RequestBody Histories histories) {
 
         Integer userId = WebUtils.getUserId();
         histories.setUid(userId);
+        System.out.println("印加");
 
         historiesService.addHistory(histories);
 
