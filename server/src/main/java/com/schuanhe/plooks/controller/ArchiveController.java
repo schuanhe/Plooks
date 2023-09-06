@@ -56,21 +56,6 @@ public class ArchiveController {
         return ResponseResult.success(data);
     }
 
-    /**
-     * 获取是否收藏
-     */
-    @GetMapping("/has/collect/{vid}")
-    public ResponseResult<?> getHasCollect(@PathVariable String vid) {
-        int vidInt;
-        try {
-            vidInt = Integer.parseInt(vid);
-        }catch (NumberFormatException e){
-            return ResponseResult.error("参数错误");
-        }
-        Map<String, Boolean> data = new HashMap<>();
-        data.put("collect", archiveService.hasCollect(vidInt));
-        return ResponseResult.success(data);
-    }
 
     /**
      * 点赞
@@ -102,6 +87,20 @@ public class ArchiveController {
         return ResponseResult.success();
     }
 
-
+    /**
+     * 获取是否收藏
+     */
+    @GetMapping("/has/collect/{vid}")
+    public ResponseResult<?> getHasCollect(@PathVariable String vid) {
+        int vidInt;
+        try {
+            vidInt = Integer.parseInt(vid);
+        }catch (NumberFormatException e){
+            return ResponseResult.error("参数错误");
+        }
+        Map<String, Boolean> data = new HashMap<>();
+        data.put("collect", archiveService.hasCollect(vidInt));
+        return ResponseResult.success(data);
+    }
 
 }

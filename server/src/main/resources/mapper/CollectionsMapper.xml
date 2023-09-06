@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.schuanhe.plooks.mapper.CollectionsMapper">
+
+    <resultMap id="BaseResultMap" type="com.schuanhe.plooks.domain.Collections">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+            <result property="uid" column="uid" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="desc" column="desc" jdbcType="VARCHAR"/>
+            <result property="cover" column="cover" jdbcType="VARCHAR"/>
+            <result property="open" column="open" jdbcType="TINYINT"/>
+    </resultMap>
+    <update id="deleteById">
+        update collections set deleted_at = now() where id = #{id}
+    </update>
+
+    <select id="selectByName" resultType="com.schuanhe.plooks.domain.Collections">
+        select * from collections where name = #{name} and uid = #{uid} and deleted_at is null
+    </select>
+</mapper>

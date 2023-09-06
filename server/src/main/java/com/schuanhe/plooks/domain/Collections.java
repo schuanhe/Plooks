@@ -6,15 +6,18 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 /**
- * 弹幕表
- * @TableName danmukus
+ * 收藏夹表
+ * @TableName collections
  */
-@TableName(value ="danmukus")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@TableName(value ="collections")
 @Data
-public class Danmukus implements Serializable {
+public class Collections implements Serializable {
     /**
      * 
      */
@@ -37,39 +40,32 @@ public class Danmukus implements Serializable {
     private Date deletedAt;
 
     /**
-     * 视频ID
-     */
-    private Integer vid;
-
-    /**
-     * 分集ID
-     */
-    private Integer part;
-
-    /**
-     * 内容
-     */
-    private String text;
-
-    /**
-     * 时间
-     */
-    private Double time;
-
-    /**
-     * 类型0滚动;1顶部;2底部
-     */
-    private Integer mode;
-
-    /**
-     * 颜色
-     */
-    private String color;
-
-    /**
-     * 用户ID
+     * 所属用户
      */
     private Integer uid;
+
+    /**
+     * 收藏夹名称
+     */
+    @TableField(value = "`name`")
+    private String name;
+
+    /**
+     * 简介
+     */
+    @TableField(value = "`desc`")
+    private String desc;
+
+    /**
+     * 封面
+     */
+    private String cover;
+
+    /**
+     * 是否公开
+     */
+    @TableField(value = "`open`")
+    private boolean open;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

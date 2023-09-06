@@ -16,4 +16,5 @@ public interface ArchiveService extends IService<Archive> {
     void addLike(int vid);
 
     void cancelLike(int vid);
+
 }
