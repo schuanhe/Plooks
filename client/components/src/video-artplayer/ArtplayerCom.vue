@@ -122,6 +122,9 @@ const bindArtplayerEvents = () => {
     instance.value.on('destroy', () => {
       console.log('destroy');
     });
+    // 视频播放完毕自动播放下一集
+    
+    // TODO: 修复播放完毕自动播放下一集
 
     // 弹幕事件绑定(关闭ts校验)
     //@ts-ignore

@@ -98,17 +98,17 @@ public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> impl
     }
 
     @Override
-    public List<Integer> getCollectListId(int vidInt) {
+    public List<Integer> getCollectListId(int vid) {
         Integer uid = WebUtils.getUserId();
         List<Integer> collectListId = new ArrayList<>();
         if (uid == null) {
             return collectListId;
         }
 
-        List<Archive.Collect> collects = baseMapper.selectCollect(uid, vidInt);
+        List<Archive.Collect> collects = baseMapper.selectCollect(uid, vid);
 
         for (Archive.Collect collect : collects) {
-            collectListId.add(collect.getId());
+            collectListId.add(collect.getCid());
         }
         return collectListId;
     }

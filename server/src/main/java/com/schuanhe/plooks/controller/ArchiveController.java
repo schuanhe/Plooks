@@ -116,7 +116,7 @@ public class ArchiveController {
             return ResponseResult.error("参数错误");
         }
         Map<String, Object> data = new HashMap<>();
-        data.put("collect", archiveService.getCollectListId(vidInt));
+        data.put("collectionIds", archiveService.getCollectListId(vidInt));
         return ResponseResult.success(data);
     }
 
@@ -134,14 +134,16 @@ public class ArchiveController {
         return ResponseResult.success();
     }
 
+    /**
+     * 收藏信息
+     */
+    @Data
+    static class addCollect {
+        private int vid;
+        private List<Integer> addList;
+        private List<Integer> cancelList;
+    }
+
 }
 
-/**
- * 收藏信息
- */
-@Data
-class addCollect {
-    private int vid;
-    private List<Integer> addList;
-    private List<Integer> cancelList;
-}
+
