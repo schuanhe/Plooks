@@ -257,6 +257,22 @@ public class VideoController {
         return ResponseResult.success(data);
     }
 
+    /**
+     * 获取收藏夹视频
+     */
+    @GetMapping("/collect/{cid}/{size}/{page}")
+    public ResponseResult<?> collectVideo(@PathVariable Integer cid, @PathVariable Integer size, @PathVariable Integer page) {
+        // 获取收藏夹视频
+        List<Video> collectVideo = videoService.getCollectVideo(cid, size, page);
+        // 获取视频总数
+        int count = videoService.getCollectVideoCount(cid);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", count);
+        data.put("videos", collectVideo);
+        return ResponseResult.success(data);
+    }
+
 
 
     //视频消息校验

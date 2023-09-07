@@ -30,4 +30,14 @@ public interface ArchiveMapper extends BaseMapper<Archive>{
     void updateLikeById(Archive.Like like);
 
     void insertLike(Archive.Like like);
+
+    List<Archive.Collect> selectCollect(Integer uid, int vid);
+
+    void cancelCollect(Integer uid, int vid, List<Integer> cancelList);
+
+    void addCollect(Integer uid, int vid, List<Integer> addList);
+
+    List<Integer> getCollectVideoIds(Integer cid, Integer uid, int i, Integer size);
+
+    Integer getCollectVideoCount(Integer cid, Integer uid);
 }

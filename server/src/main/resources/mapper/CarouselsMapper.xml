@@ -20,4 +20,7 @@
         deleted_at,img,title,
         url,color
     </sql>
+    <select id="getCollectVideoIds" resultType="java.lang.Integer">
+        select id from carousels where deleted_at is null
+    </select>
 </mapper>

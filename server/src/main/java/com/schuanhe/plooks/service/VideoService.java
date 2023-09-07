@@ -57,4 +57,7 @@ public interface VideoService extends IService<Video> {
 
     int getVideoCountByUid(Integer uid);
 
+    List<Video> getCollectVideo(Integer cid, Integer size, Integer page);
+
+    int getCollectVideoCount(Integer cid);
 }

@@ -3,6 +3,8 @@ package com.schuanhe.plooks.mapper;
 import com.schuanhe.plooks.domain.Carousels;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author ASUS
 * @description 针对表【carousels(轮播图表)】的数据库操作Mapper

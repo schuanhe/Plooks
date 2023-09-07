@@ -13,4 +13,5 @@ import java.util.List;
 public interface CarouselsService extends IService<Carousels> {
 
     List<Carousels> getCarousels();
+
 }

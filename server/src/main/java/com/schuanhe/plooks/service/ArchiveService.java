@@ -17,4 +17,12 @@ public interface ArchiveService extends IService<Archive> {
 
     void cancelLike(int vid);
 
+    List<Integer> getCollectListId(int vidInt);
+
+    void addCollect(int vid, List<Integer> addList, List<Integer> cancelList) throws Exception;
+
+
+    List<Integer> getCollectVideoIds(Integer cid, Integer uid, Integer size, Integer page);
+
+    Integer getCollectVideoCount(Integer cid, Integer uid);
 }

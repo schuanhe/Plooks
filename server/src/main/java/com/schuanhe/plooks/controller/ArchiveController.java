@@ -2,6 +2,7 @@ package com.schuanhe.plooks.controller;
 
 import com.schuanhe.plooks.service.ArchiveService;
 import com.schuanhe.plooks.utils.ResponseResult;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,4 +104,44 @@ public class ArchiveController {
         return ResponseResult.success(data);
     }
 
+    /**
+     * 获取该视频的收藏夹
+     */
+    @GetMapping("/collect/{vid}")
+    public ResponseResult<?> getCollect(@PathVariable String vid) {
+        int vidInt;
+        try {
+            vidInt = Integer.parseInt(vid);
+        }catch (NumberFormatException e){
+            return ResponseResult.error("参数错误");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("collect", archiveService.getCollectListId(vidInt));
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 收藏
+     */
+    @PostMapping("/collect")
+    public ResponseResult<?> collect(@RequestBody addCollect addCollect) {
+
+        try {
+            archiveService.addCollect(addCollect.getVid(),addCollect.getAddList(),addCollect.getCancelList());
+        }catch (Exception e){
+            return ResponseResult.error(e.getMessage());
+        }
+        return ResponseResult.success();
+    }
+
+}
+
+/**
+ * 收藏信息
+ */
+@Data
+class addCollect {
+    private int vid;
+    private List<Integer> addList;
+    private List<Integer> cancelList;
 }

@@ -8,7 +8,7 @@ export const collectAPI = (collect: CollectType) => {
 
 // 获取该收藏视频的收藏夹
 export const getCollectedCollection = (vid: number) => {
-    return request.get(`v1/archive/collect/collected?vid=${vid}`);
+    return request.get(`v1/archive/collect/${vid}`);
 }
 
 

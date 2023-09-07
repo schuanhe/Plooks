@@ -43,7 +43,7 @@ export const submitReviewAPI = (id: number) => {
 
 //获取收藏夹内的视频
 export const getCollectVideoAPI = (id: number, page: number, page_size: number) => {
-    return request.get(`v1/video/collect?id=${id}&page=${page}&page_size=${page_size}`);
+    return request.get(`v1/video/collect/${id}/${page_size}/${page}`);
 }
 
 //获取我的视频

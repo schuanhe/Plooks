@@ -9,10 +9,7 @@ import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> implements ArchiveService {
@@ -99,5 +96,49 @@ public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> impl
         }
 
     }
+
+    @Override
+    public List<Integer> getCollectListId(int vidInt) {
+        Integer uid = WebUtils.getUserId();
+        List<Integer> collectListId = new ArrayList<>();
+        if (uid == null) {
+            return collectListId;
+        }
+
+        List<Archive.Collect> collects = baseMapper.selectCollect(uid, vidInt);
+
+        for (Archive.Collect collect : collects) {
+            collectListId.add(collect.getId());
+        }
+        return collectListId;
+    }
+
+    @Override
+    public void addCollect(int vid, List<Integer> addList, List<Integer> cancelList) throws Exception {
+        Integer uid = WebUtils.getUserId();
+        if (uid == null) {
+            throw new Exception("用户未登录");
+        }
+        //先处理取消收藏
+        if (cancelList != null && cancelList.size() > 0) {
+            baseMapper.cancelCollect(uid, vid, cancelList);
+        }
+        //再处理添加收藏
+        if (addList != null && addList.size() > 0) {
+            baseMapper.addCollect(uid, vid, addList);
+        }
+    }
+
+
+    @Override
+    public List<Integer> getCollectVideoIds(Integer cid, Integer uid, Integer size, Integer page) {
+        return baseMapper.getCollectVideoIds(cid, uid, (page - 1) * size, size);
+    }
+
+    @Override
+    public Integer getCollectVideoCount(Integer cid, Integer uid) {
+        return baseMapper.getCollectVideoCount(cid, uid);
+    }
+
 
 }

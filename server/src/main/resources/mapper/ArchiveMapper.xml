@@ -8,9 +8,25 @@
         values (#{uid}, #{vid}, #{createdAt}, #{updatedAt})
     </insert>
 
+
     <update id="updateLikeById">
         update `like` set deleted_at = #{deletedAt}, updated_at = #{updatedAt} where id = #{id}
     </update>
+
+    <!--循环cancelList删除-->
+    <delete id="cancelCollect">
+        delete from collect where vid = #{vid} and uid = #{uid}
+        <foreach collection="cancelList" item="cancel" open="and id in (" close=")" separator=",">
+            #{cancel}
+        </foreach>
+    </delete>
+
+    <insert id="addCollect">
+        insert into collect (uid, vid, cid, created_at, updated_at) values
+        <foreach collection="addList" item="add" separator=",">
+            (#{uid}, #{vid},#{add},NOW(), NOW())
+        </foreach>
+    </insert>
 
     <select id="getCollectCount" resultType="java.lang.Integer">
         select count(*) from collect where vid = #{vid} and deleted_at is null
@@ -28,6 +44,16 @@
     </select>
     <select id="hasLikeNoDelete" resultType="com.schuanhe.plooks.domain.Archive$Like">
         select * from `like` where vid = #{vid} and uid = #{uid}
+    </select>
+    <select id="selectCollect" resultType="com.schuanhe.plooks.domain.Archive$Collect">
+        select * from collect where vid = #{vid} and uid = #{uid} and deleted_at is null
+    </select>
+    <select id="getCollectVideoIds" resultType="java.lang.Integer">
+        select vid from collect where cid = #{cid} and uid = #{uid} and deleted_at is null
+        order by created_at desc limit #{i}, #{size}
+    </select>
+    <select id="getCollectVideoCount" resultType="java.lang.Integer">
+        select count(*) from collect where cid = #{cid} and uid = #{uid} and deleted_at is null
     </select>
 
 </mapper>

@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Histories;
 import com.schuanhe.plooks.domain.Video;
-import com.schuanhe.plooks.service.HistoriesService;
-import com.schuanhe.plooks.service.PartitionService;
-import com.schuanhe.plooks.service.UserService;
-import com.schuanhe.plooks.service.VideoService;
+import com.schuanhe.plooks.mapper.CarouselsMapper;
+import com.schuanhe.plooks.service.*;
 import com.schuanhe.plooks.mapper.VideoMapper;
 import com.schuanhe.plooks.utils.RedisCache;
 import com.schuanhe.plooks.utils.WebUtils;
@@ -33,6 +31,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
     @Autowired
     private PartitionService partitionService;
+
+    // 点赞与收藏的服务
+    @Autowired
+    private ArchiveService archiveService;
 
     @Autowired
     private UserService userService;
@@ -221,6 +223,28 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         }
 
         return videos;
+    }
+
+    @Override
+    public List<Video> getCollectVideo(Integer cid, Integer size, Integer page) {
+        // 不使用redis了
+        Integer uid = WebUtils.getUserId();
+        // 先获取收藏夹的视频id
+        List<Integer> vids = archiveService.getCollectVideoIds(cid, uid, size, page);
+        if (vids.size() == 0) {
+            return new java.util.ArrayList<>();
+        }else {
+            // 获取视频信息
+            return baseMapper.selectBatchIds(vids);
+        }
+    }
+
+    @Override
+    public int getCollectVideoCount(Integer cid) {
+        // 不使用redis了
+        Integer uid = WebUtils.getUserId();
+        // 先获取收藏夹的视频id
+        return archiveService.getCollectVideoCount(cid, uid);
     }
 
     @Override
