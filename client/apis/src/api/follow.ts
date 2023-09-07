@@ -17,15 +17,15 @@ export const getFollowStatusAPI = (fid: number) => {
 
 //获取关注数据
 export const getFollowDataAPI = (uid: number) => {
-    return request.get(`v1/follow/count?uid=${uid}`)
+    return request.get(`v1/follow/count/${uid}`)
 }
 
 //获取关注列表
 export const getFollowingAPI = (uid: number, page: number, page_size: number) => {
-    return request.get(`v1/follow/following?uid=${uid}&page=${page}&page_size=${page_size}`)
+    return request.get(`v1/follow/following/${uid}/${page_size}/${page}`)
 }
 
 //获取粉丝列表
 export const getFollowersAPI = (uid: number, page: number, page_size: number) => {
-    return request.get(`v1/follow/follower?uid=${uid}&page=${page}&page_size=${page_size}`)
+    return request.get(`v1/follow/follower/${uid}/${page_size}/${page}`)
 }
