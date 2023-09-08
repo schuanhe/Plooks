@@ -270,8 +270,6 @@ const showReply = (index: number, reply: ReplyType | null, isComment: boolean) =
     }
     console.log("回复xxx"+ isComment + reply);
     if (!isComment && reply) {
-        
-        
         replyUserName = reply.author.nickname;
         replyForm.replyUserId = reply.author.uid;
         replyForm.replyContent = reply.content;

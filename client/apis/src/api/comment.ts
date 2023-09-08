@@ -18,7 +18,7 @@ export const getCommentListAPI = (vid: number, page: number, page_size: number) 
 
 //获取回复
 export const getReplyListAPI = (cid: string, page: number, page_size: number) => {
-    return request.get(`v1/comment/reply/get?cid=${cid}&page=${page}&page_size=${page_size}`);
+    return request.get(`v1/comment/reply/${cid}/${page_size}/${page}`);
 }
 
 //删除评论

@@ -13,4 +13,6 @@ public interface CommentsMapper extends BaseMapper<Comments> {
     void insertReply(Comments.Reply reply);
 
     void updateNoMore(Integer id);
+
+    List<Comments.Reply> getReply(Integer fid);
 }

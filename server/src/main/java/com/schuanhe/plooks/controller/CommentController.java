@@ -23,7 +23,7 @@ public class CommentController {
     private CommentsService commentsService;
 
     /**
-     * 获取评论回复
+     * 获取评论
      */
     @GetMapping("/{vid}/{size}/{page}")
     public ResponseResult<?> getComment(@PathVariable Integer vid, @PathVariable Integer size, @PathVariable Integer page ) {
@@ -32,6 +32,19 @@ public class CommentController {
 
         Map<String,Object> data = new HashMap<>();
         data.put("comments",comments);
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 获取回复
+     */
+    @GetMapping("/reply/{cid}/{size}/{page}")
+    public ResponseResult<?> getReply(@PathVariable Integer cid, @PathVariable Integer size, @PathVariable Integer page ) {
+
+        List<Comments.Reply> replies = commentsService.getReply(cid,size,page);
+
+        Map<String,Object> data = new HashMap<>();
+        data.put("replies",replies);
         return ResponseResult.success(data);
     }
 

@@ -6,18 +6,21 @@
 
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
         insert into comment (vid, uid, content, created_at, is_delete,at,no_more)
-        values (#{vid}, #{uid}, #{content}, NOW(), 0, #{atStr} , 0)
+        values (#{vid}, #{uid}, #{content}, NOW(), 0, #{atStr} , 1)
     </insert>
     <insert id="insertReply" useGeneratedKeys="true" keyProperty="id">
         insert into reply (created_at, content, uid, fid, vid, is_delete, at)
-        values (now(), #{content}, #{uid}, #{fid},#{vid}, 0, #{atStr})
+        values (NOW(), #{content}, #{uid}, #{fid},#{vid}, 0, #{atStr})
     </insert>
     <update id="updateNoMore">
-        update comment set no_more = 1 where id = #{id}
+        update comment set no_more = 0 where id = #{id}
     </update>
 
 
     <select id="getComment" resultType="com.schuanhe.plooks.domain.Comments$Comment">
         select * from comment where comment.is_delete = false and vid = #{vid}
+    </select>
+    <select id="getReply" resultType="com.schuanhe.plooks.domain.Comments$Reply">
+        select * from reply where reply.is_delete = false and fid = #{fid}
     </select>
 </mapper>

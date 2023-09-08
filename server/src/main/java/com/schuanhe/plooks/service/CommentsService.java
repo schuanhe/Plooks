@@ -21,4 +21,6 @@ public interface CommentsService extends IService<Comments>{
     Integer sendComment(Comments.Comment comment);
 
     Integer sendReply(ReplyForm reply);
+
+    List<Comments.Reply> getReply(Integer cid, Integer size, Integer page);
 }
