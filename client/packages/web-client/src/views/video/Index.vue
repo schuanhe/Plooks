@@ -5,7 +5,7 @@
             <div class="content-left">
                 <div v-if="!loading" class="video-player">
                     <video-player :vid="vid" :theme="theme.primaryColor" :part="part"
-                        :resources="resources"></video-player>
+                        :resources="resources" @change="changePart"></video-player>
                     <div class="video-title-box">
                         <p class="video-title">{{ videoInfo!.title }}</p>
                         <p v-show="videoInfo!.copyright" class="copyright">

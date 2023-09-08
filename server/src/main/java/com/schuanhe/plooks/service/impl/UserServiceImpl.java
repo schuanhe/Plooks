@@ -1,15 +1,13 @@
 package com.schuanhe.plooks.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.form.LoginForm;
 import com.schuanhe.plooks.domain.model.UserDetailsImpl;
 import com.schuanhe.plooks.service.UserService;
 import com.schuanhe.plooks.mapper.UserMapper;
-import com.schuanhe.plooks.utils.CoreUtils;
-import com.schuanhe.plooks.utils.JwtUtil;
-import com.schuanhe.plooks.utils.MailUtil;
-import com.schuanhe.plooks.utils.RedisCache;
+import com.schuanhe.plooks.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -140,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 设置默认生日1970-01-01
         user.setBirthday(new Date(0));
         // 设置默认昵称
-        user.setNickname("用户" + CoreUtils.getRandomString(4));
+        user.setNickname("用户" + CoreUtils.getRandomString(4) + user.getId().toString());
 
         // 将用户信息插入到数据库中
         int insert = baseMapper.insert(user);
@@ -186,9 +184,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public User getUserInfo(String token) {
         try {
-            User user = null;
             String userid = JwtUtil.getUserid(token);
-            user = redisCache.getCacheObject("user:info:user:" + userid);
+            User user = redisCache.getCacheObject("user:info:user:" + userid);
             // 如果redis中没有用户信息，则从数据库中获取用户信息
             if (user == null) {
                 user = baseMapper.selectById(userid);
@@ -215,20 +212,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Integer getUserIdByUsername(String username) {
+    public Integer getUserIdByNickName(String nickname) {
         // 先从缓存中获取用户信息
-        Integer userid = redisCache.getCacheObject("user:info:username" + username);
+        Integer userid = redisCache.getCacheObject("user:info:nickname" + nickname);
         // 如果缓存中没有用户信息，则从数据库中获取用户信息
         if (userid == null) {
-            User user = baseMapper.selectByUsername(username);
+
+            User user = baseMapper.selectOne(new QueryWrapper<User>().eq("nickname", nickname).isNull("deleted_at"));
             // 将用户信息存储到 Redis 缓存中
-            redisCache.setCacheObject("user:info:username" + username, user.getId());
+            redisCache.setCacheObject("user:info:nickname" + nickname, user.getId());
             return user.getId();
         } else {
             return userid;
         }
-
     }
+
 
     @Override
     public void modifyPasswordByEmail(LoginForm loginForm) {
@@ -252,9 +250,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public void modifyCover(String token, String spacecover) {
-        String userid = getIdByToken(token);
-        int update = baseMapper.updateCoverById(Integer.valueOf(userid), spacecover);
+    public void modifyCover(String spacecover) {
+        Integer userid = WebUtils.getUserId();
+        if (userid == null){
+            throw new RuntimeException("没登录");
+        }
+
+        int update = baseMapper.updateCoverById(userid, spacecover);
         if (update != 1) {
             throw new RuntimeException("修改失败");
         }
@@ -263,9 +265,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
-    public void modifyUserInfo(String token, User user) {
-        String userid = getIdByToken(token);
-        user.setId(Integer.valueOf(userid));
+    public void modifyUserInfo(User user) {
+        Integer userid = WebUtils.getUserId();
+        if (userid == null){
+            throw new RuntimeException("没登录");
+        }
+        // 查询新昵称是否存在
+        if (user.getNickname()!=null){
+            Integer userIdByNickName = this.getUserIdByNickName(user.getNickname());
+            if (userIdByNickName!=null && !userIdByNickName.equals(userid)){
+                throw new RuntimeException("该昵称已经存在存在");
+            }
+        }
+
+        user.setId(userid);
         int update = baseMapper.updateUserInfoById(user);
         if (update != 1) {
             throw new RuntimeException("修改失败");
@@ -274,7 +287,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     // 更新Redis缓存
-    private void updateRedisCache(String userid) {
+    private void updateRedisCache(Integer userid) {
         // 老旧的用户信息
         UserDetailsImpl userDetailsOld = redisCache.getCacheObject("user:info:" + userid);
         // 删除缓存

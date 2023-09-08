@@ -1,3 +1,4 @@
+import com.schuanhe.plooks.domain.Comments;
 import com.wf.captcha.ArithmeticCaptcha;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
@@ -5,11 +6,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import javax.servlet.ServletOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class captcha {
     @Test
     public void captcha() {
+
+        Comments.Comment comment = new Comments.Comment();
+        List<Integer> at = new ArrayList<>();
+        at.add(1);
+        at.add(2);
+        comment.setAt(at);
+        System.out.println(comment);
+        String atStr = comment.getAtStr();
+        System.out.println(atStr);
 
 
         ////算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
@@ -23,13 +35,13 @@ public class captcha {
 
 
         // 算数验证码
-        Captcha captcha = new ArithmeticCaptcha();
-        // 文字验证码
-        // Captcha captcha2=new ChineseCaptcha();
-        // 生成的验证码
-        String text = captcha.text();
-        System.out.println("验证码 = " + text);
-        // 返回图片类型
+        //Captcha captcha = new ArithmeticCaptcha();
+        //// 文字验证码
+        //// Captcha captcha2=new ChineseCaptcha();
+        //// 生成的验证码
+        //String text = captcha.text();
+        //System.out.println("验证码 = " + text);
+        //// 返回图片类型
 
 
         // 将验证码和uuid存入redis

@@ -69,12 +69,12 @@ public interface UserService extends IService<User> {
      */
     User getUserInfoById(Integer id);
 
-    Integer getUserIdByUsername(String username);
+    Integer getUserIdByNickName(String nickname);
 
     void modifyPasswordByEmail(LoginForm loginForm);
 
-    void modifyCover(String token, String spacecover);
+    void modifyCover( String spacecover);
 
-    void modifyUserInfo(String token, User user);
+    void modifyUserInfo(User user);
 
 }

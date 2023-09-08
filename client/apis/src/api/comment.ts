@@ -3,12 +3,12 @@ import type { AddCommentType } from '../types/comment-type';
 
 // 评论
 export const addCommentAPI = (postComment: AddCommentType) => {
-    return request.post('v1/comment/add', postComment);
+    return request.post('v1/comment', postComment);
 }
 
 // 回复
 export const addReplyAPI = (postComment: AddCommentType) => {
-    return request.post('v1/comment/reply/add', postComment);
+    return request.post('v1/comment/reply', postComment);
 }
 
 //获取评论

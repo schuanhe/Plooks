@@ -200,8 +200,10 @@ const submitReply = (comment: CommentType) => {
     if (replyForm.replyUserId) {
         replyForm.content = `回复 @${replyUserName} :${replyForm.content}`;
     }
+    console.log(replyForm);
+    
 
-    if (comment.reply.length < replyCount) {
+    if (comment.reply && comment.reply.length < replyCount) {
         comment.noMore = true;
     }
 
@@ -222,6 +224,9 @@ const submitReply = (comment: CommentType) => {
                     },
                     content: replyForm.content,
                     createdAt: new Date().getTime(),
+                }
+                if (comment.reply === undefined) {
+                    comment.reply = [];
                 }
                 comment.reply.push(newReply);
             }
@@ -263,7 +268,10 @@ const showReply = (index: number, reply: ReplyType | null, isComment: boolean) =
     for (let i = 0; i < commentList.value.length; i++) {
         showReplyFlag.value[i] = false;
     }
+    console.log("回复xxx"+ isComment + reply);
     if (!isComment && reply) {
+        
+        
         replyUserName = reply.author.nickname;
         replyForm.replyUserId = reply.author.uid;
         replyForm.replyContent = reply.content;
@@ -322,12 +330,12 @@ const deleteClick = (id: string, replyId: string | null, index: number, replyInd
 
 //前往@的用户
 let loadingUser = false;
-const goMention = (name: string | null) => {
+const goMention = (nickname: string | null) => {
     if (loadingUser) return;
     loadingUser = true;
-    if (name) {
+    if (nickname) {
         messageReactive = message.loading("加载用户信息");
-        getUserIdAPI(name).then((res) => {
+        getUserIdAPI(nickname).then((res) => {
             if (messageReactive) {
                 messageReactive.destroy();
                 messageReactive = null;

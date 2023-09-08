@@ -2,6 +2,7 @@ package com.schuanhe.plooks.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.schuanhe.plooks.domain.Comments;
+import com.schuanhe.plooks.domain.form.ReplyForm;
 
 import java.util.List;
 
@@ -16,4 +17,8 @@ public interface CommentsService extends IService<Comments>{
      * @return 评论列表
      */
     List<Comments.Comment> getComment(Integer vid, Integer size, Integer page);
+
+    Integer sendComment(Comments.Comment comment);
+
+    Integer sendReply(ReplyForm reply);
 }

@@ -29,9 +29,11 @@ const emits = defineEmits(['get-instance']);
 // 创建 Artplayer 实例
 const createArtplayerInstance = () => {
   instance.value = new Artplayer({
+    id:props.resource[props.part - 1].url,
     url: props.resource[props.part - 1].url,
     container: artRef.value as HTMLDivElement,
     playbackRate: false, // 播放速度
+    autoPlayback: true, // 视频回放功能
     pip: true, // 画中画
     fullscreen: true, // 全屏
     fullscreenWeb: true, // 全屏Web

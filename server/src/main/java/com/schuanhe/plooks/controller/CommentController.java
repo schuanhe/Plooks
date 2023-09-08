@@ -2,13 +2,11 @@ package com.schuanhe.plooks.controller;
 
 
 import com.schuanhe.plooks.domain.Comments;
+import com.schuanhe.plooks.domain.form.ReplyForm;
 import com.schuanhe.plooks.service.CommentsService;
 import com.schuanhe.plooks.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,5 +34,28 @@ public class CommentController {
         data.put("comments",comments);
         return ResponseResult.success(data);
     }
+
+    /**
+     * 发送评论
+     */
+    @PostMapping
+    public ResponseResult<?> sendComment(@RequestBody Comments.Comment comment){
+        Integer id = commentsService.sendComment(comment);
+        Map<String,Integer> data = new HashMap<>();
+        data.put("id",id);
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 发送回复
+     */
+    @PostMapping("/reply")
+    public ResponseResult<?> sendReply(@RequestBody ReplyForm reply){
+        Integer id = commentsService.sendReply(reply);
+        Map<String,Integer> data = new HashMap<>();
+        data.put("id",id);
+        return ResponseResult.success(data);
+    }
+
 
 }

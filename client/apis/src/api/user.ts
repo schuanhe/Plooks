@@ -33,12 +33,12 @@ export const modifySpaceCoverAPI = (url: string) => {
 
 //通过用户ID获取用户信息
 export const getOtherUserInfoAPI = (uid: number) => {
-    return request.get(`v1/user/info/other?uid=${uid}`);
+    return request.get(`v1/user/info/${uid}`);
 }
 
 //通过用户名获取用户ID
-export const getUserIdAPI = (name: string) => {
-    return request.get(`v1/user/uid?name=${name}`);
+export const getUserIdAPI = (nikename: string) => {
+    return request.get(`v1/user/uid/${nikename}`);
 }
 
 

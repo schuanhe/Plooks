@@ -224,29 +224,35 @@ public class UserController {
      * 通过id获取用户部分信息
      */
     @GetMapping("/info/{id}")
-    public ResponseResult<User> getUserInfoById(@PathVariable("id") Integer id){
+    public ResponseResult<Map<String,User>> getUserInfoById(@PathVariable("id") Integer id){
         User user = userService.getUserInfoById(id);
         if(user == null){
             return ResponseResult.fail("获取用户信息失败");
         }
-        return ResponseResult.success(user);
+
+        Map<String,User> data = new HashMap<>();
+        data.put("user",user);
+
+        return ResponseResult.success(data);
     }
 
     /**
-     * 通过用户名获取用户id
+     * 通过昵称获取用户uid
      */
-    @GetMapping("/id/{username}")
-    public ResponseResult<Map<String,Integer>> getUserIdByUsername(@PathVariable("username") String username){
-        Integer id = userService.getUserIdByUsername(username);
+    @GetMapping("/uid/{nikeName}")
+    public ResponseResult<Map<String,Integer>> getUserIdByUsername(@PathVariable("nikeName") String nikeName){
+        Integer id = userService.getUserIdByNickName(nikeName);
         if(id == null){
             return ResponseResult.fail("获取用户id失败");
         }
 
         Map<String,Integer> map = new HashMap<>();
-        map.put("id",id);
+        map.put("uid",id);
 
         return ResponseResult.success(map);
     }
+
+
 
     /**
      * 邮箱修改密码验证
@@ -291,15 +297,15 @@ public class UserController {
      * 修改封面
      */
     @PutMapping("/cover")
-    public ResponseResult<String> modifyCover(@RequestHeader("Authorization") String token, @RequestBody String url){
-        if(token.equals("") || url == null || url.equals(""))
+    public ResponseResult<String> modifyCover(@RequestBody String url){
+        if(url == null || url.equals(""))
             return ResponseResult.fail("表单不完整");
         try {
             JSONObject jsonObject = JSONObject.parseObject(url);
             String urlJson = jsonObject.getString("url");
             if(urlJson == null || urlJson.equals(""))
                 urlJson = url;
-            userService.modifyCover(token,urlJson);
+            userService.modifyCover(urlJson);
         }catch (RuntimeException e){
             return ResponseResult.fail(e.getMessage());
         }
@@ -310,11 +316,11 @@ public class UserController {
      * 用户修改个人信息
      */
     @PutMapping("/info")
-    public ResponseResult<String> modifyUserInfo(@RequestHeader("Authorization") String token, @RequestBody User user){
-        if(token.equals("") || user == null)
+    public ResponseResult<String> modifyUserInfo(@RequestBody User user){
+        if(user == null)
             return ResponseResult.fail("表单不完整");
         try {
-            userService.modifyUserInfo(token,user);
+            userService.modifyUserInfo(user);
         }catch (RuntimeException e){
             return ResponseResult.fail(e.getMessage());
         }
@@ -339,7 +345,7 @@ public class UserController {
             return true;
         }
         //验证成功，删除验证码
-        //redisCache.deleteObject("user:captcha:" + uuid); // 测试阶段验证码不删除，可以重复使用
+        redisCache.deleteObject("user:captcha:" + uuid); // 测试阶段验证码不删除，可以重复使用
         return false;
     }
 

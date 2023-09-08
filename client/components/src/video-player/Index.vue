@@ -1,24 +1,21 @@
 <template>
     <div class="player-container">
-        <!-- <w-player class="player" :key="playerKey" :options="options"></w-player> -->
         <artplayer-com class="player" 
         :resource="props.resources"
         :vid="props.vid"
         :part="props.part"
-        @getInstance="getInstance"></artplayer-com>
+        @getInstance="getInstance"
+        @autoPlayNext="autoPlayNext"
+        ></artplayer-com>
 
     </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, onBeforeUnmount } from 'vue';
-import dashjs from "dashjs";
+import { ref, onBeforeUnmount } from 'vue';
 import ArtplayerCom from '../video-artplayer/ArtplayerCom.vue';
-import type { ResourceType, AddHistoryType, AddDanmukuType,DanmukuType } from '@plooks/apis';
-import { sendDanmukuAPI, getDanmukuAPI } from '@plooks/apis';
-import { addHistoryAPI, getHistoryProgressAPI } from '@plooks/apis';
-import type { OptionsType, QualityType, OptionType } from '../types/player';
-import { getResourceUrl, statusCode } from '@plooks/utils';
+import type { ResourceType, AddHistoryType } from '@plooks/apis';
+import { addHistoryAPI } from '@plooks/apis';
 import Artplayer from 'artplayer';
 
 const props = withDefaults(defineProps<{
@@ -34,12 +31,22 @@ const props = withDefaults(defineProps<{
 
 const instance = ref<Artplayer | null>(null)
 
+const emits = defineEmits(['change']);
+
 // 更新instance
 const getInstance = (art: Artplayer) => {
     instance.value = art;    
 }
 
 
+// 视频播放完毕自动播放下一局
+const autoPlayNext = () => {
+    // 判断是否为最后一集
+    if (props.part < props.resources.length) {
+        // 播放下一集
+        emits('change', props.part + 1);
+    }
+}
 
 
 // 上传历史记录

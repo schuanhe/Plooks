@@ -217,8 +217,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
             //    video.setAuthor(userService.getUserInfoById(video.getUid()));
             //});
 
-            // 将视频信息存入redis
-            redisCache.setCacheList("video:list:" + uid, videos);
+            if (videos.size()>0)
+                redisCache.setCacheList("video:list:" + uid, videos);
             videos = redisCache.getCacheList("video:list:" + uid, (page - 1) * size, page * size - 1);
         }
 
