@@ -3,10 +3,13 @@ package com.schuanhe.plooks.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Comments;
+import com.schuanhe.plooks.domain.Message;
 import com.schuanhe.plooks.domain.form.ReplyForm;
 import com.schuanhe.plooks.mapper.CommentsMapper;
 import com.schuanhe.plooks.service.CommentsService;
+import com.schuanhe.plooks.service.MessageService;
 import com.schuanhe.plooks.service.UserService;
+import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.utils.RedisCache;
 import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,12 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private VideoService videoService;
 
 
     @Override
@@ -88,7 +97,15 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         reply1.setAt(atIds);
 
         if (reply.getReplyUserId() != null && reply.getReplyUserId() != 0){
-            //TODO: 给回复者发送消息
+            Message.ReplyMessages replyMessages = new Message.ReplyMessages(reply.getVid(),
+                    reply.getReplyUserId(),
+                    uid,
+                    reply.getContent(),
+                    reply.getReplyContent(),
+                    reply.getRootComment(),
+                    reply.getParentId()
+            );
+            messageService.sendReplyMessage(replyMessages);
         }
 
         // 设置父id的noMore为true
@@ -176,9 +193,19 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         if (uid == null){
             return null;
         }
+
+        Integer uidByVid = videoService.getUidByVid(comment.getVid());
+        // 给视频作者发送消息
+        Message.ReplyMessages commentMessages = new Message.ReplyMessages(comment.getVid(),
+                uidByVid,
+                uid,
+                comment.getContent()
+        );
+        // 发送消息
+        messageService.sendReplyMessage(commentMessages);
+
         // 设置评论者id
         comment.setUid(uid);
-
         comment.setCreatedAt(new Date());
         // 保存评论
         baseMapper.insertComment(comment);

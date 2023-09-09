@@ -6,7 +6,7 @@ export interface ReplyMessageType {
     user: UserInfoType,
     createdAt: string,
     content: string,
-    target_reply_content: string,
-    root_content: string,
-    comment_id: string
+    targetReplyContent: string,
+    rootContent: string,
+    commentId: number
 }

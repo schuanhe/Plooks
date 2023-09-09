@@ -6,6 +6,7 @@ export interface AddCommentType {
     parentId?: string, //父级评论id
     replyUserId?: number, //回复用户id
     replyContent?: string, //回复内容
+    rootComment?: string, //根评论
     at: Array<string> //被@的用户id
 }
 

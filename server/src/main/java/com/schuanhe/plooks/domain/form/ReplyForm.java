@@ -18,6 +18,8 @@ public class ReplyForm {
     private Integer replyUserId; //回复对象id
 
     private String replyContent; // 回复评论
+
+    private String rootComment; // 根评论
     private List<String> at; // @用户昵称列表
 
 }

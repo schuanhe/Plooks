@@ -27,6 +27,7 @@
 | 视频info信息 | Video | video:info:{vid} |
 | 视频作者信息 | User | video:info:author:{vid} |
 | 视频资源信息 | List<Resources> | video:info:resources:{vid} |
+| 视频作者uid | Integer | video:uid:{vid} |
 
 #### video:danmuku
 | 备注 | 数据类型 | 路径 | redis数据类型 |
@@ -50,6 +51,12 @@
 | --- | --- | --- | --- |
 | 评论列表(有评论删除后三分钟删除) | List<Comment> | comments:comment:list:{vid} | list |
 | 评论回复列表(有评论删除后三分钟删除) | List<Reply> | comments:reply:list:{cid} | list |
+
+
+### message
+| 备注 | 数据类型 | 路径 | redis数据类型 |
+| --- | --- | --- | --- |
+| 用户回复消息 | List<Message.ReplyMessages> | message:reply:{uid} | list |
 
 
 ### 缓存刷新

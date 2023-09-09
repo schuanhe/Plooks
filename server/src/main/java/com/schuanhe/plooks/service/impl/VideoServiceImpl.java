@@ -248,6 +248,19 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     }
 
     @Override
+    public Integer getUidByVid(Integer vid) {
+        // 先获取redis中的视频作者id
+        Integer uid = redisCache.getCacheObject("video:uid:" + vid);
+        if (uid == null) {
+            // 获取指定视频的作者id
+            uid = baseMapper.selectUidByVid(vid);
+            // 将视频作者id存入redis
+            redisCache.setCacheObject("video:uid:" + vid, uid);
+        }
+        return uid;
+    }
+
+    @Override
     public int getVideoCountByUid(Integer uid) {
         // 先获取redis中的视频总数
         Integer count = redisCache.getCacheObject("video:count:" + uid);

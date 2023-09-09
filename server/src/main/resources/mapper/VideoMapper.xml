@@ -52,6 +52,9 @@
     <select id="selectVideoCountByUid" resultType="java.lang.Integer">
         select count(*) from videos where uid = #{uid} and status = 0
     </select>
+    <select id="selectUidByVid" resultType="java.lang.Integer">
+        select uid from videos where id = #{vid}
+    </select>
 
 
 </mapper>

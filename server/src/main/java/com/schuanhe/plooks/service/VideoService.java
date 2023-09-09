@@ -60,4 +60,9 @@ public interface VideoService extends IService<Video> {
     List<Video> getCollectVideo(Integer cid, Integer size, Integer page);
 
     int getCollectVideoCount(Integer cid);
+
+    /**
+     * 通过vid获取视频作者信息uid
+     */
+    Integer getUidByVid(Integer vid);
 }

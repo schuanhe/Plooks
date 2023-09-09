@@ -3,11 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.schuanhe.plooks.mapper.MessageMapper">
+    <insert id="insertReply">
+        insert into reply_messages (created_at, updated_at, vid, uid, fid, content, target_reply_content, root_content, comment_id)
+        values (now(), now(), #{vid}, #{uid}, #{fid}, #{content}, #{targetReplyContent}, #{rootContent}, #{commentId})
+    </insert>
 
     <select id="getAnnouncement" resultType="com.schuanhe.plooks.domain.Message$Announces">
         select * from announces where deleted_at is null and important = 0
     </select>
     <select id="getImportantAnnouncement" resultType="com.schuanhe.plooks.domain.Message$Announces">
         select * from announces where deleted_at is null and important = 1
+    </select>
+    <select id="getReplyMessage" resultType="com.schuanhe.plooks.domain.Message$ReplyMessages">
+        select * from reply_messages where uid = #{uid} and deleted_at is null
     </select>
 </mapper>

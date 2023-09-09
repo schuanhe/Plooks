@@ -53,4 +53,17 @@ public class MessageController {
         return ResponseResult.success(data);
     }
 
+    /**
+     * 获取回复消息
+     */
+    @GetMapping("/reply/{size}/{page}")
+    public ResponseResult<?> getReply(@PathVariable Integer size, @PathVariable Integer page) {
+        List<Message.ReplyMessages> replies = messageService.getReplyMessage(size, page);
+
+        // 返回回复
+        Map<String, Object> data = new HashMap<>();
+        data.put("messages", replies);
+        return ResponseResult.success(data);
+    }
+
 }

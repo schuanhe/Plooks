@@ -128,6 +128,7 @@ const replyForm = reactive<AddCommentType>({
     parentId: "",
     replyUserId: 0,
     replyContent: "",
+    rootComment:"",
     at: []
 })
 
@@ -189,6 +190,7 @@ const submitComment = () => {
 //提交回复
 const submitReply = (comment: CommentType) => {
     replyForm.parentId = comment.id;
+    replyForm.rootComment = comment.content;
 
     // 处理@
     handleMention(replyForm.content).forEach((item) => {
@@ -236,6 +238,7 @@ const submitReply = (comment: CommentType) => {
             replyForm.parentId = "";
             replyForm.replyUserId = 0;
             replyForm.replyContent = "";
+            replyForm.rootComment = "";
 
             //关闭动态回复框
             showReplyFlag.value.forEach((item, index) => {

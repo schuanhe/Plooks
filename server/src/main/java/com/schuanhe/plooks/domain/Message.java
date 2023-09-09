@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -83,6 +84,7 @@ public class Message {
 
     @TableName(value ="reply_messages")
     @Data
+    @NoArgsConstructor
     public static class ReplyMessages implements Serializable {
 
         @TableId(type = IdType.AUTO)
@@ -106,9 +108,47 @@ public class Message {
 
         private String rootContent;
 
-        private String commentId;
+        private Integer commentId;
+
+        @TableField(exist = false)
+        private User user;  // 评论者
+
+        @TableField(exist = false)
+        private Video video;  // 视频
 
         @TableField(exist = false)
         private static final long serialVersionUID = 1L;
+
+        /**
+         * 回复 回复消息构造器
+         * @param vid 视频id
+         * @param uid 消息接受者用户id
+         * @param fid 消息提供者uid
+         * @param content 回复内容
+         * @param targetReplyContent 回复评论
+         * @param rootContent 根评论
+         * @param commentId 评论id
+         */
+        public ReplyMessages(Integer vid, Integer uid, Integer fid, String content, String targetReplyContent, String rootContent, Integer commentId) {
+            this.vid = vid;
+            this.uid = uid;
+            this.fid = fid;
+            this.content = content;
+            this.targetReplyContent = targetReplyContent;
+            this.rootContent = rootContent;
+            this.commentId = commentId;
+            this.createdAt = new Date();
+        }
+
+        /**
+         * 回复 评论消息构造器
+         */
+        public ReplyMessages(Integer vid, Integer uid, Integer fid, String content) {
+            this.vid = vid;
+            this.uid = uid;
+            this.fid = fid;
+            this.content = content;
+            this.createdAt = new Date();
+        }
     }
 }

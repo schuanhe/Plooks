@@ -37,6 +37,8 @@ public interface VideoMapper extends BaseMapper<Video> {
     List<Video> selectRecommendVideo(Integer size);
 
     Integer selectVideoCountByUid(Integer uid);
+
+    Integer selectUidByVid(Integer vid);
 }
 
 

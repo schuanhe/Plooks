@@ -10,4 +10,8 @@ public interface MessageMapper extends BaseMapper<Message> {
     List<Message.Announces> getAnnouncement();
 
     List<Message.Announces> getImportantAnnouncement();
+
+    List<Message.ReplyMessages> getReplyMessage(Integer uid);
+
+    void insertReply(Message.ReplyMessages replyMessages);
 }
