@@ -22,5 +22,5 @@ export const likeAPI = (id: number) => {
 
 //取消赞
 export const cancelLikeAPI = (id: number) => {
-    return request.delete('v1/archive/cancel/like/' + id )
+    return request.delete('v1/archive/like/' + id )
 }

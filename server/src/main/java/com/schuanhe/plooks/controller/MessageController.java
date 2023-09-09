@@ -66,4 +66,30 @@ public class MessageController {
         return ResponseResult.success(data);
     }
 
+    /**
+     * 获取@消息
+     */
+    @GetMapping("/at/{size}/{page}")
+    public ResponseResult<?> getAt(@PathVariable Integer size, @PathVariable Integer page) {
+        List<Message.AtMessages> ats = messageService.getAtMessage(size, page);
+
+        // 返回@消息
+        Map<String, Object> data = new HashMap<>();
+        data.put("messages", ats);
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 获取点赞消息
+     */
+    @GetMapping("/like/{size}/{page}")
+    public ResponseResult<?> getLike(@PathVariable Integer size, @PathVariable Integer page) {
+        List<Message.LikeMessages> likes = messageService.getLikeMessage(size, page);
+
+        // 返回点赞消息
+        Map<String, Object> data = new HashMap<>();
+        data.put("messages", likes);
+        return ResponseResult.success(data);
+    }
+
 }

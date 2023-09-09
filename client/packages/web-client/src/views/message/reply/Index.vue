@@ -8,7 +8,6 @@
                 <p class="title">
                     <span class="user-name" @click="goUserSpace(item.user.uid)">{{ item.user.nickname }}</span>
                     <span v-if="item.rootContent"> 回复了你的评论</span>
-                    
                     <span v-else> 对你的视频发表评论</span>
                 </p>
                 <p class="content">{{ item.content }}</p>
@@ -17,7 +16,7 @@
             </div>
             <div class="item-right">
                 <div v-if="item.rootContent">{{ item.rootContent }}</div>
-                <img v-else :src="getResourceUrl(item.video.cover)" alt="封面" :title="item.video.title"
+                <img :src="getResourceUrl(item.video.cover)" alt="封面" :title="item.video.title"
                     @click="goVideo(item.video.vid)">
             </div>
         </div>

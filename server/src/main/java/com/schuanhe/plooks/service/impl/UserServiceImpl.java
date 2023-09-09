@@ -220,6 +220,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
             User user = baseMapper.selectOne(new QueryWrapper<User>().eq("nickname", nickname).isNull("deleted_at"));
             // 将用户信息存储到 Redis 缓存中
+            if (user == null)
+                return null;
             redisCache.setCacheObject("user:info:nickname" + nickname, user.getId());
             return user.getId();
         } else {

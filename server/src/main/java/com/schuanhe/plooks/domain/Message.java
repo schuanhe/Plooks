@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -38,6 +39,7 @@ public class Message {
     }
     @TableName(value ="at_messages")
     @Data
+    @NoArgsConstructor
     public static class AtMessages implements Serializable {
 
         @TableId(type = IdType.AUTO)
@@ -49,18 +51,33 @@ public class Message {
 
         private Date deletedAt;
 
-        private Integer vid;
+        private Integer vid; // 视频id
 
-        private Integer uid;
+        private Integer uid; // 被@者id
 
-        private Integer fid;
+        private Integer fid; // @者id
+
+        @TableField(exist = false)
+        private User user;  // @者
+
+        @TableField(exist = false)
+        private Video video;  // 视频
 
         @TableField(exist = false)
         private static final long serialVersionUID = 1L;
+
+        public AtMessages(Integer vid, Integer uid, Integer fid) {
+            this.vid = vid;
+            this.uid = uid;
+            this.fid = fid;
+            this.createdAt = new Date();
+            this.updatedAt = new Date();
+        }
     }
 
     @TableName(value ="like_messages")
     @Data
+    @NoArgsConstructor
     public static class LikeMessages implements Serializable {
 
         @TableId(type = IdType.AUTO)
@@ -79,7 +96,21 @@ public class Message {
         private Integer fid;
 
         @TableField(exist = false)
+        private User user;  // 点赞者
+
+        @TableField(exist = false)
+        private Video video;  // 视频
+
+        @TableField(exist = false)
         private static final long serialVersionUID = 1L;
+
+        public LikeMessages(Integer vid, Integer uid, Integer fid) {
+            this.vid = vid;
+            this.uid = uid;
+            this.fid = fid;
+            this.createdAt = new Date();
+            this.updatedAt = new Date();
+        }
     }
 
     @TableName(value ="reply_messages")

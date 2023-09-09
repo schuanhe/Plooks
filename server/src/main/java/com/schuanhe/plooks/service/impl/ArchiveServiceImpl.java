@@ -3,17 +3,20 @@ package com.schuanhe.plooks.service.impl;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Archive;
+import com.schuanhe.plooks.domain.Message;
 import com.schuanhe.plooks.mapper.ArchiveMapper;
 import com.schuanhe.plooks.service.ArchiveService;
+import com.schuanhe.plooks.service.MessageService;
+import com.schuanhe.plooks.service.VideoService;
 import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> implements ArchiveService {
-
 
     @Override
     public Map<String, Integer> getArchive(int vid) {
@@ -73,7 +76,12 @@ public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> impl
             baseMapper.insertLike(nLike);
         }
 
-
+        // 通知用户
+        Integer uidByVid = baseMapper.selectUidByVid(vid);
+        if (uidByVid != null && !uidByVid.equals(uid) && uidByVid != 0) {
+            Message.LikeMessages likeMessages = new Message.LikeMessages(vid, uidByVid, uid);
+            baseMapper.insertLikeMessage(likeMessages);
+        }
     }
 
     @Override

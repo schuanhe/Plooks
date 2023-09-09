@@ -35,7 +35,7 @@ public class Comments {
         private boolean isDelete; // 是否删除
 
         @TableField(exist = false) // 不映射到数据库
-        private List<Integer> at;
+        private List<String> at;
 
         @TableField(value = "at") // 映射到数据库
         private String atStr;
@@ -49,14 +49,14 @@ public class Comments {
         private User author;
 
 
-        public void setAt(List<Integer> at) {
+        public void setAt(List<String> at) {
             this.at = at;
             this.atStr = JSON.toJSONString(at);
         }
 
         public void setAtStr(String atStr) {
             this.atStr = atStr;
-            this.at = JSON.parseArray(atStr, Integer.class);
+            this.at = JSON.parseArray(atStr, String.class);
         }
     }
     @JsonInclude(JsonInclude.Include.NON_NULL)

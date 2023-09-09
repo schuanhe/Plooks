@@ -56,4 +56,14 @@
         select count(*) from collect where cid = #{cid} and uid = #{uid} and deleted_at is null
     </select>
 
+    <select id="selectUidByVid" resultType="java.lang.Integer">
+        select uid from videos where id = #{vid}
+    </select>
+
+
+    <insert id="insertLikeMessage">
+        insert into like_messages (created_at, updated_at, vid, uid, fid) values
+        (NOW(), NOW(), #{vid}, #{uid}, #{fid})
+    </insert>
+
 </mapper>

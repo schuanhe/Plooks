@@ -89,8 +89,9 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         List<Integer> atIds = new ArrayList<>();
         reply.getAt().forEach(at -> {
             Integer atId = userService.getUserIdByNickName(at);
-            if (atId != null) {
-                //TODO: 给被@者发送消息
+            // 如果@的用户存在 并且不是回复者本人，并且不为0
+            if (atId != null && !atId.equals(uid) && atId != 0){
+                messageService.sendAtMessage(new Message.AtMessages(reply.getVid(),atId,uid));
                 atIds.add(atId);
             }
         });
@@ -193,6 +194,26 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         if (uid == null){
             return null;
         }
+
+
+        List<Integer> atIds = new ArrayList<>();
+        // 获取@用户的id
+        comment.getAt().forEach(at -> {
+            // 获取@用户的id
+            Integer atId = userService.getUserIdByNickName(at);
+
+            // 判断重复@用户
+            if (atIds.contains(atId)){
+                return;
+            }
+            atIds.add(atId);
+
+            // 被@者id不能是自己，且不能是0
+            if (atId != null && !atId.equals(uid) && atId != 0){
+                messageService.sendAtMessage(new Message.AtMessages(comment.getVid(), atId, uid));
+            }
+        });
+
 
         Integer uidByVid = videoService.getUidByVid(comment.getVid());
         // 给视频作者发送消息

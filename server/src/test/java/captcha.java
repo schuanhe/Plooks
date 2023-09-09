@@ -16,9 +16,6 @@ public class captcha {
 
         Comments.Comment comment = new Comments.Comment();
         List<Integer> at = new ArrayList<>();
-        at.add(1);
-        at.add(2);
-        comment.setAt(at);
         System.out.println(comment);
         String atStr = comment.getAtStr();
         System.out.println(atStr);

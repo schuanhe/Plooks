@@ -2,6 +2,7 @@ package com.schuanhe.plooks.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.schuanhe.plooks.domain.Archive;
+import com.schuanhe.plooks.domain.Message;
 
 import java.util.List;
 
@@ -40,4 +41,9 @@ public interface ArchiveMapper extends BaseMapper<Archive>{
     List<Integer> getCollectVideoIds(Integer cid, Integer uid, int i, Integer size);
 
     Integer getCollectVideoCount(Integer cid, Integer uid);
+
+    // 防止依赖注入时出错
+    Integer selectUidByVid(int vid);
+
+    void insertLikeMessage(Message.LikeMessages likeMessages);
 }

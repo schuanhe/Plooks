@@ -14,4 +14,12 @@ public interface MessageMapper extends BaseMapper<Message> {
     List<Message.ReplyMessages> getReplyMessage(Integer uid);
 
     void insertReply(Message.ReplyMessages replyMessages);
+
+    List<Message.AtMessages> getAtMessage(Integer uid);
+
+    List<Message.LikeMessages> getLikeMessage(Integer uid);
+
+    void insertAt(Message.AtMessages atMessages);
+
+    void insertLike(Message.LikeMessages likeMessages);
 }
