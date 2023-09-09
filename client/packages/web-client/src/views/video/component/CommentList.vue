@@ -18,7 +18,7 @@
             <n-time class="comment-time" type="relative" :time="new Date(item.createdAt)"></n-time>
             <div class="comment-btn">
                 <n-button v-if="userInfo" text @click="showReply(index, null, true)">{{ t("common.reply") }}</n-button>
-                <n-button v-if="item.author.uid === userInfo.uid" text @click="deleteClick(item.id, null, index)">{{
+                <n-button v-if="item.author.uid === userInfo.uid" text @click="deleteClick(item.id, null, index,null,vid)">{{
                     t("common.delete")
                 }}</n-button>
             </div>
@@ -59,7 +59,7 @@
                             {{ t("common.reply") }}
                         </n-button>
                         <n-button v-if="reply.author.uid === userInfo.uid" text
-                            @click="deleteClick(item.id, reply.id, index, i)">{{ t("common.delete") }}
+                            @click="deleteClick(item.id, reply.id, index, i,vid)">{{ t("common.delete") }}
                         </n-button>
                     </div>
                 </div>
@@ -283,9 +283,13 @@ const page = ref(1);
 //加载更多回复
 const getMoreReply = (cid: string, index: number) => {
     const pageSize = 2;
-    if (!commentList.value[index].page) {
+    if (!commentList.value[index].page && commentList.value[index].reply.length < 2) {
         commentList.value[index].page = 1;
+    }else if (!commentList.value[index].page && commentList.value[index].reply.length == 2){
+        commentList.value[index].page = 2;
     }
+    console.log(commentList.value[index]);
+    
     //获取回复内容
     getReplyListSync(cid, commentList.value[index].page, pageSize).then((res) => {
         if (res === null || res.length < replyCount) {
@@ -314,8 +318,8 @@ const lazyLoading = () => {
 
 
 //删除评论回复
-const deleteClick = (id: string, replyId: string | null, index: number, replyIndex: number | null = null) => {
-    deleteCommentSync(id, replyId).then((res) => {
+const deleteClick = (id: string, replyId: string | null, index: number, replyIndex: number | null = null,vid: number) => {    
+    deleteCommentSync(id, replyId,vid).then((res) => {
         if (res) {
             if (replyIndex !== null) {
                 (commentList.value[index].reply)?.splice(replyIndex, 1);

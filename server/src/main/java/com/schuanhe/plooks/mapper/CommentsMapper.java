@@ -15,4 +15,10 @@ public interface CommentsMapper extends BaseMapper<Comments> {
     void updateNoMore(Integer id);
 
     List<Comments.Reply> getReply(Integer fid);
+
+    void deleteCommentById(Integer id);
+
+    void deleteReplyByFid(Integer id);
+
+    void deleteReplyById(Integer id);
 }

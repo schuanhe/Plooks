@@ -140,6 +140,37 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
     }
 
     @Override
+    public void removeCommentById(Integer id,Integer vid) {
+        // 删除评论
+        baseMapper.deleteCommentById(id);
+        // 删除所有回复
+        baseMapper.deleteReplyByFid(id);
+        // 删除redis中的评论
+        redisCache.deleteObject("comments:comment:list:" + vid);
+        // 删除redis中的回复
+        redisCache.deleteObject("comments:reply:list:" + id);
+
+        // 删除缓存
+        redisCache.deleteObject("refresh:comments:" + vid);
+        System.out.println("删除评论" + id + "成功" +vid);
+    }
+
+    @Override
+    public void removeReplyById(Integer id,Integer fid,Integer vid) {
+        // 删除回复
+        baseMapper.deleteReplyById(id);
+        // 删除redis中的回复
+        redisCache.deleteObject("comments:reply:list:" + fid);
+        redisCache.deleteObject("comments:comment:list:" + vid);
+
+        // 删除缓存
+        redisCache.deleteObject("refresh:reply:" + fid);
+        redisCache.deleteObject("refresh:comments:" + vid);
+        System.out.println("删除回复" + id + "成功" +fid + "v:" + vid);
+    }
+
+
+    @Override
     public Integer sendComment(Comments.Comment comment) {
         Integer uid = WebUtils.getUserId();
         if (uid == null){
@@ -151,6 +182,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         comment.setCreatedAt(new Date());
         // 保存评论
         baseMapper.insertComment(comment);
+        // 获取评论者消息
+        comment.setAuthor(userService.getUserInfoById(comment.getUid()));
         // 新增清redis中的评论
         redisCache.setCacheList("comments:comment:list:" + comment.getVid(),comment);
 

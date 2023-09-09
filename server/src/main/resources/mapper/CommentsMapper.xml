@@ -16,6 +16,15 @@
         update comment set no_more = 0 where id = #{id}
     </update>
 
+    <delete id="deleteCommentById">
+        update comment set is_delete = 1 where id = #{id}
+    </delete>
+    <delete id="deleteReplyByFid">
+        update reply set is_delete = 1 where fid = #{fid}
+    </delete>
+    <delete id="deleteReplyById">
+        update reply set is_delete = 1 where id = #{id}
+    </delete>
 
     <select id="getComment" resultType="com.schuanhe.plooks.domain.Comments$Comment">
         select * from comment where comment.is_delete = false and vid = #{vid}

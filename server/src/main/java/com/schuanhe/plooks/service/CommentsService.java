@@ -23,4 +23,8 @@ public interface CommentsService extends IService<Comments>{
     Integer sendReply(ReplyForm reply);
 
     List<Comments.Reply> getReply(Integer cid, Integer size, Integer page);
+
+    void removeCommentById(Integer id, Integer vid);
+
+    void removeReplyById(Integer id, Integer fid, Integer vid);
 }

@@ -70,5 +70,23 @@ public class CommentController {
         return ResponseResult.success(data);
     }
 
+    /**
+     * 删除评论
+     */
+    @DeleteMapping("/{vid}/{id}")
+    public ResponseResult<?> deleteComment(@PathVariable Integer id, @PathVariable Integer vid){
+        commentsService.removeCommentById(id,vid);
+        return ResponseResult.success();
+    }
+
+    /**
+     * 删除回复
+     */
+    @DeleteMapping("/reply/{vid}/{fid}/{id}")
+    public ResponseResult<?> deleteReply(@PathVariable Integer id, @PathVariable Integer fid,@PathVariable Integer vid){
+        commentsService.removeReplyById(id,fid,vid);
+        return ResponseResult.success();
+    }
+
 
 }

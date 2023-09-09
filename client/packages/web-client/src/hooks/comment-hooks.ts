@@ -51,9 +51,11 @@ export default function useComment() {
         }
     }
 
-    const deleteCommentSync = async (id: string, replyId: string | null) => {
+    const deleteCommentSync = async (id: string, replyId: string | null,vid: number) => {
         try {
-            const res = replyId?await deleteReplyAPI(id, replyId):await deleteCommentAPI(id);
+            console.log(vid);
+            
+            const res = replyId?await deleteReplyAPI(id, replyId, vid):await deleteCommentAPI(id, vid);
             if (res.data.code === statusCode.OK) {
                 return true;
             }

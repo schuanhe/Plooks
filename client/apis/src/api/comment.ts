@@ -22,13 +22,15 @@ export const getReplyListAPI = (cid: string, page: number, page_size: number) =>
 }
 
 //删除评论
-export const deleteCommentAPI = (id: string) => {
-    return request.post('v1/comment/delete', { id });
+export const deleteCommentAPI = (id: string,vid: number) => {
+    return request.delete(`v1/comment/${vid}/${id}`);
 }
 
 //删除回复
-export const deleteReplyAPI = (commentId: string, replyId: string) => {
-    return request.post('v1/comment/reply/delete', { commentId, replyId });
+export const deleteReplyAPI = (commentId: string, replyId: string, vid: number) => {
+    console.log(vid);
+    
+    return request.delete(`v1/comment/reply/${vid}/${commentId}/${replyId}`);
 }
 
 
