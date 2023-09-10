@@ -287,6 +287,20 @@ public class RedisCache
     }
 
     /**
+     * Long类型自增
+     */
+    public void increment(String s, long l) {
+        // 先读取再自增
+        Long data = (Long) redisTemplate.opsForValue().get(KEY_PREFIX_VALUE + s);
+        if (data == null) {
+            data = 0L;
+        }else {
+            data = data + l;
+        }
+        redisTemplate.opsForValue().set(KEY_PREFIX_VALUE + s, data);
+    }
+
+    /**
      * 查询key是否存在
      */
     public boolean hasKey(String key) {

@@ -36,9 +36,6 @@ public class VideoController {
     private UserService userService;
 
     @Autowired
-    private PartitionService partitionService;
-
-    @Autowired
     private RedisCache redisCache;
 
 
@@ -48,49 +45,8 @@ public class VideoController {
      * @return 用户和视频的信息
      */
     @GetMapping("/{vid}")
-    public ResponseResult<?> getVideoById(@PathVariable("vid") String vid) {
-        int vidInt;
-        try {
-            //将vid转换为int类型，错误则返回
-            vidInt = Integer.parseInt(vid);
-        } catch (NumberFormatException e) {
-            return ResponseResult.fail("vid格式错误");
-        }
-
-        // 获取视频信息
-        // 先获取redis中的视频信息(部分信息)
-        Video video = redisCache.getCacheObject("video:info:" + vidInt);
-
-        if (video == null) {
-            // 如果redis中没有视频信息，则从数据库中获取
-            video = videoService.getVideoInfo(vidInt);
-            // 将视频信息存入redis
-            redisCache.setCacheObject("video:info:" + vidInt, video);
-            if (video == null) {
-                return ResponseResult.fail("视频不存在");
-            }
-        }
-
-        // 获取视频资源
-        List<Resources> resources = resourcesService.getResourcesByVid(video.getId());
-
-        if (resources == null || resources.size() < 1) {
-            return ResponseResult.fail("视频不存在");
-        }
-
-        // 将资源添加到视频中
-        video.setResources(resources);
-
-        Integer uid = video.getUid();
-
-        if (uid == null) {
-            return ResponseResult.fail("视频作者不存在");
-        }
-
-        //获取用户信息
-        User userInfo = userService.getUserInfoById(uid);
-
-        video.setAuthor(userInfo);
+    public ResponseResult<?> getVideoById(@PathVariable("vid") Integer vid) {
+        Video video = videoService.getVideoById(vid);
 
         Map<String, Object> data = new HashMap<>();
         data.put("video", video);

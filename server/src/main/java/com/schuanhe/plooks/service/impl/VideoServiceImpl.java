@@ -3,11 +3,14 @@ package com.schuanhe.plooks.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Histories;
+import com.schuanhe.plooks.domain.Resources;
+import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.mapper.CarouselsMapper;
 import com.schuanhe.plooks.service.*;
 import com.schuanhe.plooks.mapper.VideoMapper;
 import com.schuanhe.plooks.utils.RedisCache;
+import com.schuanhe.plooks.utils.ResponseResult;
 import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +34,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
     @Autowired
     private PartitionService partitionService;
+
+    @Autowired
+    private ResourcesService resourcesService;
 
     // 点赞与收藏的服务
     @Autowired
@@ -258,6 +264,58 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
             redisCache.setCacheObject("video:uid:" + vid, uid);
         }
         return uid;
+    }
+
+    @Override
+    public Video getVideoById(Integer vid) {
+
+
+
+        Video video = this.getVideoInfo(vid);
+        // 获取视频资源
+        List<Resources> resources = resourcesService.getResourcesByVid(video.getId());
+
+        if (resources.size() < 1) {
+            return video;
+        }
+
+        // 将资源添加到视频中
+        video.setResources(resources);
+
+        Integer uid = video.getUid();
+
+        if (uid == null) {
+            return video;
+        }
+
+        //获取用户信息
+        User userInfo = userService.getUserInfoById(uid);
+        video.setAuthor(userInfo);
+
+        // 视频播放量+1
+        // 添加视频观看次数Redis缓存
+        if (redisCache.hasKey("video:clicks:" + vid)) {
+            redisCache.increment("video:clicks:" + vid, 1L);
+            // 同步到数据库，60秒内不重复同步
+            Object refObject = redisCache.getCacheObject("refresh:video:clicks:" + vid);
+            if (refObject == null || !(boolean) refObject) {
+                // 视频播放量+1
+                Video video1 = new Video();
+                video1.setId(vid);
+                video1.setClicks(redisCache.getCacheObject("video:clicks:" + vid));
+                baseMapper.updateById(video1);
+                // 设置刷新缓存标志
+                redisCache.setCacheObject("refresh:video:clicks:" + vid, true, 60 );
+                // 清除视频info缓存
+                redisCache.deleteObject("video:info:" + vid);
+            }
+        } else {
+            redisCache.setCacheObject("video:clicks:" + vid, video.getClicks() + 1);
+        }
+
+
+        return video;
+
     }
 
     @Override

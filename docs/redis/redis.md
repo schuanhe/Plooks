@@ -28,6 +28,7 @@
 | 视频作者信息 | User | video:info:author:{vid} |
 | 视频资源信息 | List<Resources> | video:info:resources:{vid} |
 | 视频作者uid | Integer | video:uid:{vid} |
+| 视频点击次数 | int | video:clicks:{vid}|
 
 #### video:danmuku
 | 备注 | 数据类型 | 路径 | redis数据类型 |
@@ -70,4 +71,4 @@
 | --- | --- | --- |
 | 视频评论缓存刷新 | boolean | refresh:comments:{vid} |
 | 轮播图缓存刷新 | boolean | refresh:carousel |
-
+| 视频点击次数缓存刷新(60s) | boolean | refresh:video:clicks:{vid} |

@@ -1,9 +1,8 @@
-package com.schuanhe.plooks.controller;
+package com.schuanhe.plooks.controller.WebSocket;
 
 
 import com.schuanhe.plooks.utils.JwtUtil;
 import com.schuanhe.plooks.utils.WebSocketManager;
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,16 +12,14 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 @Slf4j
 @Component
-@ServerEndpoint("/api/v1/websocket/{token}")
+@ServerEndpoint("/api/v1/websocket/whisper/{token}")
 //此注解相当于设置访问URL
-public class WebSocket {
+public class WhisperWebSocket {
 
 
     /**
@@ -79,7 +76,7 @@ public class WebSocket {
 
     // 此为广播消息
 //    public void sendAllMessage(String message) {
-//        for(WebSocket webSocket : webSockets) {
+//        for(WhisperWebSocket webSocket : webSockets) {
 //            System.out.println("【websocket消息】广播消息:"+message);
 //            try {
 //                webSocket.session.getAsyncRemote().sendText(message);

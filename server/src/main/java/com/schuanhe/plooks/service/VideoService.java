@@ -65,4 +65,6 @@ public interface VideoService extends IService<Video> {
      * 通过vid获取视频作者信息uid
      */
     Integer getUidByVid(Integer vid);
+
+    Video getVideoById(Integer vid);
 }

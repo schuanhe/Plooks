@@ -232,7 +232,7 @@ let websocket: WebSocket | null = null;
 const initWebSocket = async () => {
     const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     const domain = globalConfig.domain || window.location.host;
-    SocketURL = wsProtocol + domain + "/api/v1/websocket/";
+    SocketURL = wsProtocol + domain + "/api/v1/websocket/whisper/";
 
     // 获取token
     const res = await getAccessToken();
@@ -258,7 +258,7 @@ const websocketOnmessage = (e: any) => {
             toBottom();
         })
     } else {
-        // msgForm.fid = res.fid;
+        msgForm.fid = res.fid;
         initSendUser(res.fromId);
     }
 }
