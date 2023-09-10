@@ -41,10 +41,8 @@ public class WhisperWebSocket {
 
         // 将token 解密
         Integer uid = JwtUtil.getUseridNoException(token);
-        if(uid != 0 ) {
-            this.uid = uid;
-        } else{
-            log.info("[链接失败]token={} socket={}",token,this);
+        if(uid == 0 ) {
+            log.info("[链接失败]token={} token不正确",token);
             onClose();
             return;
         }
@@ -55,60 +53,13 @@ public class WhisperWebSocket {
 
     @OnClose
     public void onClose() {
-        // 断开连接删除用户删除session
-        log.info("[断开连接]token={} session={} socket={}",token,session,this);
-
+        WebSocketManager.whispers.remove(uid);
+        log.info("[断开连接]uid={} 当前链接数{}",uid,WebSocketManager.whispers.size());
     }
 
     @OnMessage
     public void onMessage(String message) {
         log.info("[收到消息]token={} session={} socket={} message={}",token,session,this,message);
-
     }
-
-    //发送消息
-    public void sendMassageList(Map<String, Object> sendMsg){
-    }
-
-    //发送消息
-    public void sendMassage(String name,String message){}
-
-
-    // 此为广播消息
-//    public void sendAllMessage(String message) {
-//        for(WhisperWebSocket webSocket : webSockets) {
-//            System.out.println("【websocket消息】广播消息:"+message);
-//            try {
-//                webSocket.session.getAsyncRemote().sendText(message);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-    // 此为单点消息 (发送文本)
-//    public void sendTextMessage(Integer userId, String message) {
-//        Session session = (Session)CurPool.sessionPool.get(userId).get(1);
-//        if (session != null) {
-//            try {
-//                session.getAsyncRemote().sendText(message);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-    // 此为单点消息 (发送对象)
-//    public void sendObjMessage(String sessionId, Object message) {
-//        Session session = CurPool.sessionPool.get(sessionId);
-//        if (session != null) {
-//            try {
-////                session.getAsyncRemote().sendObject(message);
-//                session.getBasicRemote().sendText(JsonUtils.objectToJson(message));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
 }

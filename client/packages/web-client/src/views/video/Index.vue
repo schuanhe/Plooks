@@ -135,7 +135,7 @@ const initWebSocket = (vid: number) => {
     }
     const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     const domain = globalConfig.domain || window.location.host;
-    SocketURL = wsProtocol + domain + `/api/v1/video/online/ws?vid=${vid}&client_id=${clientId}`;
+    SocketURL = wsProtocol + domain + `/api/v1/websocket/video/online/${vid}/${clientId}`;
 
     websocket = new WebSocket(SocketURL);
     websocket.onmessage = websocketOnmessage;

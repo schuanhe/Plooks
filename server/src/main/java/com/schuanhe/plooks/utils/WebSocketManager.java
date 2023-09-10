@@ -4,6 +4,7 @@ package com.schuanhe.plooks.utils;
 import com.alibaba.fastjson.JSON;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import javax.websocket.Session;
 
@@ -16,6 +17,9 @@ public class WebSocketManager {
 
     // 私聊链接
     public static Map<Integer, Session> whispers = new ConcurrentHashMap<>();
+
+    // 视频在线链接(vid,(cid,session)))
+    public static Map<Integer, Map<String,Session>> videoOnline = new ConcurrentHashMap<>();
 
     /**
      * 发送消息
