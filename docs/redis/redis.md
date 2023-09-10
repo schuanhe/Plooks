@@ -59,6 +59,12 @@
 | 用户回复消息 | List<Message.ReplyMessages> | message:reply:{uid} | list |
 
 
+### whispers
+| 备注 | 数据类型 | 路径 | redis数据类型 |
+| --- | --- | --- | --- |
+| 用户私信列表(每个用户仅最近一条) | Map<Integer,Objet> | message:whispers:{uid} | Hash  |
+
+
 ### 缓存刷新
 | 备注 | 数据类型 | 路径 |
 | --- | --- | --- |

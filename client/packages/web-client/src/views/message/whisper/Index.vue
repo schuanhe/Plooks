@@ -20,7 +20,7 @@
             <div ref="msgBox" class="msg-main" @scroll="lazyLoading">
                 <div class="content-container" v-for="(item, index) in msgDetails" :key="index">
                     <!--自己发送的-->
-                    <div v-if="item.from_id == userInfo.uid">
+                    <div v-if="item.fromId == userInfo.uid">
                         <common-avatar class="avatar-right" :url="userInfo.avatar" :size="45"></common-avatar>
                         <span class="content-right">{{ item.content }}</span>
                     </div>
@@ -70,7 +70,7 @@ const notification = useNotification();//通知
 const msgList = ref<Array<WhisperListType>>([]);
 const msgDetails = ref<Array<WhisperDetailsType>>([]);
 const msgForm = reactive({
-    fid: 0,
+    fid: 0, // 
     content: ''
 })
 
@@ -204,7 +204,7 @@ const sendMsg = () => {
         if (res.data.code === statusCode.OK) {
             msgDetails.value.push({
                 fid: 0,
-                from_id: userInfo.value.uid,
+                fromId: userInfo.value.uid,
                 content: msgForm.content,
                 createdAt: ""
             });
@@ -232,13 +232,13 @@ let websocket: WebSocket | null = null;
 const initWebSocket = async () => {
     const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     const domain = globalConfig.domain || window.location.host;
-    SocketURL = wsProtocol + domain + "/api/v1/message/whisper/ws";
+    SocketURL = wsProtocol + domain + "/api/v1/websocket/";
 
     // 获取token
     const res = await getAccessToken();
     if (res.data.code === statusCode.OK) {
         storageData.set("access_token", res.data.data.token, 5);
-        SocketURL += "?token=" + storageData.get("access_token");
+        SocketURL += storageData.get("access_token");
         websocket = new WebSocket(SocketURL);
         websocket.onmessage = websocketOnmessage;
     }
@@ -247,10 +247,10 @@ const initWebSocket = async () => {
 //数据接收
 const websocketOnmessage = (e: any) => {
     const res = JSON.parse(Base64.decode(e.data));
-    if (msgForm.fid === res.fid) {
+    if (msgForm.fid === res.fromId) {
         msgDetails.value.push({
-            fid: msgForm.fid,
-            from_id: res.fid,
+            fid: res.fromId,
+            fromId: res.fromId,
             content: res.content,
             createdAt: ""
         });
@@ -258,8 +258,8 @@ const websocketOnmessage = (e: any) => {
             toBottom();
         })
     } else {
-        msgForm.fid = res.fid;
-        initSendUser(res.fid);
+        // msgForm.fid = res.fid;
+        initSendUser(res.fromId);
     }
 }
 

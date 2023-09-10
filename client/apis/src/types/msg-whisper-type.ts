@@ -13,7 +13,7 @@ export interface WhisperListType {
 
 export interface WhisperDetailsType {
     fid: number,
-    from_id: number,
+    fromId: number,
     content: string,
     createdAt: string
 }

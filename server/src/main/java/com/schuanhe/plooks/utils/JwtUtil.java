@@ -134,4 +134,18 @@ public class JwtUtil {
         Claims claims = parseJWT(refreshToken);
         return claims.getSubject();
     }
+
+    /**
+     * 通过token获取用户id，不抛出异常
+     * @param token token
+     * @return 用户id(错误返回0)
+     */
+    public static Integer getUseridNoException(String token) {
+        try {
+            String userid = getUserid(token);
+            return Integer.valueOf(userid);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

@@ -68,12 +68,13 @@ public class FollowsServiceImpl extends ServiceImpl<FollowsMapper, Follows>
     @Override
     public Map<String, Integer> getFollowCount(Integer uid) {
 
-        Integer followers = Math.toIntExact(baseMapper.selectCount(new QueryWrapper<Follows>().eq("uid", uid)));
-        Integer following = Math.toIntExact(baseMapper.selectCount(new QueryWrapper<Follows>().eq("fid", uid)));
+        Integer following = Math.toIntExact(baseMapper.selectCount(new QueryWrapper<Follows>().eq("uid", uid)));
+        Integer followers = Math.toIntExact(baseMapper.selectCount(new QueryWrapper<Follows>().eq("fid", uid)));
 
         Map<String, Integer> data = new HashMap<>();
-        data.put("follower", followers);
         data.put("following", following);
+        data.put("follower", followers);
+
         return data;
     }
 
