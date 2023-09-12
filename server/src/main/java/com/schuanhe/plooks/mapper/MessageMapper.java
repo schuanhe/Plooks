@@ -22,4 +22,8 @@ public interface MessageMapper extends BaseMapper<Message> {
     void insertAt(Message.AtMessages atMessages);
 
     void insertLike(Message.LikeMessages likeMessages);
+
+    void addAnnounce(Message.Announces announces);
+
+    void deleteAnnounce(Integer id);
 }

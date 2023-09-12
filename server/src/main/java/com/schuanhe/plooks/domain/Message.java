@@ -32,7 +32,7 @@ public class Message {
 
         private String url;
 
-        private Integer important;
+        private Boolean important;
 
         @TableField(exist = false)
         private static final long serialVersionUID = 1L;

@@ -15,9 +15,16 @@
         insert into like_messages (created_at, updated_at, vid, uid, fid)
         values (now(), now(), #{vid}, #{uid}, #{fid})
     </insert>
+    <insert id="addAnnounce">
+        insert into announces (created_at, updated_at, title, content, url, important)
+        values (now(), now(), #{title}, #{content}, #{url}, #{important})
+    </insert>
+    <delete id="deleteAnnounce">
+        update announces set deleted_at = now() where id = #{id}
+    </delete>
 
     <select id="getAnnouncement" resultType="com.schuanhe.plooks.domain.Message$Announces">
-        select * from announces where deleted_at is null and important = 0
+        select * from announces where deleted_at is null
     </select>
     <select id="getImportantAnnouncement" resultType="com.schuanhe.plooks.domain.Message$Announces">
         select * from announces where deleted_at is null and important = 1

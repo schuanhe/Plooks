@@ -13,10 +13,10 @@ export const getImportantAnnounceAPI = () => {
 
 //添加公告
 export const addAnnounceAPI = (addAnnounce: AddAnnounceType) => {
-    return request.post('v1/message/announce/add', addAnnounce);
+    return request.post('v1/announce/admin', addAnnounce);
 }
 
 //删除公告
 export const deleteAnnounceAPI = (id: number) => {
-    return request.post('v1/message/announce/delete', { id });
+    return request.delete(`v1/announce/admin/${id}`);
 }

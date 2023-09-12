@@ -8,11 +8,11 @@ export const getPartitionAPI = () => {
 
 //新增分区
 export const addPartitionAPI = (addPartition: AddPartitionType) => {
-    return request.put(`v1/partition/add`, addPartition);
+    return request.post(`v1/partition/admin`, addPartition);
 }
 
 
 //删除分区
 export const deletePartitionAPI = (id: number) => {
-    return request.post(`v1/partition/delete`, { id });
+    return request.delete(`v1/partition/admin/${id}`);
 }
