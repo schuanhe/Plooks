@@ -1,6 +1,5 @@
 package com.schuanhe.plooks.handler.impl;
 
-import com.schuanhe.plooks.service.impl.UserDetailsServiceImpl;
 import com.schuanhe.plooks.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

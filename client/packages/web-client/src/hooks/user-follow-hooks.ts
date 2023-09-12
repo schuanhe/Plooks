@@ -23,7 +23,7 @@ export default function useUserFollow() {
                 message.success('关注成功');
                 isFollow.value = true;
             } else {
-                message.error(res.data.msg);
+                message.error(res.data.message);
             }
         })
     }
@@ -35,7 +35,7 @@ export default function useUserFollow() {
                 message.success('取关成功');
                 isFollow.value = false;
             } else {
-                message.error(res.data.msg);
+                message.error(res.data.message);
             }
         })
     }

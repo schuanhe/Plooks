@@ -13,7 +13,7 @@
 | 用户邮箱验证码 | String | user:email:{email} |
 | 用户认证信息 | UserDetailsImpl | user:info:{uid} |
 | 用户信息 | User | user:info:user:{uid} |
-| 用户id | String | user:info:username:{username} |
+| 用户id | String | user:info:nickname:{nickname} |
 | 用户id | String | user:token:{token} |
 
 ### captcha

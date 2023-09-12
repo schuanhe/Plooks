@@ -134,7 +134,7 @@ const modifyUserInfo = () => {
         } else {
             notification.error({
                 title: '修改失败',
-                content: res.data.msg,
+                content: res.data.message,
                 duration: 5000,
             })
         }

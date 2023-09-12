@@ -35,7 +35,7 @@ export interface ModifyUserInfoType {
 }
 
 export interface AdminModifyUserInfoType {
-    id: number,
+    uid: number,
     email: string,
     nickname: string,
     sign: string,

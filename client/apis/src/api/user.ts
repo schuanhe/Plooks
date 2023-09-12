@@ -49,25 +49,25 @@ export const mpdifyPwdAPI = (modifyPwd: UserLoginType) => {
 
 // 管理员获取用户列表
 export const adminGetUserListAPI = (page: number, pageSize: number) => {
-    return request.get(`v1/user/manage/list?page=${page}&page_size=${pageSize}`)
+    return request.get(`v1/user/admin/${pageSize}/${page}`)
 }
 
 // 管理员搜索用户
 export const adminSearchUserAPI = (keyword: string, page: number, pageSize: number) => {
-    return request.get(`v1/user/manage/search?keyword=${keyword}&page=${page}&page_size=${pageSize}`)
+    return request.get(`v1/user/admin/search/${keyword}/${pageSize}/${page}`)
 }
 
 // 管理员修改用户信息
 export const adminModifyUserInfoAPI = (modify: AdminModifyUserInfoType) => {
-    return request.post('v1/user/manage/modify', modify);
+    return request.put('v1/user/admin', modify);
 }
 
 // 管理员修改用户角色
-export const adminModifyUserRoleAPI = (id: number, role: number) => {
-    return request.post('v1/user/manage/role/modify', { id, role });
+export const adminModifyUserRoleAPI = (uid: number, role: number) => {
+    return request.put('v1/user/admin/role', { uid, role });
 }
 
 // 管理员删除用户
 export const adminDeleteUserAPI = (id: number) => {
-    return request.post("v1/user/manage/delete", { id })
+    return request.delete(`v1/user/admin/${id}`)
 }

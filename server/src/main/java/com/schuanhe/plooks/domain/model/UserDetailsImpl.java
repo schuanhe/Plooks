@@ -84,6 +84,6 @@ public class UserDetailsImpl implements UserDetails {
     // 账户是否可用
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getDeletedAt() == null;
     }
 }

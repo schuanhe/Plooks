@@ -127,7 +127,7 @@ const modifyCollection = () => {
         } else {
             notification.error({
                 title: '修改失败',
-                content: res.data.msg,
+                content: res.data.message,
                 duration: 5000,
             })
         }
@@ -142,7 +142,7 @@ const deleteClick = (id: number, index: number) => {
         } else {
             notification.error({
                 title: '删除失败',
-                content: res.data.msg,
+                content: res.data.message,
                 duration: 5000,
             })
         }

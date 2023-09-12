@@ -9,7 +9,7 @@
             </div>
             <n-scrollbar style="max-height: 270px;margin-top: 10px;">
                 <n-checkbox-group v-if="!loading" :default-value="defaultChecked" @update:value="handleUpdateValue">
-                    <div class="collention-item" v-for="item in collections">
+                    <div class="collention-item" :key="item.id" v-for="item in collections">
                         <n-checkbox :value="item.id" :label="item.name" />
                         <span>{{ item.open ? '' : t("common.private") }}</span>
                     </div>

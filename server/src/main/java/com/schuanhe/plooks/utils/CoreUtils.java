@@ -43,13 +43,11 @@ public class CoreUtils {
             return null;
         }
         user.setPassword(null);
-        user.setStatus(null);
         user.setEmail(null);
         user.setBirthday(null);
         user.setClientIp(null);
         user.setCreatedAt(null);
         user.setUpdatedAt(null);
-        user.setRole(null);
         return user;
     }
 

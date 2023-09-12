@@ -1,12 +1,9 @@
-import com.schuanhe.plooks.domain.Video;
-import com.schuanhe.plooks.service.VideoService;
-import com.schuanhe.plooks.service.impl.PartitionServiceImpl;
+import com.schuanhe.plooks.service.User.VideoService;
+import com.schuanhe.plooks.service.User.impl.PartitionServiceImpl;
 import com.schuanhe.plooks.utils.RedisCache;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest(classes = com.schuanhe.plooks.Application.class)
 public class PartitionServiceTest {

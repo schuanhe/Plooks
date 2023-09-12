@@ -74,7 +74,7 @@ const finishUpload = () => {
         } else {
             notification.error({
                 title: '获取失败',
-                content: res.data.msg,
+                content: res.data.message,
                 duration: 5000,
             })
         }
@@ -131,7 +131,7 @@ const submitReview = () => {
         } else {
             notification.error({
                 title: '提交失败',
-                description: res.data.msg,
+                description: res.data.message,
                 duration: 5000,
             })
         }

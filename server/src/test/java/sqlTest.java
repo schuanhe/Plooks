@@ -1,11 +1,7 @@
 import com.alibaba.fastjson.JSON;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.extension.toolkit.SqlRunner;
 import com.schuanhe.plooks.mapper.TestMapper;
-import com.schuanhe.plooks.mapper.UserMapper;
-import com.schuanhe.plooks.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

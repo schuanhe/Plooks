@@ -46,7 +46,7 @@ spring:
 # mybatis-plus
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml # mapper.xml文件位置
-  type-aliases-package: com.heshop.goods.entity # 实体类所在包
+  type-aliases-package: com.schuanhe.plooks.domain # 实体类所在包
   global-config: # 全局配置
     db-config: # 数据库配置
       id-type: auto # 主键类型
@@ -54,8 +54,9 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值
   configuration: # 配置
     map-underscore-to-camel-case: true # 开启驼峰命名
-    cache-enabled: false # 关闭缓存
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印sql语句
+
+
 
 debug: true
 

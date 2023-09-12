@@ -180,7 +180,7 @@ const submitComment = () => {
         } else {
             notification.error({
                 title: '发布失败',
-                description: res.data.msg,
+                description: res.data.message,
                 duration: 5000,
             })
         }
@@ -247,7 +247,7 @@ const submitReply = (comment: CommentType) => {
         } else {
             notification.error({
                 title: '发布失败',
-                description: res.data.msg,
+                description: res.data.message,
                 duration: 5000,
             })
         }

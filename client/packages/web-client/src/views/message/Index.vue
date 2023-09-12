@@ -5,7 +5,7 @@
             <div class="message-side-bar">
                 <span class="title">{{ t("message.messageCenter") }}</span>
                 <ul class="list">
-                    <li class="item" :class="defaultOption === item.link ? 'active' : ''" v-for="item in menuOption"
+                    <li class="item" :class="defaultOption === item.link ? 'active' : ''" :key="item.link" v-for="item in menuOption"
                         @click="changeMenu(item.link)">{{ item.label }}</li>
                 </ul>
             </div>
