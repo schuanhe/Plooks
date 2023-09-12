@@ -1,10 +1,11 @@
 package com.schuanhe.plooks.service.Admin;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.schuanhe.plooks.domain.User;
 
 import java.util.List;
 
-public interface UserAdminService {
+public interface UserAdminService extends IService<User> {
     List<User> getUserList(Integer page, Integer size);
 
     Long getUserCount();

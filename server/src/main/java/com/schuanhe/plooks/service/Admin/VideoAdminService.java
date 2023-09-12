@@ -21,4 +21,10 @@ public interface VideoAdminService extends IService<Video> {
     boolean reviewVideoResource(Resources resources);
 
     boolean reviewVideo(Video video);
+
+    List<Video> searchVideo(String keyword, Integer page, Integer size);
+
+    Long searchVideoCount(String keyword);
+
+    boolean deleteVideo(Integer vid);
 }

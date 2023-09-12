@@ -40,6 +40,34 @@ public class VideoAdminController {
     }
 
     /**
+     * 管理员搜索视频
+     */
+    @GetMapping("/search/{keyword}/{size}/{page}")
+    public ResponseResult<?> searchVideo(@PathVariable String keyword, @PathVariable Integer page, @PathVariable Integer size) {
+
+        List<Video> videos = videoAdminService.searchVideo(keyword,page,size);
+
+        Long videoCount = videoAdminService.searchVideoCount(keyword);
+
+        // 返回视频列表
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", videoCount);
+        data.put("videos", videos);
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 删除视频
+     */
+    @DeleteMapping("/{vid}")
+    public ResponseResult<?> deleteVideo(@PathVariable Integer vid) {
+        boolean b = videoAdminService.deleteVideo(vid);
+        if (!b)
+            return ResponseResult.error("删除失败");
+        return ResponseResult.success();
+    }
+
+    /**
      * 获取待审核视频列表
      */
     @GetMapping("/review/{size}/{page}")

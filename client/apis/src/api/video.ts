@@ -32,6 +32,7 @@ export const getRecommendedVideoAPI = (pageSize: number) => {
 }
 
 // 搜索视频
+// TODO 搜索视频
 export const searchVideoAPI = (page: number, pageSize: number, keywords: string) => {
     return request.get(`v1/video/search?page=${page}&page_size=${pageSize}&keywords=${keywords}`);
 }
@@ -56,7 +57,8 @@ export const getVideoListByUidAPI = (uid: number, page: number, page_size: numbe
     return request.get(`v1/video/user/list/${uid}/${page_size}/${page}`);
 }
 
-//删除视频
+//删除视频 
+//TODO 普通用户删除视频
 export const deleteVideoAPI = (id: number) => {
     return request.post('v1/video/delete', { id });
 }
@@ -68,12 +70,12 @@ export const adminGetVideoListAPI = (page: number, pageSize: number, partitionId
 
 //管理员搜索视频
 export const adminSearchVideoAPI = (page: number, pageSize: number, keywords: string) => {
-    return request.get(`v1/video/admin/search?page=${page}&page_size=${pageSize}&keywords=${keywords}`);
+    return request.get(`v1/video/admin/search/${keywords}/${pageSize}/${page}`);
 }
 
 //管理员删除视频
-export const adminDeleteVideoAPI = (id: number) => {
-    return request.post('v1/video/admin/delete', { id });
+export const adminDeleteVideoAPI = (vid: number) => {
+    return request.delete(`v1/video/admin/${vid}`, );
 }
 
 //获取审核视频列表

@@ -3,14 +3,18 @@ package com.schuanhe.plooks.service.Admin.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Resources;
+import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.domain.Video;
 import com.schuanhe.plooks.mapper.VideoMapper;
 import com.schuanhe.plooks.service.Admin.VideoAdminService;
 import com.schuanhe.plooks.service.User.ResourcesService;
 import com.schuanhe.plooks.service.User.UserService;
+import com.schuanhe.plooks.utils.RedisCache;
+import com.schuanhe.plooks.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -23,6 +27,9 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
     @Autowired
     private ResourcesService resourcesService;
 
+    @Autowired
+    private RedisCache redisCache;
+
     @Override
     public List<Video> getVideoList(Integer page, Integer size, int pid) {
         if (page == null || page < 1) {
@@ -34,6 +41,7 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
         QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
         if (pid != 0)
             videoQueryWrapper.eq("partition_id",pid);
+        videoQueryWrapper.isNull("deleted_at");
         videoQueryWrapper.last("LIMIT " + (page - 1) * size + "," + size);
 
         List<Video> videos = baseMapper.selectList(videoQueryWrapper);
@@ -50,6 +58,7 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
         QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
         if (pid != 0)
             videoQueryWrapper.eq("partition_id",pid);
+        videoQueryWrapper.isNull("deleted_at");
         return baseMapper.selectCount(videoQueryWrapper);
     }
 
@@ -57,6 +66,7 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
     public List<Video> getReviewVideoList(Integer page, Integer size) {
         QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
         videoQueryWrapper.eq("status",500);
+        videoQueryWrapper.isNull("deleted_at");
         videoQueryWrapper.last("LIMIT " + (page - 1) * size + "," + size);
         return baseMapper.selectList(videoQueryWrapper);
     }
@@ -65,6 +75,7 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
     public Long getReviewVideoCount() {
         QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
         videoQueryWrapper.eq("status",500);
+        videoQueryWrapper.isNull("deleted_at");
         return baseMapper.selectCount(videoQueryWrapper);
     }
 
@@ -87,6 +98,48 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
         newVideo.setId(video.getId());
         newVideo.setStatus(video.getStatus());
         int i = baseMapper.updateById(newVideo);
+        return i == 1;
+    }
+
+    @Override
+    public List<Video> searchVideo(String keyword, Integer page, Integer size) {
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (size == null || size < 1) {
+            size = 10;
+        }
+        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+        videoQueryWrapper.like("title",keyword);
+        videoQueryWrapper.isNull("deleted_at");
+        videoQueryWrapper.last("LIMIT " + (page - 1) * size + "," + size);
+        List<Video> videos = baseMapper.selectList(videoQueryWrapper);
+        // 设置用户信息
+        videos.forEach(video -> {
+            video.setAuthor(userService.getUserInfoById(video.getUid()));
+        });
+        return videos;
+    }
+
+    @Override
+    public Long searchVideoCount(String keyword) {
+        QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+        videoQueryWrapper.like("title",keyword);
+        videoQueryWrapper.isNull("deleted_at");
+        return baseMapper.selectCount(videoQueryWrapper);
+    }
+
+    @Override
+    public boolean deleteVideo(Integer vid){
+        Video video = new Video();
+        video.setId(vid);
+        video.setDeletedAt(new Date());
+        int i = baseMapper.updateById(video);
+        // 删除Redis中的视频信息
+        redisCache.deleteObject("video:info:" + vid);
+        redisCache.deleteObject("video:info:resources:" + vid );
+        redisCache.deleteObject("video:info:author:" + vid);
+        redisCache.deleteObject("video:clicks:" + vid);
         return i == 1;
     }
 }

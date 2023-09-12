@@ -1,5 +1,6 @@
 package com.schuanhe.plooks.service.User.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.schuanhe.plooks.domain.Carousels;
 import com.schuanhe.plooks.service.User.CarouselsService;
@@ -34,7 +35,9 @@ public class CarouselsServiceImpl extends ServiceImpl<CarouselsMapper, Carousels
 
         if (carousels.size() == 0 && !refresh){
             // 从数据库中获取轮播图
-            List<Carousels> newCarousels = baseMapper.selectList(null);
+            QueryWrapper<Carousels> carouselsQueryWrapper = new QueryWrapper<>();
+            carouselsQueryWrapper.isNull("deleted_at");
+            List<Carousels> newCarousels = baseMapper.selectList(carouselsQueryWrapper);
             // 将轮播图存入redis
             if (newCarousels != null && newCarousels.size() > 0){
                 redisCache.setCacheList("carousels",newCarousels);
