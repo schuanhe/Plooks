@@ -22,7 +22,7 @@
                 <p @click="goUserSpace(authorInfo.uid)">{{ authorInfo.nickname }}</p>
                 <p>{{ authorInfo.sign }}</p>
             </div>
-            <div class="follow-btn">
+            <div class="follow-btn" v-if="!isMyself">
                 <n-button size="small" v-if="isFollow" type="primary" @click="unfollow(author!.uid)">
                     {{ t("follow.followed") }}
                 </n-button>
@@ -54,6 +54,7 @@ const { t } = useI18n();
 
 const router = useRouter();
 
+const isMyself = ref(false); // 是否是自己
 const isLogin = ref(false);
 const authorInfo = ref(Object.assign({}, props.author));
 const { isFollow, getFollowStatus, follow, unfollow } = useUserFollow();
@@ -68,11 +69,16 @@ watch(() => props.loading, (val) => {
         authorInfo.value = props.author;
         getFollowStatus(authorInfo.value.uid);
     }
+
+        if (storageData.get("user_info")?.uid === props.author?.uid) {
+            isMyself.value = true;
+        }    
 })
 
 onBeforeMount(() => {
     if (storageData.get("user_info")?.uid) {
         isLogin.value = true;
+
     }
 })
 
