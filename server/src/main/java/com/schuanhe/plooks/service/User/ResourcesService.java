@@ -40,4 +40,6 @@ public interface ResourcesService extends IService<Resources> {
      * @param resources 视频资源
      */
     boolean updateById(Resources resources);
+
+    boolean updateResourceTitle(Resources resources);
 }

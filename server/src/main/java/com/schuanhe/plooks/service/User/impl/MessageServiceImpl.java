@@ -137,6 +137,12 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     }
 
     @Override
+    public Integer getAnnouncementContent() {
+
+        return baseMapper.getAnnouncementContent();
+    }
+
+    @Override
     public List<Message.AtMessages> getAtMessage(Integer size, Integer page) {
         // 获取uid
         Integer uid = WebUtils.getUserId();

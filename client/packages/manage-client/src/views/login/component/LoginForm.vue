@@ -9,9 +9,6 @@
                     </n-form-item>
                     <n-form-item label="密码" path="user.password">
                         <n-input placeholder="请输入密码)" v-model:value="loginForm.user.password" type="password">
-                            <template #suffix>
-                                <n-button type="primary" text @click="findPassword">登录</n-button>
-                            </template>
                         </n-input>
                     </n-form-item>
                     <n-form-item label="验证码" path="code" v-if="loginCaptcha.show">
@@ -54,11 +51,9 @@ import { loginAPI, emailLoginAPI, getUserInfoAPI, } from "@plooks/apis";
 import { storageData, statusCode, globalConfig as config, createUuid } from '@plooks/utils';
 import type { FormRules, FormInst } from 'naive-ui';
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification, NImage } from 'naive-ui';
-import { useRouter } from 'vue-router';
 
 const emits = defineEmits(["changeForm", "success"]);
 
-const router = useRouter();
 // i18n
 
 //通知组件
@@ -237,10 +232,7 @@ const sendLoginRequest = () => {
     });
 }
 
-const findPassword = () => {
-    let findPasswordUrl = router.resolve({ name: "FindPassword" });
-    window.open(findPasswordUrl.href, '_blank');
-}
+
 </script>
 
 <style lang="less" scoped>

@@ -17,7 +17,7 @@
 import { h, ref, onBeforeMount } from "vue";
 import { getTheme } from '@/theme';
 import { RouterLink, useRoute } from 'vue-router';
-import { globalConfig } from '@plooks/utils';
+import { globalConfig,storageData } from '@plooks/utils';
 import { NMenu } from "naive-ui";
 import HeaderBar from '@/components/header-bar/Index.vue';
 
@@ -32,6 +32,9 @@ const initTheme = () => {
 }
 
 const defaultKey = ref("");
+
+
+// 审核的路由
 const menuOptions = [
     {
         label: () =>
@@ -52,25 +55,29 @@ const menuOptions = [
                 RouterLink,
                 {
                     to: {
-                        name: "User",
-                    }
-                },
-                { default: () => '用户管理' }
-            ),
-        key: "user",
-    },
-    {
-        label: () =>
-            h(
-                RouterLink,
-                {
-                    to: {
                         name: "Video",
                     }
                 },
                 { default: () => '视频管理' }
             ),
         key: "video",
+    },
+];
+
+if(storageData.get("user_info")?.role >= 2 ) {
+    menuOptions.push(...[
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "User",
+                    }
+                },
+                { default: () => '用户管理' }
+            ),
+        key: "user",
     },
     {
         label: () =>
@@ -111,8 +118,12 @@ const menuOptions = [
             ),
         key: "partition",
     }
-];
+    ])
+}
 
+
+
+// 路由名称转key
 const routeNameToKey = () => {
     switch (route.name) {
         case "Review":

@@ -40,6 +40,7 @@
 | --- | --- | --- |
 | 视频列表(3分钟自动删除) | List<Video> | video:good:list:{pid}:{siz}:{page} |
 | 视频列表数据(3分钟自动删除) | int | video:good:count:{pid} |
+| 用户搜索关键词 | List<Video> | video:good:search:{keyword} |
 
 #### video:{uid}
 | 备注 | 数据类型 | 路径 | redis数据类型 |
@@ -72,3 +73,4 @@
 | 视频评论缓存刷新 | boolean | refresh:comments:{vid} |
 | 轮播图缓存刷新 | boolean | refresh:carousel |
 | 视频点击次数缓存刷新(60s) | boolean | refresh:video:clicks:{vid} |
+| 用户搜索视频限制(3s) | boolean | refresh:search:{uid} |

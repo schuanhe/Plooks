@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -72,7 +73,7 @@ public class UserDetailsImpl implements UserDetails {
     // 账户是否被锁定
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return Objects.equals(user.getStatus(), "0");
     }
 
     // 密码是否过期

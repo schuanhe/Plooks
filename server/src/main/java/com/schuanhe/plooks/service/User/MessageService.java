@@ -21,4 +21,6 @@ public interface MessageService extends IService<Message>{
     void sendAtMessage(Message.AtMessages atMessages);
 
     void sendLikeMessage(Message.LikeMessages likeMessages);
+
+    Integer getAnnouncementContent();
 }

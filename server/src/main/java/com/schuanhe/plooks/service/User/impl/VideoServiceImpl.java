@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -266,7 +267,6 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
     public Video getVideoById(Integer vid) {
 
 
-
         Video video = this.getVideoInfo(vid);
         // 获取视频资源
         List<Resources> resources = resourcesService.getResourcesByVid(video.getId());
@@ -311,6 +311,61 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
 
 
         return video;
+
+    }
+
+    @Override
+    public boolean deleteVideo(Integer vid) {
+        Integer userId = WebUtils.getUserId();
+        Integer uidByVid = getUidByVid(vid);
+        if (userId == null || !userId.equals(uidByVid)) {
+            return false;
+        }
+        // 删除视频
+        Video video = new Video();
+        video.setId(vid);
+        video.setDeletedAt(new Date());
+        int i = baseMapper.updateById(video);
+        return i > 0;
+    }
+
+    @Override
+    public List<Video> searchVideo(String keyword, Integer size, Integer page) throws Exception{
+        Integer userId = WebUtils.getUserId();
+        // 3s 只能搜索一次
+        if (redisCache.hasKey("refresh:search:" + userId)) {
+            throw new Exception("搜索太频繁了");
+        }
+        if (redisCache.hasKey("video:good:search:" + keyword)){
+            // 获取搜索结果
+            return redisCache.getCacheList("video:good:search:" + keyword, (page - 1) * size, page * size - 1);
+        }else {
+            // 获取搜索结果
+            QueryWrapper<Video> videoQueryWrapper = new QueryWrapper<>();
+            videoQueryWrapper.like("title", keyword);
+            videoQueryWrapper.eq("status", 0);
+            videoQueryWrapper.isNull("deleted_at");
+            videoQueryWrapper.orderByDesc("clicks");
+            List<Video> videos = baseMapper.selectList(videoQueryWrapper);
+
+            // 获取视频作者信息
+            videos.forEach(video -> {
+                video.setAuthor(userService.getUserInfoById(video.getUid()));
+            });
+
+
+            // 设置刷新缓存标志
+            redisCache.setCacheObject("refresh:search:" + userId, true, 3);
+            // 将搜索结果存入redis
+            if (videos.size()<=0){
+                return new ArrayList<>();
+            }
+
+            redisCache.setCacheList("video:good:search:" + keyword, videos);
+            // 获取搜索结果
+            videos = redisCache.getCacheList("video:good:search:" + keyword, (page - 1) * size, page * size - 1);
+            return videos;
+        }
 
     }
 

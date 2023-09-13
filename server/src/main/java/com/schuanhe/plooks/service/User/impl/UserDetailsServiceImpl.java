@@ -27,8 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private RedisCache redisCache;
 
     @Override
 // 根据用户名加载用户信息，用于Spring Security认证
@@ -47,8 +45,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(Objects.isNull(user)){
             throw new RuntimeException("用户名或密码错误");
         }
-        //TODO: 从数据库中查询用户拥有的权限列表
-        List<String> list = new ArrayList<>(Arrays.asList("test", "admin"));
+        Integer role = user.getRole();
+        List<String> list = new ArrayList<>();
+        switch (role){
+            case 3:
+                // 如果用户角色为3，即超级管理员，就给用户添加所有权限
+                list.add("role:superAdmin");
+            case 2:
+                list.add("role:admin"); // 如果用户角色为2，即管理员，就给用户添加admin权限
+            case 1:
+                // 如果用户角色为1，即为审核
+                list.add("role:reviewer");
+            case 0:
+                // 如果用户角色为0，即为普通用户
+                list.add("role:user");
+            default:
+                list.add("role:tourist"); // 如果用户角色为其他，即为游客
+                break;
+        }
 
         // 从数据库中查询用户拥有的权限列表，替换上面的初始化列表
         //List<String> list = menuMapper.selectPermsByUserId(user.getId());

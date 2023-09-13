@@ -3,7 +3,7 @@ import type { BaseResourceType } from '../types/resource-type';
 
 //修改资源标题
 export const modifyTitleAPI = (resourceTitle: BaseResourceType) => {
-    return request.post('v1/resource/title/modify', resourceTitle);
+    return request.put('v1/resource', resourceTitle);
 }
 
 //删除资源

@@ -55,6 +55,8 @@ const searchVideo = (init = false) => {
                 noMore = true;
                 message.error("获取失败");
             }
+        }else{
+            message.error(res.data.message);
         }
         loading = false;
     })

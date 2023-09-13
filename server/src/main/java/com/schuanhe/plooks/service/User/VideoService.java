@@ -67,4 +67,8 @@ public interface VideoService extends IService<Video> {
     Integer getUidByVid(Integer vid);
 
     Video getVideoById(Integer vid);
+
+    boolean deleteVideo(Integer vid);
+
+    List<Video> searchVideo(String keyword, Integer size, Integer page) throws Exception;
 }

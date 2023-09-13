@@ -128,10 +128,6 @@ const languages = [
     {
         label: 'english',
         key: 'en-US'
-    },
-    {
-        label: '日本語',
-        key: 'ja-JP'
     }
 ]
 

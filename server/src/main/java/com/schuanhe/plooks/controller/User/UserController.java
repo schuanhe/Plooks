@@ -39,7 +39,6 @@ public class UserController {
 
     //需要管理员权限
     @GetMapping("/admin")
-    @PreAuthorize("hasAnyAuthority('system:test:list')")
     public ResponseResult<String> admin(){
         return ResponseResult.success("管理员权限");
     }

@@ -75,6 +75,21 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
         redisCache.deleteObject("video:info:resources:" + resources.getVid());
         return true;
     }
+
+    @Override
+    public boolean updateResourceTitle(Resources resources) {
+
+        Resources newResources = new Resources();
+        newResources.setId(resources.getId());
+        newResources.setTitle(resources.getTitle());
+        // 更新视频资源标题
+        if (baseMapper.updateById(newResources) == 0) {
+            return false;
+        }
+        // 将视频资源缓存删除
+        redisCache.deleteObject("video:info:resources:" + resources.getVid());
+        return true;
+    }
 }
 
 

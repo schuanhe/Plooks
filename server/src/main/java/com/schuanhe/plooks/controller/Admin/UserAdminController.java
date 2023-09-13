@@ -5,6 +5,7 @@ import com.schuanhe.plooks.domain.User;
 import com.schuanhe.plooks.service.Admin.UserAdminService;
 import com.schuanhe.plooks.utils.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -78,6 +79,7 @@ public class UserAdminController {
     /**
      * 删除用户
      */
+    @PreAuthorize("hasAnyAuthority('')")
     @DeleteMapping("/{uid}")
     public ResponseResult<?> deleteUser(@PathVariable Integer uid) {
         try {

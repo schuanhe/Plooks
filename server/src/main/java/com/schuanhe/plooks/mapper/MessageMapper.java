@@ -26,4 +26,6 @@ public interface MessageMapper extends BaseMapper<Message> {
     void addAnnounce(Message.Announces announces);
 
     void deleteAnnounce(Integer id);
+
+    Integer getAnnouncementContent();
 }

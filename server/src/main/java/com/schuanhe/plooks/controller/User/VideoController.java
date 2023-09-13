@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,17 +123,28 @@ public class VideoController {
      * 提交审核
      */
     @PostMapping("/review/{vid}")
-    public ResponseResult<?> submitReview(@PathVariable String vid){
-        // 判断vid是否合法
-        if (vid == null) {
-            return ResponseResult.error("视频不存在");
-        }
+    public ResponseResult<?> submitReview(@PathVariable Integer vid){
         // 提交审核
-        boolean submitReview = videoService.submitReview(Integer.valueOf(vid));
+        boolean submitReview = videoService.submitReview(vid);
         if (submitReview) {
             return ResponseResult.success("提交成功");
         } else {
             return ResponseResult.error("提交失败");
+        }
+    }
+
+    /**
+     * 删除视频
+     */
+    @DeleteMapping("/{vid}")
+    public ResponseResult<?> deleteVideo(@PathVariable Integer vid){
+
+        // 删除视频
+        boolean deleteVideo = videoService.deleteVideo(vid);
+        if (deleteVideo) {
+            return ResponseResult.success("删除成功");
+        } else {
+            return ResponseResult.error("删除失败");
         }
     }
 
@@ -175,6 +187,25 @@ public class VideoController {
         // 返回数据
         Map<String, Object> data = new HashMap<>();
         data.put("total", count);
+        data.put("videos", videoList);
+        return ResponseResult.success(data);
+    }
+
+    /**
+     * 搜索视频
+     */
+    @GetMapping("/search/{keyword}/{size}/{page}")
+    public ResponseResult<?> searchVideo(@PathVariable String keyword, @PathVariable Integer size, @PathVariable Integer page ) {
+        List<Video> videoList;
+        // 获取正常的视频信息
+        try {
+            videoList = videoService.searchVideo(keyword, size, page);
+        }catch (Exception e){
+            return ResponseResult.error(e.getMessage());
+        }
+
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
         data.put("videos", videoList);
         return ResponseResult.success(data);
     }

@@ -9,7 +9,7 @@
                     <common-avatar :url="userInfo.avatar" :size="40"></common-avatar>
                     <div class="header-menu">
                         <div class="menu-item">
-                            <span class="btn">{{ userInfo.name }}</span>
+                            <span class="btn">{{ userInfo.nickname }}</span>
                         </div>
                         <div class="menu-item">
                             <span class="btn" @click="logout">退出登录</span>

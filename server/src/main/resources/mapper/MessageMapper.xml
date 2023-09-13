@@ -38,4 +38,7 @@
     <select id="getLikeMessage" resultType="com.schuanhe.plooks.domain.Message$LikeMessages">
         select * from like_messages where uid = #{uid} and deleted_at is null
     </select>
+    <select id="getAnnouncementContent" resultType="java.lang.Integer">
+        select count(*) from announces where deleted_at is null
+    </select>
 </mapper>

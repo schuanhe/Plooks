@@ -32,11 +32,12 @@ public class MessageController {
     @GetMapping("/announce/{size}/{page}")
     public ResponseResult<?> getAnnouncement(@PathVariable Integer size, @PathVariable Integer page) {
         List<Message.Announces> announcement = messageService.getAnnouncement(size, page);
+        Integer total = messageService.getAnnouncementContent();
 
         // 返回公告
         Map<String, Object> data = new HashMap<>();
         data.put("announces", announcement);
-        data.put("total", announcement.size()); // TODO: 总数
+        data.put("total",total);
         return ResponseResult.success(data);
     }
 
