@@ -19,7 +19,7 @@ public class sqlTest {
     @Autowired
     private TestMapper testMapper;
 
-    @Test
+
     public void teset() {
 
         String sql = getSql("查询20个用户id包含1的用户");

@@ -38,6 +38,8 @@ import Upload from "./src/Upload.vue";
 
 import Video from "./src/Video.vue";
 
+import Kans from "./src/Kans.vue";
+
 export {
     Add,
     ArrowDown,
@@ -77,5 +79,6 @@ export {
 
     Upload,
 
-    Video
+    Video,
+    Kans
 }

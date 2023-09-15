@@ -18,7 +18,7 @@
                     <!-- 点赞收藏等数据 -->
                     <div class="video-toolbar">
                         <div class="toolbar-left">
-                            <archive-info :vid="videoInfo!.vid"></archive-info>
+                            <archive-info :vid="videoInfo!.vid" :pid="part"></archive-info>
                         </div>
                         <!-- 日期播放和在线人数 -->
                         <div class="toolbar-right">

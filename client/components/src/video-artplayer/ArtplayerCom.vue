@@ -115,7 +115,7 @@ const bindArtplayerEvents = () => {
       getHistoryProgress()
     });
     instance.value.on('play', () => {
-      console.log('play');      
+      console.log('play');
     });
     instance.value.on('pause', () => {
       console.log('pause');

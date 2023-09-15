@@ -25,7 +25,7 @@ const router = useRouter();
 
 const userInfo = ref<UserInfoType>({
     uid: 0,
-    name: "",
+    nickname: "",
     avatar: ""
 });
 

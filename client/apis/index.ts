@@ -53,3 +53,6 @@ export * from "./src/types/danmuku-type";
 
 export * from "./src/api/carousel";
 export * from "./src/types/carousel-type";
+
+export * from "./src/api/watchroom";
+export * from "./src/types/watchroom-type"

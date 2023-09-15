@@ -16,7 +16,7 @@ import { ref, onBeforeUnmount } from 'vue';
 import ArtplayerCom from '../video-artplayer/ArtplayerCom.vue';
 import type { ResourceType, AddHistoryType } from '@plooks/apis';
 import { addHistoryAPI } from '@plooks/apis';
-import Artplayer from 'artplayer';
+import type Artplayer from 'artplayer';
 
 const props = withDefaults(defineProps<{
     vid: number, // 视频id

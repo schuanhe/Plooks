@@ -13,21 +13,14 @@
             </n-icon>
             <p>{{ stat.collect }}</p>
         </div>
-        <!-- 加入或者创建房间 -->
-        <div class="archive-item">
-            <n-icon class="icon" :class="archive.is_collect ? 'active' : 'icon'" @click="showRoom = true">
-                <kans></kans>
-            </n-icon>
-        </div>
     </div>
     <collection-list v-if="showCollect" :vid="vid" @close="closeCollection"></collection-list>
-    <add-room v-if="showRoom" :vid="vid" :pid="props.pid" @close="closeRoom"></add-room>
 </template>
 
 <script setup lang="ts">
 import { NIcon } from 'naive-ui';
 import { getTheme } from "@/theme"
-import { Like, Collect,Kans } from "@plooks/icons";
+import { Like, Collect } from "@plooks/icons";
 import { reactive, ref, onBeforeMount } from 'vue';
 import { statusCode } from '@plooks/utils';
 import {
@@ -35,14 +28,10 @@ import {
     likeAPI, cancelLikeAPI
 } from "@plooks/apis";
 import CollectionList from './CollectionList.vue';
-import addRoom from './addRoom.vue';
 
 const props = defineProps<{
     vid: number
-    pid: number
 }>()
-
-
 
 const initTheme = () => {
     const theme = getTheme();
@@ -68,7 +57,6 @@ const stat = ref<{
 });
 
 const showCollect = ref(false);
-const showRoom = ref(false);
 const likeAnimation = ref('');
 
 //点赞点赞按钮
@@ -95,11 +83,6 @@ const closeCollection = (val: number) => {
         archive.is_collect = false;
     }
     showCollect.value = false;
-}
-
-// 关闭创建房间
-const closeRoom = () => {
-    showRoom.value = false;
 }
 
 onBeforeMount(() => {

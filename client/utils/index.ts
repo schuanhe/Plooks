@@ -8,3 +8,4 @@ export * from "./src/time";
 export * from "./src/color";
 export * from "./src/resource";
 export * from "./src/uuid";
+export * from "./src/watchroom-code";

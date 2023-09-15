@@ -2,6 +2,7 @@ package com.schuanhe.plooks.utils;
 
 
 import com.alibaba.fastjson.JSON;
+import com.schuanhe.plooks.domain.form.RoomFrom;
 
 import java.util.Base64;
 import java.util.List;
@@ -21,8 +22,11 @@ public class WebSocketManager {
     // 视频在线链接(vid,(cid,session)))
     public static Map<Integer, Map<String,Session>> videoOnline = new ConcurrentHashMap<>();
 
+    // 房间在线链接(rid,(cid,session)))
+    public static Map<Integer, RoomFrom> WatchroomOnline = new ConcurrentHashMap<>();
+
     /**
-     * 发送消息
+     * 发送私聊消息
      */
     public static <T> void sendMessage(Integer uid, T message) {
         Session session = whispers.get(uid);

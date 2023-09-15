@@ -53,7 +53,11 @@ public class WhisperWebSocket {
 
     @OnClose
     public void onClose() {
-        WebSocketManager.whispers.remove(uid);
+        try {
+            WebSocketManager.whispers.remove(uid);
+        }catch (Exception e) {
+            log.error("[断开连接]uid={} 当前链接数{}",uid,WebSocketManager.whispers.size());
+        }
         log.info("[断开连接]uid={} 当前链接数{}",uid,WebSocketManager.whispers.size());
     }
 
