@@ -272,7 +272,6 @@ const getRoomInfo = (rid: number) =>{
                 content: "开始一起看吧!",
                 positiveText: "准备就绪",
                 onPositiveClick: () => {
-                    //TODO 跳转一起看页面
                     initWebSocket(rid);
                 },
     });  
@@ -284,7 +283,12 @@ const getRoomInfo = (rid: number) =>{
                 title: res.data.message,
                 duration: 3000,
             });
-            
+            router.push({
+                name: 'goinRoom',
+                params: {
+                    roomId: roomId
+                }
+            })
         }
     })
 }

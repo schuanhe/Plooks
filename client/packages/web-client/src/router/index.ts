@@ -37,6 +37,11 @@ const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import("../views/watchroom/Index.vue")
     },
     {
+        path: '/goinRoom/:roomId',
+        name: 'goinRoom',
+        component: () => import("../views/watchroom/goinRoom.vue")
+    },
+    {
         path: '/video/list',
         name: 'VideoList',
         component: () => import("../views/video-list/Index.vue")
