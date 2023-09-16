@@ -29,8 +29,9 @@ const imgChange = (url: string) => {
     previewURL.value = url;
 }
 
-const emits = defineEmits(["stateChange"]) // 用于定义自定义事件
+const emits = defineEmits(["stateChange","initUrl"]) // 用于定义自定义事件
 const uploadAvatar = async () => { // 用于上传头像
+    emits("initUrl")
     if (cropperRef.value) {
         const file = await cropperRef.value.getFile(); // 获取裁剪后的文件
         await uploadFileAPI({

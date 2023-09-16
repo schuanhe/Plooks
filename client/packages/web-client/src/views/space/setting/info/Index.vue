@@ -3,8 +3,10 @@
         <n-form label-placement="left" label-width="80px">
             <div class="avatar-box">
                 <p class="avatar-label">{{ t("common.avatar") }}:</p>
+                <n-spin :show="loading">
                 <common-avatar class="avatar" :url="getResourceUrl(userInfo.avatar)" :size="60"
                     @click="avatarClick"></common-avatar>
+                </n-spin>
             </div>
             <n-form-item label="UID:">
                 <p class="uid form-item">{{ userInfo.uid }}</p>
@@ -34,7 +36,7 @@
         </n-form>
         <leaf-cropper ref="cropperRef">
             <template #content="fileSlot">
-                <avatar-cropper :file="fileSlot.file" @state-change="changeUpload"></avatar-cropper>
+                <avatar-cropper :file="fileSlot.file" @initUrl="initUrl" @state-change="changeUpload"></avatar-cropper>
             </template>
         </leaf-cropper>
     </div>
@@ -45,7 +47,7 @@ import { storageData, statusCode, getResourceUrl } from "@plooks/utils";
 import { ref, onBeforeMount } from "vue";
 import {
     NForm, NFormItem, NButton, NRadioGroup, NInput,
-    NRadioButton, NDatePicker, useNotification,
+    NRadioButton, NDatePicker, useNotification,NSpin
 } from 'naive-ui';
 import { modifyUserInfoAPI, getUserInfoAPI } from "@plooks/apis";
 import { CommonAvatar } from "@plooks/components";
@@ -86,8 +88,18 @@ const avatarClick = () => {
     cropperRef.value?.open();
 }
 
+// 加载log
+// 加载图标
+const loading = ref(false);
+
+const initUrl = () => {
+    loading.value = true
+    cropperRef.value?.closeCropper();
+}
+
 //上传变化的回调
 const changeUpload = (status: string, data: any) => {
+    loading.value = false
     switch (status) {
         case "success":
             userInfo.value.avatar = data.data.url;
@@ -103,7 +115,6 @@ const changeUpload = (status: string, data: any) => {
             });
             break;
     }
-    cropperRef.value?.closeCropper();
 }
 
 
@@ -151,7 +162,7 @@ const modifyUserInfo = () => {
 const getUserInfo = () => {
     getUserInfoAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            storageData.update("user_info", res.data.data.user_info);
+            storageData.update("user_info", res.data.data);
         }
     })
 }

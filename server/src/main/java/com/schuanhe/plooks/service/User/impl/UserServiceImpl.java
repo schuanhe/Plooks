@@ -265,6 +265,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new RuntimeException("修改失败");
         }
         updateRedisCache(userid);
+        System.out.println("修改封面成功");
     }
 
 
@@ -292,11 +293,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     // 更新Redis缓存
     private void updateRedisCache(Integer userid) {
+        System.out.println("更新Redis缓存");
         // 老旧的用户信息
         UserDetailsImpl userDetailsOld = redisCache.getCacheObject("user:info:" + userid);
         // 删除缓存
+        redisCache.deleteObject("user:info:user:" + userid);
         redisCache.deleteObject("user:info:" + userid);
-        userDetailsOld.setUser(baseMapper.selectById(userid));
+        User user = baseMapper.selectById(userid);
+        redisCache.setCacheObject("user:info:user:" + userid, user);
+        userDetailsOld.setUser(user);
         redisCache.setCacheObject("user:info:" + userid, userDetailsOld);
     }
 

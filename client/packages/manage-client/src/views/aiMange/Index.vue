@@ -1,53 +1,54 @@
 <template>
     <n-spin :show="loading">
-    <n-card class="card">
-        <div class="info-header">
-            <n-card title="智慧数据(ai生成有风险,仅供毕业答辩)">
-            <n-input style="max-width: 40%;" v-model:value="question" placeholder="直接说出你想要的数据吧"></n-input>
-            <n-button style="margin-left: 5%; margin-right: 5%;" type="primary" @click="getAiData"> 智能获取 </n-button>
-            <n-input type="textarea" v-if="sql != ''" :disabled="true" v-model:value="sql" placeholder="执行的sql" style="max-width: 40%;">{{ sql }}</n-input>
-  </n-card>
-        </div>
-        <n-scrollbar style="max-height: 600px">
-        <n-table class="table" striped>
-            <thead class="table-head">
-                <tr>
-                    <th v-for="column in columns" :key="column.key"> {{ column.title }} </th>
-                </tr>
-            </thead>
-            
-            <tbody class="table-body">  
-                <tr :key="item.id" v-for="item in tableData">
-                    <template v-for="column in columns" :key="column.key">
-                        <!-- 头像 -->
-                        <td v-if="column.key == 'avatar'"> <common-avatar :url="item.avatar"></common-avatar> </td>
-                        <!-- 性别 -->
-                        <td v-else-if="column.key == 'gender'"> 
-                            <n-tag  v-if="item[column.key] == 1" type="success"> 男 </n-tag> 
-                            <n-tag v-else type="error"> 女 </n-tag>
-                        </td>
-                        <!-- 视频封面 -->
-                        <td v-else-if="column.key == 'cover'">
-                            <img class="cover" :src="getResourceUrl(item.cover)" alt="视频封面">
-                        </td>
-                        <!-- 状态 -->
-                        <td v-else-if="column.key == 'status'"> 
-                            <n-tag  v-if="item[column.key] == 0" type="success"> 正常 </n-tag> 
-                            <n-tag  v-else-if="item[column.key] == 1" type="error"> 封禁 </n-tag>
-                            <n-tag  v-else-if="item[column.key] == 100" type="warning"> 创建成功 </n-tag>
-                            <n-tag  v-else-if="item[column.key] == 500" type="info"> 待审核 </n-tag>
-                            <n-tag  v-else-if="item[column.key] == 2100" type="error"> 审核不通过 </n-tag>
-                        </td>
-                        <!-- 普通表格 -->
-                        <td v-else> {{ item[column.key] }} </td>
-                    </template>
-                </tr>
-            </tbody>
-            
-        </n-table>
-        </n-scrollbar>
-    </n-card>
-</n-spin>
+        <n-card class="card">
+            <div class="info-header">
+                <n-card title="智慧数据(ai生成有风险,仅供毕业答辩)">
+                    <n-input style="max-width: 40%;" v-model:value="question" placeholder="直接说出你想要的数据吧"></n-input>
+                    <n-button style="margin-left: 5%; margin-right: 5%;" type="primary" @click="getAiData"> 智能获取 </n-button>
+                    <n-input type="textarea" v-if="sql != ''" :disabled="true" v-model:value="sql" placeholder="执行的sql"
+                        style="max-width: 40%;">{{ sql }}</n-input>
+                </n-card>
+            </div>
+            <n-scrollbar style="max-height: 600px">
+                <n-table class="table" striped>
+                    <thead class="table-head">
+                        <tr>
+                            <th v-for="column in columns" :key="column.key"> {{ column.title }} </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="table-body">
+                        <tr :key="item.id" v-for="item in tableData">
+                            <template v-for="column in columns" :key="column.key">
+                                <!-- 头像 -->
+                                <td v-if="column.key == 'avatar'"> <common-avatar :url="item.avatar"></common-avatar> </td>
+                                <!-- 性别 -->
+                                <td v-else-if="column.key == 'gender'">
+                                    <n-tag v-if="item[column.key] == 1" type="success"> 男 </n-tag>
+                                    <n-tag v-else type="error"> 女 </n-tag>
+                                </td>
+                                <!-- 视频封面 -->
+                                <td v-else-if="column.key == 'cover'">
+                                    <img class="cover" :src="getResourceUrl(item.cover)" alt="视频封面">
+                                </td>
+                                <!-- 状态 -->
+                                <td v-else-if="column.key == 'status'">
+                                    <n-tag v-if="item[column.key] == 0" type="success"> 正常 </n-tag>
+                                    <n-tag v-else-if="item[column.key] == 1" type="error"> 封禁 </n-tag>
+                                    <n-tag v-else-if="item[column.key] == 100" type="warning"> 创建成功 </n-tag>
+                                    <n-tag v-else-if="item[column.key] == 500" type="info"> 待审核 </n-tag>
+                                    <n-tag v-else-if="item[column.key] == 2100" type="error"> 审核不通过 </n-tag>
+                                </td>
+                                <!-- 普通表格 -->
+                                <td v-else> {{ item[column.key] }} </td>
+                            </template>
+                        </tr>
+                    </tbody>
+
+                </n-table>
+            </n-scrollbar>
+        </n-card>
+    </n-spin>
 </template>
 
 <script setup lang="ts">
@@ -55,7 +56,7 @@
 import { onBeforeMount, ref } from 'vue';
 import { CommonAvatar } from '@plooks/components';
 import { getAiMngeData } from "@plooks/apis";
-import { NTable, NButton, NCard, useNotification,NScrollbar, NInput, NTag, NSpin } from 'naive-ui';
+import { NTable, NButton, NCard, useNotification, NScrollbar, NInput, NTag, NSpin } from 'naive-ui';
 import { getResourceUrl, statusCode } from '@plooks/utils';
 
 
@@ -82,13 +83,13 @@ const loading = ref(false);
 
 const getAiData = () => {
     loading.value = true;
-    getAiMngeData(question.value).then((res:any) => {
+    getAiMngeData(question.value).then((res: any) => {
         if (res.data.code === statusCode.OK) {
             sql.value = res.data.data.sql;
             columns.value = res.data.data.columns;
             tableData.value = res.data.data.data;
             console.log(res.data.data);
-        }else{
+        } else {
             notification.error({
                 title: res.data.message,
                 duration: 5000,
@@ -115,7 +116,7 @@ const getAiData = () => {
 }
 
 onBeforeMount(() => {
-    
+
 })
 </script>
 
@@ -126,7 +127,7 @@ onBeforeMount(() => {
     border-radius: 10px;
 
     .info-header {
-        display: flex;  //这里是flex布局
+        display: flex; //这里是flex布局
         height: 160px; // 这里是高度
         align-items: center; //这里是垂直居中
         justify-content: space-between; //这里是水平居中

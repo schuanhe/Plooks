@@ -27,8 +27,9 @@ const imgChange = (url: string) => {
     previewURL.value = url;
 }
 
-const emits = defineEmits(["stateChange"])
+const emits = defineEmits(["stateChange", "initUrl"])
 const uploadCover = async () => {
+    emits("initUrl")
     if (cropperRef.value) {
         const file = await cropperRef.value.getFile();
         await uploadFileAPI({

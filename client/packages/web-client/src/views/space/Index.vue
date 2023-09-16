@@ -3,6 +3,7 @@
         <header-bar></header-bar>
         <div class="space-container">
             <div class="space-header">
+                <n-spin :show="loading">
                 <button class="upload-btn" @click="uploadClick">上传封面图片</button>
                 <img class="cover" v-if="userInfo.spaceCover" alt="用户封面" :src="getResourceUrl(userInfo.spaceCover)">
                 <div class="header-content">
@@ -32,6 +33,7 @@
                         </div>
                     </div>
                 </div>
+                </n-spin>
             </div>
             <div class="space-content">
                 <n-menu class="space-menu" :options="menuOptions" :default-value="defaultOption" />
@@ -42,7 +44,7 @@
         </div>
         <leaf-cropper ref="cropperRef">
             <template #content="fileSlot">
-                <space-cover-cropper :file="fileSlot.file" @state-change="changeUpload"></space-cover-cropper>
+                <space-cover-cropper @initUrl="initUrl" :file="fileSlot.file" @state-change="changeUpload"></space-cover-cropper>
             </template>
         </leaf-cropper>
     </div>
@@ -59,7 +61,7 @@ import { getResourceUrl, statusCode, storageData } from "@plooks/utils";
 import { modifySpaceCoverAPI, getUserInfoAPI } from "@plooks/apis";
 import useRenderIcon from "@/hooks/render-icon-hooks";
 import { CommonAvatar } from "@plooks/components";
-import { NIcon, NMenu, useNotification } from "naive-ui";
+import { NIcon, NMenu, useNotification, NSpin } from "naive-ui";
 import HeaderBar from "@/components/header-bar/Index.vue";
 import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import SpaceCoverCropper from "@/components/leaf-cropper/component/SpaceCoverCropper.vue";
@@ -74,6 +76,14 @@ const { renderIcon } = useRenderIcon();
 const notification = useNotification();
 
 const defaultOption = ref('');//默认激活菜单
+
+const loading = ref(false);
+
+const initUrl = () => {
+    loading.value = true
+    cropperRef.value?.closeCropper();
+}
+
 const menuOptions = [
     {
         label: () =>
@@ -175,6 +185,7 @@ const uploadClick = () => {
 //上传变化的回调
 const changeUpload = (status: string, data: any) => {
     let url;
+    loading.value = false
     switch (status) {
         case "success":
             //更新封面图
@@ -203,7 +214,7 @@ const changeUpload = (status: string, data: any) => {
 const getUserInfo = () => {
     getUserInfoAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            const tmpInfo = res.data.data.user_info as UserInfoType;
+            const tmpInfo = res.data.data as UserInfoType;
             userInfo.value = tmpInfo;
             storageData.update("user_info", tmpInfo);
         }

@@ -46,7 +46,7 @@ public class sqlTest {
 
         try {
             // 创建URL对象
-            URL url = new URL("https://api.schuanhe.com/api/6-openai/plooks.php?msg=" + content);
+            URL url = new URL("xxx?msg=" + content);
             // 打开连接
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             // 设置请求方法为GET

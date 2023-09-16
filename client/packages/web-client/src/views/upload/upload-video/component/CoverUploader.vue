@@ -1,5 +1,7 @@
 <template>
+     
     <div class="upload-cover">
+        <n-spin :show="loading">
         <n-upload multiple directory-dnd :show-file-list="false" @before-upload="beforeUploadCover"
             :custom-request="fileChange">
             <img v-if="currentCover" class="cover" :src="getResourceUrl(currentCover)" alt="封面" />
@@ -22,10 +24,12 @@
         </n-upload>
         <leaf-cropper ref="cropperRef">
             <template #content="fileSlot">
-                <cover-cropper :file="fileSlot.file" @state-change="changeUpload"></cover-cropper>
+                <cover-cropper :file="fileSlot.file" @initUrl="initUrl" @state-change="changeUpload"></cover-cropper>
             </template>
         </leaf-cropper>
+        </n-spin>
     </div>
+    
 </template>
 
 <script setup lang="ts">
@@ -35,7 +39,7 @@ import { globalConfig, getResourceUrl } from "@plooks/utils";
 import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import CoverCropper from "@/components/leaf-cropper/component/CoverCropper.vue";
 import type { UploadCustomRequestOptions } from 'naive-ui';
-import { NIcon, NUpload, NUploadDragger, NText, NP, NProgress, useNotification } from 'naive-ui';
+import { NIcon, NUpload, NUploadDragger, NText, NP, NProgress, useNotification, NSpin } from 'naive-ui';
 
 const emits = defineEmits(["finish"]);
 const props = defineProps<{
@@ -47,6 +51,14 @@ const currentCover = ref(props.cover);
 const percent = ref(0);//上传百分比
 const uploading = ref(false);//是否上传中
 const notification = useNotification();//通知
+// 加载log
+// 加载图标
+const loading = ref(false);
+
+const initUrl = () => {
+    loading.value = true
+    cropperRef.value?.closeCropper();
+}
 
 //上传之前的回调
 const beforeUploadCover = async (options: any) => {
@@ -97,7 +109,7 @@ const changeUpload = (status: string, data: any) => {
             });
             break;
     }
-    cropperRef.value?.closeCropper();
+    loading.value = false
 }
 </script>
 
