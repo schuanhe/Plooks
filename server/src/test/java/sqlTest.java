@@ -1,7 +1,7 @@
 import com.alibaba.fastjson.JSON;
 
 
-import com.schuanhe.plooks.mapper.TestMapper;
+import com.schuanhe.plooks.mapper.AiMangeMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,16 +13,17 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootTest(classes = com.schuanhe.plooks.Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = com.schuanhe.plooks.Application.class)
+
 public class sqlTest {
 
     @Autowired
-    private TestMapper testMapper;
+    private AiMangeMapper testMapper;
 
-
+    @Test
     public void teset() {
 
-        String sql = getSql("查询20个用户id包含1的用户");
+        String sql = getSql("查询20个用户id包含1的用户所有信息");
         System.out.println(sql);
 
         String sql1 = JSON.parseObject(sql).getString("sql");
@@ -45,7 +46,7 @@ public class sqlTest {
 
         try {
             // 创建URL对象
-            URL url = new URL("https://xxxx/api/6-openai/plooks.php?msg=" + content);
+            URL url = new URL("https://api.schuanhe.com/api/6-openai/plooks.php?msg=" + content);
             // 打开连接
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             // 设置请求方法为GET

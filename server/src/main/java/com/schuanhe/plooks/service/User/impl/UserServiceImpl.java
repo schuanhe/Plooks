@@ -138,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 设置默认生日1970-01-01
         user.setBirthday(new Date(0));
         // 设置默认昵称
-        user.setNickname("用户" + CoreUtils.getRandomString(4) + user.getId().toString());
+        user.setNickname("用户" + CoreUtils.getRandomString(4));
 
         // 将用户信息插入到数据库中
         int insert = baseMapper.insert(user);

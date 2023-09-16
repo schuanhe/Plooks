@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 @Component
-public interface TestMapper {
+public interface AiMangeMapper {
 
     @SelectProvider(type = SqlProvider.class, method = "dynamicSql")
     List<Map<String,Object>> findByCriteria(String sql);

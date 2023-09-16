@@ -35,7 +35,8 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
             // 获取视频资源
             resources = baseMapper.selectList(new QueryWrapper<Resources>().eq("vid", vid).eq("status",0));
             // 将视频资源存入redis
-            redisCache.setCacheList("video:info:resources:" + vid, resources);
+            if (resources.size()>0)
+                redisCache.setCacheList("video:info:resources:" + vid, resources);
         }
 
         return resources;

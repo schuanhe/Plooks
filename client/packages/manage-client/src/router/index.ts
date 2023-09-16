@@ -46,6 +46,12 @@ const router = createRouter({
                     name: 'Carousel',
                     meta: { auth: true },
                     component: () => import("../views/carousel/Index.vue"),
+                },
+                {
+                    path: '/aiMange',
+                    name: 'AiMange',
+                    meta: { auth: true },
+                    component:() => import("../views/aiMange/Index.vue"),
                 }
             ]
         },

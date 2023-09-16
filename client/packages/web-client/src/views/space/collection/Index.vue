@@ -124,6 +124,7 @@ const modifyCollection = () => {
     modifyCollectionAPI(collectionInfo).then((res) => {
         if (res.data.code === statusCode.OK) {
             getCollectionList();
+            active.value = false
         } else {
             notification.error({
                 title: '修改失败',

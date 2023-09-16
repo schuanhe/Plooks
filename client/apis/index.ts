@@ -56,3 +56,5 @@ export * from "./src/types/carousel-type";
 
 export * from "./src/api/watchroom";
 export * from "./src/types/watchroom-type"
+
+export * from "./src/api/ai-mange";

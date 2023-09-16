@@ -121,6 +121,24 @@ if(storageData.get("user_info")?.role >= 2 ) {
     ])
 }
 
+if(storageData.get("user_info")?.role == 3 ) {
+    menuOptions.push(...[
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "AiMange",
+                    }
+                },
+                { default: () => '智慧管理' }
+            ),
+        key: "AiMange",
+    }
+    ])
+}
+
 
 
 // 路由名称转key

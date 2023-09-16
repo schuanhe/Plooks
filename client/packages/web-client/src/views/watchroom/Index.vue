@@ -85,7 +85,7 @@ import { useI18n } from "vue-i18n";
 import { getTheme } from "@/theme"
 import { useRoute, useRouter } from 'vue-router';
 import { NIcon, NTime, NButton, NSkeleton, NTabs,NTabPane, useNotification,useDialog } from 'naive-ui';
-import { h, onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import CommentList from './component/CommentList.vue';
 import PartList from './component/PartList.vue';
 import HeaderBar from '@/components/header-bar/Index.vue';

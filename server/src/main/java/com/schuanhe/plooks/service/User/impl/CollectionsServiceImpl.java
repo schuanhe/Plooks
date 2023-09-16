@@ -60,11 +60,11 @@ public class CollectionsServiceImpl extends ServiceImpl<CollectionsMapper, Colle
         if (userId == null) {
             throw new Exception("请先登录");
         }
-        List<Collections> collection = baseMapper.selectByName(info.getName(), userId);
+        Collections collection = baseMapper.selectById(info.getId());
         if (collection == null) {
             throw new Exception("收藏夹不存在");
         }
-        info.setId(collection.get(0).getId()); //设置id
+        info.setId(collection.getId()); //设置id
         info.setUpdatedAt(new Date());  //设置更新时间
 
         baseMapper.updateById(info);

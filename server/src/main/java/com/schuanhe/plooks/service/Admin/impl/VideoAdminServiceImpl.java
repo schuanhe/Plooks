@@ -97,6 +97,8 @@ public class VideoAdminServiceImpl extends ServiceImpl<VideoMapper, Video> imple
         Video newVideo = new Video();
         newVideo.setId(video.getId());
         newVideo.setStatus(video.getStatus());
+        redisCache.deleteObject("video:info:" + video.getId());
+        redisCache.deleteObject("video:info:resources:" + video.getId());
         int i = baseMapper.updateById(newVideo);
         return i == 1;
     }

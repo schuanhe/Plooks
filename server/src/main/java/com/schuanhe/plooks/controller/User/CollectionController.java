@@ -57,7 +57,6 @@ public class CollectionController {
     public ResponseResult<String> updateCollection(@RequestBody Collections info) {
         if (info.getName().length() < 1)
             return ResponseResult.error("收藏夹名字不能为空");
-
         try {
             collectionsService.updateCollection(info);
         }catch (Exception e){
