@@ -343,7 +343,7 @@ public class UserController {
             return true;
         }
         //验证成功，删除验证码
-        redisCache.deleteObject("user:captcha:" + uuid); // 测试阶段验证码不删除，可以重复使用
+        redisCache.deleteObject("user:captcha:" + uuid);
         return false;
     }
 

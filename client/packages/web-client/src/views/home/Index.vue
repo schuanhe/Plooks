@@ -45,7 +45,7 @@ const initTheme = () => {
 
 const videoList = ref<Array<VideoType>>([]);
 const getRecommendedVideo = () => {
-    getRecommendedVideoAPI(12).then((res) => {
+    getRecommendedVideoAPI(16).then((res) => {
         if (res.data.code === statusCode.OK) {
             videoList.value = res.data.data.videos;
         }
@@ -114,12 +114,12 @@ onBeforeMount(() => {
     margin-left: 20px;
     width: calc(100% - 50px);
     gap: 0 16px;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr); // 5列
     overflow: hidden;
 
     .recommended-carousel {
         height: 420px;
-        grid-row: 1/ span 2;
+        grid-row: 1/ span 2; 
         grid-column: 1/ span 2;
     }
 }

@@ -58,7 +58,7 @@ mybatis-plus:
 
 
 
-debug: true
+debug: false
 
 # 七牛云配置
 qiniu:

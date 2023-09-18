@@ -55,18 +55,13 @@
 
 import { onBeforeMount, ref } from 'vue';
 import { CommonAvatar } from '@plooks/components';
+import type { columnType } from '@plooks/apis'
 import { getAiMngeData } from "@plooks/apis";
 import { NTable, NButton, NCard, useNotification, NScrollbar, NInput, NTag, NSpin } from 'naive-ui';
 import { getResourceUrl, statusCode } from '@plooks/utils';
 
 
 const notification = useNotification();//通知
-
-export interface columnType {
-    title: string;
-    key: string;
-}
-
 
 const columns = ref(Array<columnType>());
 

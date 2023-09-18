@@ -11,7 +11,7 @@
         <div class="carousel-footer">
             <div class="tool">
                 <p class="title" v-if="carouselList[data.currentIndex]">
-                    {{ carouselList[data.currentIndex].title || "" }} 6666666666
+                    {{ carouselList[data.currentIndex].title || "" }}
                 </p>
                 <div class="dots">
                     <div class="dot" v-for="index of data.carouselCount" :key="index"

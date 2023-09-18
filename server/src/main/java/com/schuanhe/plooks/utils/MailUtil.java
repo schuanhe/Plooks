@@ -1,6 +1,7 @@
 package com.schuanhe.plooks.utils;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 public class MailUtil {
 
@@ -40,5 +42,6 @@ public class MailUtil {
         message.setSentDate(new Date());
         // 发送邮件
         javaMailSender.send(message);
+        log.info("向邮箱：{}发送了一封邮件:[{}]{}",to,subject,content);
     }
 }
