@@ -33,9 +33,9 @@ const initTheme = () => {
 
 const defaultKey = ref("");
 
-
-// 审核的路由
-const menuOptions = [
+const menuOptions:Array<any> = [];
+if (storageData.get("user_info")?.role > 0) {
+menuOptions.push(...[    
     {
         label: () =>
             h(
@@ -61,9 +61,10 @@ const menuOptions = [
                 { default: () => '视频管理' }
             ),
         key: "video",
-    },
-];
+    },])
+}
 
+// 审核的路由
 if(storageData.get("user_info")?.role >= 2 ) {
     menuOptions.push(...[
     {
