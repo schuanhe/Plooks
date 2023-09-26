@@ -29,7 +29,7 @@ public class WatchroomServiceImpl implements WatchroomService {
         }
         RoomFrom roomFrom = watchroomOnline.get(rid);
         // 判断是否有密码
-        if (roomFrom.getIsPublic()){
+        if (!roomFrom.getIsPublic()){
             // 不需要密码，将用户存入预备信息中
             WebSocketManager.WatchroomOnline.get(rid).getUserIds().add(userId);
             return;

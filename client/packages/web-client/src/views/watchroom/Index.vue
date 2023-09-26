@@ -258,13 +258,13 @@ const syncVideo = () => {
 
 
 // 获取房间信息
-const getRoomInfo = (rid: number) =>{
+const getRoomInfo = (rid: number) => {
     getRoomInfoApi(rid).then((res) => {
-        if(res.data.code === statusCode.OK) {
+        if (res.data.code === statusCode.OK) {
             // 进入成功
             roomInfo.value = res.data.data.roomInfo;
             part.value = res.data.data.roomInfo.pid;
-            if(res.data.data.roomInfo.adminId === storageData.get("user_info").uid){
+            if (res.data.data.roomInfo.adminId === storageData.get("user_info").uid) {
                 isAdmin.value = true;
             }
             dialog.success({
@@ -274,9 +274,9 @@ const getRoomInfo = (rid: number) =>{
                 onPositiveClick: () => {
                     initWebSocket(rid);
                 },
-    });  
-            
-        }else{
+            });
+
+        } else {
             // 其他错误
             console.log(res.data.message);
             notification.error({

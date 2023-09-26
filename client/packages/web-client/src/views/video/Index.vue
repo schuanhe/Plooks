@@ -15,7 +15,7 @@
                             <span>{{ t("video.copyright") }}</span>
                         </p>
                     </div>
-                    <!-- 点赞收藏等数据 -->
+                    <!-- 点赞收藏等数据和加入房间 -->
                     <div class="video-toolbar">
                         <div class="toolbar-left">
                             <archive-info :vid="videoInfo!.vid" :pid="part"></archive-info>

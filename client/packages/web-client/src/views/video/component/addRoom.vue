@@ -11,7 +11,7 @@
                 <n-form-item  label="是否创建私密房间">
                     <n-switch v-model:value="isPublic" @update:value="handleChange" />
                 </n-form-item>
-                <n-form-item v-if="addRommInfo.isPublic" label="密码" path="password">
+                <n-form-item v-if="isPublic" label="密码" path="password">
                     <n-input v-model:value="password" placeholder="请输入密码" />
                 </n-form-item>
             </n-form>
@@ -58,8 +58,8 @@ const handleChange = (value: boolean) => {
 }
 
 const addRoom = () =>{
-    if(addRommInfo.value.isPublic){
-        if(addRommInfo.value.password == ""){
+    if(isPublic.value){
+        if(password.value == ""){
             notification.error({
                 title: "非公开房间需要设置密码",
                 duration: 3000,
