@@ -15,7 +15,7 @@
     </select>
 
     <select id="selectVideoByUid" resultType="com.schuanhe.plooks.domain.Video">
-        select * from videos where uid = #{uid} order by created_at desc limit #{i}, #{size}
+        select * from videos where uid = #{uid} and deleted_at is null order by created_at desc limit #{i}, #{size}
     </select>
     <select id="selectGoodVideoListByPartitionIds" resultType="com.schuanhe.plooks.domain.Video">
         SELECT * FROM videos

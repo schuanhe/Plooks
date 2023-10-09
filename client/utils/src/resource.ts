@@ -1,4 +1,4 @@
-import { globalConfig } from "./global-config"
+import { globalConfig } from "./config"
 import { isURL } from "./util"
 
 // 获取资源url

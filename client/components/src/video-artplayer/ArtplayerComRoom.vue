@@ -5,10 +5,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, nextTick, watch, reactive } from 'vue';
 import Artplayer from 'artplayer';
-import artplayerPluginDanmuku from 'artplayer-plugin-danmuku'
 import Hls from 'hls.js';
 import type { AddDanmukuType, DanmukuType, ResourceType } from '@plooks/apis';
-import { getDanmukuAPI, sendDanmukuAPI } from '@plooks/apis';
+import { sendDanmukuAPI } from '@plooks/apis';
 import { statusCode } from '@plooks/utils';
 
 

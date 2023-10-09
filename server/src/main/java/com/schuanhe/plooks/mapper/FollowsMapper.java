@@ -13,8 +13,6 @@ import java.util.List;
 */
 public interface FollowsMapper extends BaseMapper<Follows> {
 
-
-    List<Integer> getFollowListUid(Integer uid, int i, Integer size);
 }
 
 

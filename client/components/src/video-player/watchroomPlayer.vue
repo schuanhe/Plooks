@@ -20,8 +20,7 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount } from 'vue';
 import ArtplayerCom from '../video-artplayer/ArtplayerComRoom.vue';
-import type { ResourceType, AddHistoryType, roomInfoType } from '@plooks/apis';
-import { addHistoryAPI } from '@plooks/apis';
+import type { ResourceType } from '@plooks/apis';
 import type Artplayer from 'artplayer';
 
 const props = withDefaults(defineProps<{

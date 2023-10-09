@@ -114,6 +114,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         QueryWrapper<Video> wrapper = new QueryWrapper<>();
         // 获取当前登录用户上传的视频总数
         wrapper.eq("uid", uid);
+        wrapper.isNull("deleted_at");
 
         return baseMapper.selectCount(wrapper);
     }
@@ -325,6 +326,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video>
         Video video = new Video();
         video.setId(vid);
         video.setDeletedAt(new Date());
+        // 删除视频缓存
+        redisCache.deleteObject("video:info:" + vid);
         int i = baseMapper.updateById(video);
         return i > 0;
     }

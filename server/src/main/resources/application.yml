@@ -19,16 +19,16 @@ spring:
     port: 6379
   mail:
     # 配置 SMTP 服务器地址
-    host: smtp.exmail.qq.com
+    host: ${MY_MAIL_HOST}
     # 发送者邮箱，已开通POP3/SMTP服务的邮箱，也就是你自己的
-    username: xxx@qq.com
+    username: ${MY_MAIL_USERNAME}
     # 配置密码，注意不是真正的密码，而是刚刚申请到的授权码
-    password: xxx
+    password: ${MY_MAIL_PASSWORD}
     # 配置发件人名称
     nickname: Plook邮箱验证码
 
     # 端口号465或587（QQ邮箱发送邮件仅支持587端口协议）
-    port: 465
+    port: ${MY_MAIL_PORT}
     # 默认的邮件编码为UTF-8
     default-encoding: UTF-8
     # 配置SSL 加密工厂
@@ -62,10 +62,10 @@ debug: false
 
 # 七牛云配置
 qiniu:
-  access: xxx
-  secret: xxx
-  bucket: xxx
-  path: http://qiniu.xxx.com/
+  access: ${MY_QINIU_ACCESS}
+  secret: ${MY_QINIU_SECRET}
+  bucket: ${MY_QINIU_BUCKET}
+  path: ${MY_QINIU_PATH}
 
 # 自定义配置
 base-url: /v1/api # 基础路径
@@ -76,4 +76,6 @@ plooks:
     cache:
       expire: 180 # 缓存过期时间，单位秒
   ai:
-    url: http://xxxx # AI服务地址
+    url: ${MY_AI_URL}
+server:
+  port: 2023
