@@ -26,7 +26,7 @@
   {
     "code": 200,
     "data": null,
-    "message":"ok"
+    "message":"success"
   }
 ```
 
@@ -62,7 +62,7 @@
       "access_token": "",
       "refresh_token": "", 
     },
-    "message":"ok"
+    "message":"success"
   }
 ```
 
@@ -111,7 +111,7 @@
       "access_token": "",
       "refresh_token": "" 
     },
-    "message":"ok"
+    "message":"success"
   }
 ```
 
@@ -160,7 +160,7 @@
   {
     "code": 200,
     "data": null,
-    "message":"ok"
+    "message":"success"
   }
 ```
 
@@ -192,7 +192,7 @@
   {
     "code": 200,
     "data": null,
-    "message":"ok"
+    "message":"success"
   }
 ```
 

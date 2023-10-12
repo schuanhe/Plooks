@@ -1,4 +1,4 @@
-## redis数据备注
+# Redis数据说明
 
 
 ### login
@@ -74,3 +74,4 @@
 | 轮播图缓存刷新 | boolean | refresh:carousel |
 | 视频点击次数缓存刷新(60s) | boolean | refresh:video:clicks:{vid} |
 | 用户搜索视频限制(3s) | boolean | refresh:search:{uid} |
+

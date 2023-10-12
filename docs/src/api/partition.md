@@ -32,7 +32,7 @@
 ## 新增分区
 
 #### 请求URL
-- ` http://域名/api/v1/partition/add `
+- ` http://域名/api/v1/partition `
   
 #### 请求方式
 - POST 
@@ -54,7 +54,7 @@
   {
     "code": 200,
     "data": null,
-    "msg": "ok"
+    "mssage": "success"
   }
 ```
 
@@ -65,10 +65,10 @@
 ## 删除分区
 
 #### 请求URL
-- ` http://域名/api/v1/partition/delete `
+- ` http://域名/api/v1/partition/{id} `
   
 #### 请求方式
-- POST 
+- DELETE 
 
 ####  请求头
 - `"content-type": "application/json",`
@@ -86,7 +86,7 @@
   {
     "code": 200,
     "data": null,
-    "msg": "ok"
+    "msgsage": "success"
   }
 ```
 
