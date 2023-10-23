@@ -17,7 +17,10 @@
                     </div>
                     <!-- 点赞收藏等数据和加入房间 -->
                     <div class="video-toolbar">
-                        <div class="toolbar-left">
+                        <div v-if="isLogin" class="toolbar-left">
+                            <archive-info :vid="videoInfo!.vid" :pid="part"></archive-info>
+                        </div>
+                        <div v-else class="toolbar-left" style="pointer-events: none;">
                             <archive-info :vid="videoInfo!.vid" :pid="part"></archive-info>
                         </div>
                         <!-- 日期播放和在线人数 -->
@@ -77,11 +80,12 @@ import ArchiveInfo from './component/ArchiveInfo.vue';
 import { Forbid } from "@plooks/icons";
 import type { ResourceType, VideoType } from '@plooks/apis';
 import { getVideoInfoAPI } from '@plooks/apis';
-import { createUuid, globalConfig, statusCode } from '@plooks/utils';
+import { createUuid, globalConfig,storageData, statusCode } from '@plooks/utils';
 
 // i18n
 const { t } = useI18n();
 
+const isLogin = ref(false);
 const route = useRoute();
 const router = useRouter();
 const theme = getTheme();
@@ -159,6 +163,9 @@ onBeforeMount(() => {
     getVideoInfo(vid);
     if (route.query.p) {
         part.value = Number(route.query.p);
+    }
+    if (storageData.get("user_info")?.uid) {
+        isLogin.value = true;
     }
 })
 

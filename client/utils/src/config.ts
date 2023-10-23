@@ -4,8 +4,8 @@ const https =  false; // 是否启用https
 // 去除警告
 // @ts-ignore
 // const domain = import.meta.env.VITE_BASE_DOMAIN; // 域名
-// const domain = "localhost:2023"; // 域名
-const domain = "43.138.25.64:2023"; // 域名
+const domain = "localhost:2023"; // 域名
+// const domain = "43.138.25.64:2023"; // 域名
 const icp = "icp备案信息"; // 备案信息
 const security = "公网安备信息"; // 公网安备信息
 

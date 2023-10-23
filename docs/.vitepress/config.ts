@@ -5,6 +5,7 @@ import path from 'path';
 export default defineConfig({
     title: 'Plooks一起看网站文档',
     lang: 'zh-CN',
+    base: '/Plooks/',
     description: '基于SpringBoot + Vue的一起看',
     head: [
         [
@@ -133,7 +134,11 @@ export default defineConfig({
                         {
                             text: '轮播图相关接口',
                             link: '/api/carousel'
-                        }
+                        },
+                        {
+                            text: 'Redis配置',
+                            link: '/api/redis'
+                        },
                     ]
                 }
             ]

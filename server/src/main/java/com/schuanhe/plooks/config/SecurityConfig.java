@@ -38,9 +38,34 @@ public class SecurityConfig {
     @Autowired
     private AccessDeniedHandlerImpl accessDeniedHandler;
 
-
     @Value("${base-url}")
     private String baseUrl;
+
+    // 设置不需要认证的接口String...
+    private String[] getAuthWhitelist() {
+        return new String[]{
+                //登录
+                baseUrl + "/user/login",
+                baseUrl + "/user/login/**",
+                //刷新token
+                baseUrl + "/user/token/refresh",
+                //获取验证码
+                baseUrl + "/user/captchaImage/**",
+                //注册发送验证码
+                baseUrl + "/user/register/**",
+                //websocket 链接
+                "/api/v1/websocket/**",
+                // 公告分区域等公共接口
+                baseUrl + "/carousel",
+                baseUrl + "/partition",
+                baseUrl + "/video/**",
+                // 评论以及点赞信息
+                baseUrl + "/history/progress/**", // 获取播放进度
+                baseUrl + "/danmuku/**", // 获取弹幕
+                baseUrl + "/comment/**", // 获取评论
+                baseUrl + "/archive/**", // 获取视频信息
+        };
+    };
 
 
     @Bean
@@ -53,19 +78,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
-                .antMatchers(
-                        //登录
-                        baseUrl + "/user/login",
-                        baseUrl + "/user/login/**",
-                        //刷新token
-                        baseUrl + "/user/token/refresh",
-                        //获取验证码
-                        baseUrl + "/user/captchaImage/**",
-                        //注册发送验证码
-                        baseUrl + "/user/register/**",
-                        //websocket 链接
-                        "/api/v1/websocket/**"
-                        ).permitAll()
+                .antMatchers(getAuthWhitelist()).permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //在xxx过滤器之前
