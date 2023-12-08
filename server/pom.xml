@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>com.schuanhe.plooks</groupId>
-    <artifactId>server</artifactId>
+    <artifactId>plooks-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

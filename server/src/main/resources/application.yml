@@ -2,7 +2,7 @@ spring:
   profiles:
     active: local # 指定当前环境为 local
   datasource:
-    url: jdbc:mysql://localhost:3306/tb_plooks?characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://plooks-mysql:3306/tb_plooks?characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,7 +15,7 @@ spring:
       # 总文件最大
       max-request-size: 1000MB
   redis:
-    host: localhost
+    host: plooks-redis
     port: 6379
   mail:
     # 配置 SMTP 服务器地址

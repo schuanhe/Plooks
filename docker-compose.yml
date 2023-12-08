@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  #MySQL
+  mysql:
+    image: mysql:8.0.28
+    container_name: plooks-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456 # root密码
+      MYSQL_DATABASE: tb_plooks
+    restart: on-failure
+    volumes:
+      - ./data/mysql/db:/var/lib/mysql
+      - ./data/mysql/init:/docker-entrypoint-initdb.d/
+    ports:
+      - '3307:3306'
+  #Redis
+  redis:
+    image: redis
+    container_name: plooks-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./data/redis:/data
+
+
+  # 后端
+  api:
+    container_name: plooks-api
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      # 映射端口
+      - "9000:9000"
+    depends_on:
+      - mysql
+      - redis
