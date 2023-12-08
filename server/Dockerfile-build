@@ -1,0 +1,28 @@
+# 构建阶段
+FROM maven:3.8.4-openjdk-17-slim AS build
+
+WORKDIR /app
+
+COPY . .
+
+
+# 打开 Maven 配置文件，添加阿里云镜像配置
+RUN sed -i '/<\/mirrors>/i \
+<mirror> \
+  <id>aliyunmaven<\/id> \
+  <mirrorOf>*</mirrorOf> \
+  <name>阿里云公共仓库<\/name> \
+  <url>https:\/\/maven.aliyun.com\/repository\/public<\/url> \
+<\/mirror>' /usr/share/maven/conf/settings.xml
+
+RUN mvn clean install
+
+# 运行阶段
+FROM openjdk:17-slim
+
+WORKDIR /app
+
+# 复制构建阶段产生的 JAR 文件
+COPY --from=build /app/target/plooks-api-1.0-SNAPSHOT.jar .
+
+CMD ["java", "-jar", "plooks-api-1.0-SNAPSHOT.jar"]

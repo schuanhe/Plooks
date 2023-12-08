@@ -1,18 +1,16 @@
-# 构建阶段
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM openjdk:17-slim
 
 WORKDIR /app
 
-COPY . .
+# 检查是否存在plooks-api-1.0-SNAPSHOT.jar文件
+RUN if [ ! -e target/plooks-api-1.0-SNAPSHOT.jar ]; then \
+    echo "Error: 请先打包jar文件，或者使用Dockerfile-build"; \
+    exit 1; \
+    fi
 
-RUN mvn clean install
+# 复制JAR文件
+COPY target/plooks-api-1.0-SNAPSHOT.jar .
 
-# 运行阶段
-FROM openjdk:17-jre-slim
-
-WORKDIR /app
-
-# 复制构建阶段产生的 JAR 文件
-COPY --from=build /app/target/plooks-api-1.0-SNAPSHOT.jar .
+EXPOSE 2023
 
 CMD ["java", "-jar", "plooks-api-1.0-SNAPSHOT.jar"]

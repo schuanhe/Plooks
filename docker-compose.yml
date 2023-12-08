@@ -29,10 +29,11 @@ services:
     container_name: plooks-api
     build:
       context: ./server
-      dockerfile: Dockerfile
+      # 如果已经打包好jar包可以将“Dockerfile-build”替换“Dockerfile”
+      dockerfile: Dockerfile-build
     ports:
       # 映射端口
-      - "9000:9000"
+      - "2023:2023"
     depends_on:
       - mysql
       - redis
