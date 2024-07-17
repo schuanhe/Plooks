@@ -9,9 +9,8 @@ http://plooks.schuanhe.com
 
 ## 最近计划
 
-- [ ] 部署文档与官网
-- [ ] docker部署
-- [ ] 更多建议与bug修复
+- [x] 部署文档与官网 
+- [x] docker部署
 
 
 
