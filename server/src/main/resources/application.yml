@@ -10,10 +10,6 @@ spring:
     multipart:
       # 开启文件上传
       enabled: true
-      # 单个文件最大
-      max-file-size: 500MB
-      # 总文件最大
-      max-request-size: 1000MB
   redis:
     host: plooks-redis
     port: 6379
