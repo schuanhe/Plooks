@@ -15,8 +15,8 @@ export const uploadFileAPI = ({
     const formData = new FormData();
     formData.append(name, file)
     request.post(action, formData, {
-        // 文件上传20分钟超时 1200000 = 1000*60*20
-        timeout: 1200000,
+        // 文件上传60分钟超时 3600000 = 1000*60*60
+        timeout: 3600000,
         headers: {
             'Content-Type': 'multipart/form-data'
         },

@@ -51,15 +51,7 @@ const beforeUploadVideo = async (options: any) => {
             duration: 5000,
         });
     }
-    const isLtMaxSize = file.file.size / 1024 / 1024 < globalConfig.maxVideoSize;
-    if (!isLtMaxSize) {
-        notification.error({
-            title: '上传失败',
-            content: `视频大小不能超过${globalConfig.maxVideoSize}M`,
-            duration: 5000,
-        });
-    }
-    return isJpgOrPng && isLtMaxSize;
+    return isJpgOrPng;
 }
 
 //上传变化的回调
